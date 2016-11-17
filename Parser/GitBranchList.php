@@ -24,8 +24,8 @@ class GitBranchList {
 
   public function parse() {
     // Split the lines of the input.
-    $git_branch_list = explode("\n", $this->input);
-    print_r($git_branch_list);
+    $git_branch_list = explode("\n", rtrim($this->input));
+    //print_r($git_branch_list);
 
     $branch_names = [];
     foreach ($git_branch_list as $branch) {
@@ -35,7 +35,7 @@ class GitBranchList {
       if (!empty($matches['mark']) && $matches['mark'] == '*') {
         $this->currentBranch = $matches['name'];
       }
-      print_r(">$branch<");
+      //print_r(">$branch<");
 
       // Build a clean list of branch names.
       $branch_names[] = $matches['name'];
