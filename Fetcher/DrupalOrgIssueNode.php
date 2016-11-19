@@ -2,11 +2,28 @@
 
 namespace Dorgflow\Fetcher;
 
-class DorgIssueNode {
+class DrupalOrgIssueNode {
   
   public function getIssueNumber() {
     // TODO? Needed?
   }
+  
+  public function getPatchList() {
+
+  }
+  
+  public function getIssueNodeTitle() {
+    return 'foobar is broken';
+  }
+  
+  // methods needed:
+  
+  // next comment number
+  
+  // file list
+  
+  // most recent file
+  
 
   // TODO!
   protected function fetchData() {

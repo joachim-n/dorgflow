@@ -6,7 +6,7 @@ namespace Dorgflow\Fetcher;
 class UserInput {
 
   public function getIssueNumber() {
-    return 12345;
+    return 230774;
   }
 
 }

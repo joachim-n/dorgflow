@@ -2,7 +2,7 @@
 
 namespace Dorgflow\Parser;
 
-class DrupalOrgIssueJSON {
+class DrupalOrgIssueNode {
 
   public function setInput() {
 
@@ -12,8 +12,5 @@ class DrupalOrgIssueJSON {
 
   }
 
-  public function getPatchList() {
-
-  }
 
 }

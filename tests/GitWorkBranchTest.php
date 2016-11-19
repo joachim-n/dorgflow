@@ -28,7 +28,6 @@ class GitWorkBranchTest extends \PHPUnit_Framework_TestCase {
 * 12345-foo-bar
 EOT;
 
-
     $work_branch_parser->setInput($git_output);
     $work_branch_parser->parse();
 
