@@ -23,7 +23,7 @@ class DrupalOrgIssueNode {
 
   public function getIssueNodeTitle() {
     $issue_node = $this->fetchData();
-    dump($issue_node);
+    //dump($issue_node);
     return $issue_node->title;
   }
 
@@ -32,8 +32,8 @@ class DrupalOrgIssueNode {
   }
 
   public function getIssueFiles() {
-    return [
-    ];
+    $issue_node = $this->fetchData();
+    return $issue_node->field_issue_files;
   }
 
   // Todo:
@@ -42,6 +42,7 @@ class DrupalOrgIssueNode {
 
   // TODO! protect!
   protected function fetchData() {
+    // TEMP! Dev -- don't hit d.org all the time while developing.
     return $this->dummyData();
     /*
     $client = DrupalClient::create();
