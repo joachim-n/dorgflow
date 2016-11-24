@@ -50,7 +50,8 @@ class Analyser {
     $master_branch = new Waypoint\MasterBranch($situation);
     $feature_branch = new Waypoint\FeatureBranch($situation);
 
-    $feature_branch_log = $situation->getFeatureBranchLog($master_branch);
+    $feature_branch_log = $situation->getFeatureBranchLog();
+    dump($feature_branch_log);
     $parent = $feature_branch;
     //$patch = Waypoint\Patch::getNextPatch($situation, $parent);
 

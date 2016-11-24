@@ -29,6 +29,10 @@ class Situation {
     $fetcher = $this->getFetcher('GitBranchList');
     return $fetcher->getBranchList();
   }
+  
+  public function setMasterBranch($master_branch) {
+    $this->masterBranch = $master_branch;
+  }
 
   public function getCurrentBranch() {
     $fetcher = $this->getFetcher('GitBranchList');
@@ -36,7 +40,7 @@ class Situation {
     return $fetcher->getCurrentBranch();
   }
 
-  public function getFeatureBranchLog($master_branch) {
+  public function getFeatureBranchLog() {
     // return array
     // SHA => commit message
     // Oldest first.
@@ -45,7 +49,7 @@ class Situation {
     // ARGH need FeatureBranch!!
 
     $fetcher = $this->getFetcher('GitFeatureBranchLog');
-    return $fetcher->getFeatureBranchLog($master_branch);
+    return $fetcher->getFeatureBranchLog($this->masterBranch);
   }
 
   public function getIssueNodeTitle() {

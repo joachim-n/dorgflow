@@ -28,6 +28,9 @@ class MasterBranch {
       // This should trigger a complete failure -- throw an exception!
       throw new \Exception("Can't find a master branch.");
     }
+    
+    // Set this on the situation object, as other things depend on it.
+    $situation->setMasterBranch($this);
   }
 
   public function getBranchName() {
