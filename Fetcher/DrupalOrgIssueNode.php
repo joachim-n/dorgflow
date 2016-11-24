@@ -63,9 +63,9 @@ class DrupalOrgIssueNode {
 
   protected function dummyData() {
     // Data from node 2801423.
-    return stdClass::__set_state(array(
+    return (object) (array(
        'body' =>
-      stdClass::__set_state(array(
+      (object) (array(
          'value' => '<p>isFlagged status is not reflected correctly in some cases, most cases of this will incorrectly show the wrong flag status until the page is refreshed.</p>
     <p>Two calls to $flag-&gt;isFlagged($entity) that span a Flagging save or a Flagging delete operation will not update the isFlagged status.</p>
     <p>Ex.<br />
@@ -88,7 +88,7 @@ class DrupalOrgIssueNode {
        'field_issue_category' => '1',
        'field_issue_component' => 'Flag core',
        'field_project' =>
-      stdClass::__set_state(array(
+      (object) (array(
          'uri' => 'https://www.drupal.org/api-d7/node/268362',
          'id' => '268362',
          'resource' => 'node',
@@ -96,9 +96,9 @@ class DrupalOrgIssueNode {
        'field_issue_files' =>
       array (
         0 =>
-        stdClass::__set_state(array(
+        (object) (array(
            'file' =>
-          stdClass::__set_state(array(
+          (object) (array(
              'uri' => 'https://www.drupal.org/api-d7/file/5699555',
              'id' => '5699555',
              'resource' => 'file',
@@ -106,9 +106,9 @@ class DrupalOrgIssueNode {
            'display' => '0',
         )),
         1 =>
-        stdClass::__set_state(array(
+        (object) (array(
            'file' =>
-          stdClass::__set_state(array(
+          (object) (array(
              'uri' => 'https://www.drupal.org/api-d7/file/5746785',
              'id' => '5746785',
              'resource' => 'file',
@@ -116,9 +116,9 @@ class DrupalOrgIssueNode {
            'display' => '0',
         )),
         2 =>
-        stdClass::__set_state(array(
+        (object) (array(
            'file' =>
-          stdClass::__set_state(array(
+          (object) (array(
              'uri' => 'https://www.drupal.org/api-d7/file/5746786',
              'id' => '5746786',
              'resource' => 'file',
@@ -126,9 +126,9 @@ class DrupalOrgIssueNode {
            'display' => '1',
         )),
         3 =>
-        stdClass::__set_state(array(
+        (object) (array(
            'file' =>
-          stdClass::__set_state(array(
+          (object) (array(
              'uri' => 'https://www.drupal.org/api-d7/file/5746787',
              'id' => '5746787',
              'resource' => 'file',
@@ -136,9 +136,9 @@ class DrupalOrgIssueNode {
            'display' => '1',
         )),
         4 =>
-        stdClass::__set_state(array(
+        (object) (array(
            'file' =>
-          stdClass::__set_state(array(
+          (object) (array(
              'uri' => 'https://www.drupal.org/api-d7/file/5747266',
              'id' => '5747266',
              'resource' => 'file',
@@ -146,9 +146,9 @@ class DrupalOrgIssueNode {
            'display' => '1',
         )),
         5 =>
-        stdClass::__set_state(array(
+        (object) (array(
            'file' =>
-          stdClass::__set_state(array(
+          (object) (array(
              'uri' => 'https://www.drupal.org/api-d7/file/5747267',
              'id' => '5747267',
              'resource' => 'file',
@@ -163,19 +163,19 @@ class DrupalOrgIssueNode {
        'field_issue_credit' =>
       array (
         0 =>
-        stdClass::__set_state(array(
+        (object) (array(
            'uri' => 'https://www.drupal.org/api-d7/comment/11631183',
            'id' => '11631183',
            'resource' => 'comment',
         )),
         1 =>
-        stdClass::__set_state(array(
+        (object) (array(
            'uri' => 'https://www.drupal.org/api-d7/comment/11631209',
            'id' => '11631209',
            'resource' => 'comment',
         )),
         2 =>
-        stdClass::__set_state(array(
+        (object) (array(
            'uri' => 'https://www.drupal.org/api-d7/comment/11631347',
            'id' => '11631347',
            'resource' => 'comment',
@@ -187,37 +187,37 @@ class DrupalOrgIssueNode {
        'flag_project_issue_follow_user' =>
       array (
         0 =>
-        stdClass::__set_state(array(
+        (object) (array(
            'uri' => 'https://www.drupal.org/api-d7/user/180064',
            'id' => 180064,
            'resource' => 'user',
         )),
         1 =>
-        stdClass::__set_state(array(
+        (object) (array(
            'uri' => 'https://www.drupal.org/api-d7/user/208732',
            'id' => 208732,
            'resource' => 'user',
         )),
         2 =>
-        stdClass::__set_state(array(
+        (object) (array(
            'uri' => 'https://www.drupal.org/api-d7/user/1270322',
            'id' => 1270322,
            'resource' => 'user',
         )),
         3 =>
-        stdClass::__set_state(array(
+        (object) (array(
            'uri' => 'https://www.drupal.org/api-d7/user/65793',
            'id' => 65793,
            'resource' => 'user',
         )),
         4 =>
-        stdClass::__set_state(array(
+        (object) (array(
            'uri' => 'https://www.drupal.org/api-d7/user/2659379',
            'id' => 2659379,
            'resource' => 'user',
         )),
         5 =>
-        stdClass::__set_state(array(
+        (object) (array(
            'uri' => 'https://www.drupal.org/api-d7/user/559632',
            'id' => 559632,
            'resource' => 'user',
@@ -237,7 +237,7 @@ class DrupalOrgIssueNode {
        'created' => '1474042917',
        'changed' => '1479926083',
        'author' =>
-      stdClass::__set_state(array(
+      (object) (array(
          'uri' => 'https://www.drupal.org/api-d7/user/559632',
          'id' => '559632',
          'resource' => 'user',
@@ -249,67 +249,67 @@ class DrupalOrgIssueNode {
        'comments' =>
       array (
         0 =>
-        stdClass::__set_state(array(
+        (object) (array(
            'uri' => 'https://www.drupal.org/api-d7/comment/11631183',
            'id' => 11631183,
            'resource' => 'comment',
         )),
         1 =>
-        stdClass::__set_state(array(
+        (object) (array(
            'uri' => 'https://www.drupal.org/api-d7/comment/11631209',
            'id' => 11631209,
            'resource' => 'comment',
         )),
         2 =>
-        stdClass::__set_state(array(
+        (object) (array(
            'uri' => 'https://www.drupal.org/api-d7/comment/11631347',
            'id' => 11631347,
            'resource' => 'comment',
         )),
         3 =>
-        stdClass::__set_state(array(
+        (object) (array(
            'uri' => 'https://www.drupal.org/api-d7/comment/11635019',
            'id' => 11635019,
            'resource' => 'comment',
         )),
         4 =>
-        stdClass::__set_state(array(
+        (object) (array(
            'uri' => 'https://www.drupal.org/api-d7/comment/11791959',
            'id' => 11791959,
            'resource' => 'comment',
         )),
         5 =>
-        stdClass::__set_state(array(
+        (object) (array(
            'uri' => 'https://www.drupal.org/api-d7/comment/11792155',
            'id' => 11792155,
            'resource' => 'comment',
         )),
         6 =>
-        stdClass::__set_state(array(
+        (object) (array(
            'uri' => 'https://www.drupal.org/api-d7/comment/11792161',
            'id' => 11792161,
            'resource' => 'comment',
         )),
         7 =>
-        stdClass::__set_state(array(
+        (object) (array(
            'uri' => 'https://www.drupal.org/api-d7/comment/11792162',
            'id' => 11792162,
            'resource' => 'comment',
         )),
         8 =>
-        stdClass::__set_state(array(
+        (object) (array(
            'uri' => 'https://www.drupal.org/api-d7/comment/11793587',
            'id' => 11793587,
            'resource' => 'comment',
         )),
         9 =>
-        stdClass::__set_state(array(
+        (object) (array(
            'uri' => 'https://www.drupal.org/api-d7/comment/11793670',
            'id' => 11793670,
            'resource' => 'comment',
         )),
         10 =>
-        stdClass::__set_state(array(
+        (object) (array(
            'uri' => 'https://www.drupal.org/api-d7/comment/11793759',
            'id' => 11793759,
            'resource' => 'comment',
