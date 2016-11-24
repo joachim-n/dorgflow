@@ -27,11 +27,26 @@ class Situation {
     // ARGH!
     return $fetcher->getCurrentBranch();
   }
+  
+  public function getFeatureBranchLog($master_branch) {
+    // return array
+    // SHA => commit message
+    // Oldest first.
+    
+    
+    // ARGH need FeatureBranch!!
+    
+    $fetcher = $this->getFetcher('GitFeatureBranchLog');
+    return $fetcher->getFeatureBranchLog($master_branch);
+  }
 
   public function getIssueNodeTitle() {
     return $this->getFetcher('DrupalOrgIssueNode')->getIssueNodeTitle();
   }
 
+  /**
+   *
+   */
   protected function getFetcher($name) {
     // statically cache fetchers, as they statically cache their own data.
     if (!isset($fetchers[$name])) {
