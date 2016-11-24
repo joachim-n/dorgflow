@@ -33,7 +33,15 @@ class DrupalOrgIssueNode {
 
   public function getIssueFiles() {
     $issue_node = $this->fetchData();
-    return $issue_node->field_issue_files;
+    // Ensure these are in creation order by ordering them by fid.
+    // TODO: in due course, get the comment index data!!! -- see d.org issue!
+    $files = $issue_node->field_issue_files;
+
+    usort($files, function($a, $b) {
+      return ($a->file->id <=> $b->file->id);
+    });
+
+    return $files;
   }
 
   // Todo:
