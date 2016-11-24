@@ -55,8 +55,8 @@ class Analyser {
     //$patch = Waypoint\Patch::getNextPatch($situation, $parent);
 
     // temp! issue data!
-    $situation->getIssueNodeTitle();
-
+    $title = $situation->DrupalOrgIssueNode->getIssueNodeTitle();
+    dump($title);
 
     /*
     work over the files from the issue
