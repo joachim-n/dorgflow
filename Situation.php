@@ -8,6 +8,14 @@ class Situation {
 
   protected $fetchers = [];
 
+  /**
+   * Magic method: get a data fetcher.
+   */
+  public function __get($name) {
+    return $this->getFetcher($name);
+  }
+
+
   public function getIssueNumber() {
     return 123456;
 
@@ -27,15 +35,15 @@ class Situation {
     // ARGH!
     return $fetcher->getCurrentBranch();
   }
-  
+
   public function getFeatureBranchLog($master_branch) {
     // return array
     // SHA => commit message
     // Oldest first.
-    
-    
+
+
     // ARGH need FeatureBranch!!
-    
+
     $fetcher = $this->getFetcher('GitFeatureBranchLog');
     return $fetcher->getFeatureBranchLog($master_branch);
   }
