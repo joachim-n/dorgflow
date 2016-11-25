@@ -38,7 +38,7 @@ class FeatureBranch {
       $this->exists = FALSE;
 
       // Invent a branch name.
-      $issue_title = $situation->getIssueNodeTitle();
+      $issue_title = $situation->DrupalOrgIssueNode->getIssueNodeTitle();
 
       $issue_title = str_replace([',', "'", '"'], '', $issue_title);
       $issue_title = str_replace(['-', '_'], ' ', $issue_title);

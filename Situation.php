@@ -43,10 +43,6 @@ class Situation {
     return $fetcher->getFeatureBranchLog($this->masterBranch);
   }
 
-  public function getIssueNodeTitle() {
-    return $this->getFetcher('DrupalOrgIssueNode')->getIssueNodeTitle();
-  }
-
   /**
    *
    */
