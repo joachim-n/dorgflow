@@ -57,4 +57,12 @@ class FeatureBranch {
     return $this->branchName;
   }
 
+  public function exists() {
+    return $this->exists;
+  }
+
+  public function gitCreate() {
+    shell_exec("git checkout -b $this->branchName");
+  }
+
 }
