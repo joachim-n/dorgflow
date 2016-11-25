@@ -17,6 +17,17 @@ class LocalUpdate {
 
     $situation = new Situation();
 
+    // Create waypoints.
+    $master_branch = new \Dorgflow\Waypoint\MasterBranch($situation);
+    $feature_branch = new \Dorgflow\Waypoint\FeatureBranch($situation);
+
+    // Check whether feature branch exists.
+    // If not, create it in git.
+    if (!$feature_branch->exists()) {
+      // TODO: check we are on the master branch -- if not, throw exception
+
+      $feature_branch->gitCreate();
+    }
   }
 
 }
