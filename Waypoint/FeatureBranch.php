@@ -40,7 +40,7 @@ class FeatureBranch {
       // Invent a branch name.
       $issue_title = $situation->DrupalOrgIssueNode->getIssueNodeTitle();
 
-      $issue_title = str_replace([',', "'", '"'], '', $issue_title);
+      $issue_title = str_replace([',', "'", '"', '.', '\\', '/'], '', $issue_title);
       $issue_title = str_replace(['-', '_'], ' ', $issue_title);
       $pieces = preg_split('/\s+/', $issue_title);
       array_unshift($pieces, $issue_number);
