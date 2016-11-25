@@ -11,7 +11,13 @@ class Patch {
    */
   public $cancel;
 
+  protected $fid;
+
+  protected $patchFile;
+
   function __construct(\Dorgflow\Situation $situation) {
+    $this->situation = $situation;
+
     // The generator must be stored, otherwise getting it again takes us back
     // to the start of the iterator.
     if (!isset(static::$generator)) {
@@ -29,6 +35,22 @@ class Patch {
 
     // Advance the generator for the next use.
     static::$generator->next();
+
+    // Set our properties.
+    $this->fid = $file->file->id;
+
+    // Try to find a commit.
+    // TODO: can't do this until we have index numbers.
+    // (well, we could use fids, but then we'd have a backwards compatibility
+    // issue in the future...)
+  }
+
+  public function getPatchFile() {
+    // Lazy fetch the patch file.
+    if (empty($this->patchFile)) {
+      $this->patchFile = $this->situation->DrupalOrgPatchFile->getPatchFile($this->fid);
+    }
+    return $this->patchFile;
   }
 
 }
