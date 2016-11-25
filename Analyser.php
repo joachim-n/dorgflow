@@ -55,9 +55,30 @@ class Analyser {
     $parent = $feature_branch;
     //$patch = Waypoint\Patch::getNextPatch($situation, $parent);
 
-    // temp! issue data!
-    $title = $situation->DrupalOrgIssueNode->getIssueNodeTitle();
-    dump($title);
+    // test magic!!
+    //$title = $situation->DrupalOrgIssueNode->getIssueNodeTitle();
+
+    $issue_files = $situation->DrupalOrgIssueNode->getIssueFiles();
+    //dump($issue_files);
+
+    $patches = [];
+
+    do {
+      $patch = new Waypoint\Patch($situation);
+
+      if ($patch->cancel) {
+        break;
+      }
+
+      $patches[] = $patch;
+
+    } while (TRUE);
+
+    dump($patches);
+
+    //foreach ($issue_files as $file) {
+    //}
+
 
     /*
     work over the files from the issue
