@@ -7,7 +7,7 @@ class MasterBranch {
   protected $branchName;
 
   function __construct(\Dorgflow\Situation $situation) {
-    $branch_list = $situation->getBranchList();
+    $branch_list = $situation->GitBranchList->getBranchList();
 
     foreach ($branch_list as $branch) {
       // Identify the main development branch, of one of the following forms:

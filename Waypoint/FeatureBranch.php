@@ -17,7 +17,7 @@ class FeatureBranch {
     }
 
     // Is there a branch for this issue number, that is not a tests branch?
-    $branch_list = $situation->getBranchList();
+    $branch_list = $situation->GitBranchList->getBranchList();
     dump($branch_list);
 
     // Work over branch list.

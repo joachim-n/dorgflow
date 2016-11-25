@@ -25,11 +25,6 @@ class Situation {
     // Then user input - d.org node
   }
 
-  public function getBranchList() {
-    $fetcher = $this->getFetcher('GitBranchList');
-    return $fetcher->getBranchList();
-  }
-  
   public function setMasterBranch($master_branch) {
     $this->masterBranch = $master_branch;
   }
