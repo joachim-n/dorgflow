@@ -77,7 +77,9 @@ class DrupalOrgIssueNode {
     $response = file_get_contents("https://www.drupal.org/api-d7/node/{$issue_number}.json");
     //$response = file_get_contents("https://www.drupal.org/api-d7/node.json?nid=$issue_number");
     $response = json_decode($response);
-    var_export($response);
+    //var_export($response);
+    
+    // TODO! cache and return!!!
   }
 
   protected function dummyData() {
