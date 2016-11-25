@@ -31,12 +31,6 @@ class Situation {
     $this->masterBranch = $master_branch;
   }
 
-  public function getCurrentBranch() {
-    $fetcher = $this->getFetcher('GitBranchList');
-    // ARGH!
-    return $fetcher->getCurrentBranch();
-  }
-
   public function getFeatureBranchLog() {
     // return array
     // SHA => commit message
