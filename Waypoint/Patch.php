@@ -54,5 +54,9 @@ class Patch {
     }
     return $this->patchFile;
   }
+  
+  public function applyPatchFile() {    
+    // https://www.sitepoint.com/proc-open-communicate-with-the-outside-world/
+  }
 
 }
