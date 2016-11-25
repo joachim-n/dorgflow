@@ -37,8 +37,7 @@ class Situation {
     // Oldest first.
 
 
-    // ARGH need FeatureBranch!!
-
+    // ARGH need MastBranch!!!
     $fetcher = $this->getFetcher('GitFeatureBranchLog');
     return $fetcher->getFeatureBranchLog($this->masterBranch);
   }
