@@ -31,6 +31,8 @@ class Patch {
       // Cancel this.
       // (Would throwing an exception be cleaner?)
       $this->cancel = TRUE;
+
+      return;
     }
 
     // Advance the generator for the next use.
