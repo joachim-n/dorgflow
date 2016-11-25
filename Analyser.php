@@ -53,10 +53,6 @@ class Analyser {
     $feature_branch_log = $situation->getFeatureBranchLog();
     dump($feature_branch_log);
     $parent = $feature_branch;
-    //$patch = Waypoint\Patch::getNextPatch($situation, $parent);
-
-    // test magic!!
-    //$title = $situation->DrupalOrgIssueNode->getIssueNodeTitle();
 
     $issue_files = $situation->DrupalOrgIssueNode->getIssueFiles();
     //dump($issue_files);
@@ -89,18 +85,6 @@ class Analyser {
 
     */
 
-    /*
-    while ($patch = Waypoint\Patch::getNextPatch($patches)) {
-      dump($patch);
-      $patches[] = $patch;
-    }
-    */
-
-
-    /*
-    look at the
-
-    */
 
 
 

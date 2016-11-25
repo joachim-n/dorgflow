@@ -6,6 +6,9 @@ class Patch {
 
   protected static $generator;
 
+  /**
+   * Indicates that the patch is not a viable object and should be destroyed.
+   */
   public $cancel;
 
   function __construct(\Dorgflow\Situation $situation) {
@@ -20,29 +23,12 @@ class Patch {
 
     if (empty($file)) {
       // Cancel this.
+      // (Would throwing an exception be cleaner?)
       $this->cancel = TRUE;
     }
 
     // Advance the generator for the next use.
     static::$generator->next();
-  }
-
-  public static function getNextPatch(\Dorgflow\Situation $situation) {
-    // Get from situation:
-    // - next patch
-    // - feature branch log
-
-    // Need:
-    // git log
-    // file list
-
-    $feature_branch_log = $situation->getFeatureBranchLog($feature_branch);
-
-    // Get file list from d.org
-    //....
-
-
-    //create a patch object for the first file and patch-ish commit
   }
 
 }
