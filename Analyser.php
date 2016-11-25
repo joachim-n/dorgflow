@@ -112,16 +112,5 @@ class Analyser {
     */
   }
 
-  protected function fetchData($class_name) {
-    $fetcher_full_class_name = 'Dorgflow\\Fetcher\\' . $class_name;
-    $fetcher = new $fetcher_full_class_name();
-    $raw_data = $fetcher->fetchData();
-
-    $parser_full_class_name = 'Dorgflow\\Parser\\' . $class_name;
-    if (class_exists($parser_full_class_name)) {
-      //$parser_full_class_name->
-    }
-  }
-
 
 }
