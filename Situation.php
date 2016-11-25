@@ -15,7 +15,9 @@ class Situation {
     return $this->getFetcher($name);
   }
 
-
+  /**
+   * Get the issue number.
+   */
   public function getIssueNumber() {
     return 123456;
 
