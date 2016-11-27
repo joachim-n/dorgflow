@@ -27,6 +27,35 @@ class Situation {
     // Then user input - d.org node
   }
 
+  public function setUpMasterBranch() {
+    $this->masterBranch = new \Dorgflow\Waypoint\MasterBranch($this);
+
+    return $this->masterBranch;
+  }
+
+  public function setUpFeatureBranch() {
+    $feature_branch = new Waypoint\FeatureBranch($this);
+
+    return $feature_branch;
+  }
+
+  public function setUpPatches() {
+    $patches = [];
+
+    do {
+      $patch = new Waypoint\Patch($this);
+
+      if ($patch->cancel) {
+        break;
+      }
+
+      $patches[] = $patch;
+
+    } while (TRUE);
+
+    return $patches;
+  }
+
   public function setMasterBranch($master_branch) {
     $this->masterBranch = $master_branch;
   }
