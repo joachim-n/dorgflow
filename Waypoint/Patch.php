@@ -86,10 +86,26 @@ class Patch {
     // commit.
     $this->situation->masterBranch->checkOutFiles();
 
-    $this->applyPatchFile();
-    $this->makeGitCommit();
+    $patch_status = $this->applyPatchFile();
+
+    if ($patch_status) {
+      $this->makeGitCommit();
+      return TRUE;
+    }
+    else {
+      return FALSE;
+    }
   }
 
+  /**
+   * Apply the file for this patch.
+   *
+   * This assumes that the filesystem is in a state that is ready to accept the
+   * patch -- that is, the master branch files are checked out.
+   *
+   * @return
+   *  TRUE if the patch applied, FALSE if it did not.
+   */
   public function applyPatchFile() {
     // See https://www.sitepoint.com/proc-open-communicate-with-the-outside-world/
     $desc = [
@@ -118,14 +134,19 @@ class Patch {
 
     $errors = stream_get_contents($pipes[2]);
     dump($errors);
-    // TODO: check STDERR for errors!
-
-
 
     // all done! Clean up
     fclose($pipes[1]);
     fclose($pipes[2]);
     proc_close($process);
+
+    // Check STDERR for errors.
+    if (!empty($errors)) {
+      return FALSE;
+    }
+    else {
+      return TRUE;
+    }
   }
 
   protected function getCommitMessage() {
