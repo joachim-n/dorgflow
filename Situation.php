@@ -60,10 +60,6 @@ class Situation {
     return $patches;
   }
 
-  public function setMasterBranch($master_branch) {
-    $this->masterBranch = $master_branch;
-  }
-
   public function getFeatureBranchLog() {
     // return array
     // SHA => commit message

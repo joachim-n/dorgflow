@@ -33,9 +33,6 @@ class MasterBranch {
     }
 
     $this->isCurrentBranch = ($situation->GitBranchList->getCurrentBranch() == $this->branchName);
-
-    // Set this on the situation object, as other things depend on it.
-    $situation->setMasterBranch($this);
   }
 
   public function getBranchName() {
