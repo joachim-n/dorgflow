@@ -11,9 +11,14 @@ class DrupalOrgPatchFile {
     // Get the file entity first.
     ini_set('user_agent', "dorgpatch - https://github.com/joachim-n/dorgpatch.");
     $response = file_get_contents("https://www.drupal.org/api-d7/file/{$fid}.json");
-    $response = json_decode($response);
-    $url = $response->url;
+    $file_entity = json_decode($response);
+
+    dump($file_entity);
+
+    $url = $file_entity->url;
     $file = file_get_contents($url);
+
+    dump($file);
 
     return $file;
   }
