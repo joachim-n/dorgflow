@@ -47,6 +47,14 @@ class Patch {
     // issue in the future...)
   }
 
+  public function getFileEntity() {
+    // Lazy fetch the patch file.
+    if (empty($this->fileEntity)) {
+      $this->fileEntity = $this->situation->DrupalOrgPatchFile->getFileEntity($this->fid);
+    }
+    return $this->fileEntity;
+  }
+
   public function getPatchFile() {
     // Lazy fetch the patch file.
     if (empty($this->patchFile)) {

@@ -7,6 +7,14 @@ namespace Dorgflow\Fetcher;
  */
 class DrupalOrgPatchFile {
 
+  public function getFileEntity($fid) {
+    ini_set('user_agent', "dorgpatch - https://github.com/joachim-n/dorgpatch.");
+    $response = file_get_contents("https://www.drupal.org/api-d7/file/{$fid}.json");
+    $file_entity = json_decode($response);
+
+    return $file_entity;
+  }
+
   public function getPatchFile($fid) {
     // Get the file entity first.
     ini_set('user_agent', "dorgpatch - https://github.com/joachim-n/dorgpatch.");
