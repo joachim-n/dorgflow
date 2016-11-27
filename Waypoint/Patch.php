@@ -54,9 +54,45 @@ class Patch {
     }
     return $this->patchFile;
   }
-  
-  public function applyPatchFile() {    
-    // https://www.sitepoint.com/proc-open-communicate-with-the-outside-world/
+
+  public function applyPatchFile() {
+    // See https://www.sitepoint.com/proc-open-communicate-with-the-outside-world/
+    // descriptor array
+    $desc = [
+      0 => array('pipe', 'r'), // 0 is STDIN for process
+      1 => array('pipe', 'w'), // 1 is STDOUT for process
+      2 => array('pipe', 'w'), // 2 is STDERR for process
+    ];
+
+    // The command.
+    $cmd = "git apply --index --verbose -";
+
+    // Spawn the process.
+    $pipes = [];
+    $process = proc_open($cmd, $desc, $pipes);
+
+    // TODO: check STDERR for errors!
+
+
+    // Send the patch to command as input, the close the input pipe so the
+    // command knows to start processing.
+    $patch_file = $this->getPatchFile();
+    dump($patch_file);
+    fwrite($pipes[0], $patch_file);
+    fclose($pipes[0]);
+
+
+    $out = stream_get_contents($pipes[1]);
+    dump($out);
+
+    $errors = stream_get_contents($pipes[2]);
+    dump($errors);
+
+
+    // all done! Clean up
+    fclose($pipes[1]);
+    fclose($pipes[2]);
+    proc_close($process);
   }
 
 }
