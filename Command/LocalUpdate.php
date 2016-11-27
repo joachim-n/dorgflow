@@ -24,7 +24,10 @@ class LocalUpdate {
     // Check whether feature branch exists.
     // If not, create it in git.
     if (!$feature_branch->exists()) {
-      // TODO: check we are on the master branch -- if not, throw exception
+      // Check we are on the master branch -- if not, throw exception.
+      if (!$master_branch->isCurrentBranch()) {
+        throw new \Exception("The master branch is not current.");
+      }
 
       $feature_branch->gitCreate();
     }
