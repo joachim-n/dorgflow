@@ -26,20 +26,38 @@ class Patch {
 
 
     $file = static::$generator->current();
-
+    dump($file);
     if (empty($file)) {
       // Cancel this.
       // (Would throwing an exception be cleaner?)
       $this->cancel = TRUE;
-
+      $this->status = 'end';
       return;
     }
 
     // Advance the generator for the next use.
     static::$generator->next();
 
-    // Set our properties.
+    // Skip a patch file that is set to not be displayed.
+    if (!$file->display) {
+      $this->cancel = TRUE;
+      $this->status = 'skip';
+      return;
+    }
+
+    // Set the file ID.
     $this->fid = $file->file->id;
+
+    // Skip if it's not a patch file.
+    // Unfortunately, we have to retrieve the file entity from d.org API to
+    // know the file's URL and its extension.
+    $file_entity = $this->getFileEntity();
+    $file_url = $file_entity->url;
+    if (pathinfo($file_url, PATHINFO_EXTENSION) != 'patch') {
+      $this->cancel = TRUE;
+      $this->status = 'skip';
+      return;
+    }
 
     // Try to find a commit.
     // TODO: can't do this until we have index numbers.

@@ -46,6 +46,10 @@ class Situation {
       $patch = new Waypoint\Patch($this);
 
       if ($patch->cancel) {
+        if ($patch->status == 'skip') {
+          continue;
+        }
+
         break;
       }
 
