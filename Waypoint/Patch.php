@@ -81,9 +81,13 @@ class Patch {
     return $this->patchFile;
   }
 
+  public function commitPatch() {
+    $this->applyPatchFile();
+    $this->makeGitCommit();
+  }
+
   public function applyPatchFile() {
     // See https://www.sitepoint.com/proc-open-communicate-with-the-outside-world/
-    // descriptor array
     $desc = [
       0 => array('pipe', 'r'), // 0 is STDIN for process
       1 => array('pipe', 'w'), // 1 is STDOUT for process
@@ -96,9 +100,6 @@ class Patch {
     // Spawn the process.
     $pipes = [];
     $process = proc_open($cmd, $desc, $pipes);
-
-    // TODO: check STDERR for errors!
-
 
     // Send the patch to command as input, the close the input pipe so the
     // command knows to start processing.
@@ -113,12 +114,23 @@ class Patch {
 
     $errors = stream_get_contents($pipes[2]);
     dump($errors);
+    // TODO: check STDERR for errors!
+
 
 
     // all done! Clean up
     fclose($pipes[1]);
     fclose($pipes[2]);
     proc_close($process);
+  }
+
+  protected function getCommitMessage() {
+    return "patch #??TODO; fid $this->fid. Automatic commit by dorgflow.";
+  }
+
+  protected function makeGitCommit() {
+    $message = $this->getCommitMessage();
+    shell_exec("git commit --message='$message'");
   }
 
 }
