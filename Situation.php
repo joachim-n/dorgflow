@@ -19,12 +19,27 @@ class Situation {
    * Get the issue number.
    */
   public function getIssueNumber() {
-    return 2801423;
+    // Try to deduce an issue number from the current branch.
+    $current_branch = $this->GitBranchList->getCurrentBranch();
 
+    // TODO: analysis should be in Fetcher/Parser classes!
+    $matches = [];
+    preg_match("@^(?P<number>\d+)-@", $current_branch, $matches);
+    if (!empty($matches['number'])) {
+      return $matches['number'];
+    }
 
-    // Try git current branch first
+    $issue_number = $this->UserInput->getIssueNumber();
 
-    // Then user input - d.org node
+    if (!empty($issue_number)) {
+      return $issue_number;
+    }
+    else {
+      // TEMP! TESTING!
+      return 2801423;
+
+      throw new \Exception("Unable to find an issue number from command line parameter.");
+    }
   }
 
   public function setUpMasterBranch() {
