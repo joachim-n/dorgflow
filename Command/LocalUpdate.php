@@ -32,8 +32,12 @@ class LocalUpdate {
     $feature_branch = $situation->setUpFeatureBranch();
 
     // Check whether feature branch exists.
-    // If not, create it in git.
-    if (!$feature_branch->exists()) {
+    if ($feature_branch->exists()) {
+      // TEMPORARY: we don't yet support updates...
+      throw new \Exception("The feature branch already exists. Updating an existing branch is not yet supported.");
+    }
+    else {
+      // If feature branch doens't exist, create it in git.
       // Check we are on the master branch -- if not, throw exception.
       if (!$master_branch->isCurrentBranch()) {
         throw new \Exception("The master branch is not current.");
