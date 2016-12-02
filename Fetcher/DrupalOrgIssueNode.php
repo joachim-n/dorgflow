@@ -27,8 +27,16 @@ class DrupalOrgIssueNode {
     return $issue_node->title;
   }
 
+  /**
+   * Get the index number of the next comment to be posted to the issue.
+   *
+   * @return int
+   *  The comment index number.
+   */
   public function getNextCommentIndex() {
-    return 42;
+    $comment_count = $issue_node->comment_count;
+    $next_comment_index = $comment_count + 1;
+    return $next_comment_index;
   }
 
   public function getIssueFiles() {
