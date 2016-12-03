@@ -8,6 +8,8 @@ class Situation {
 
   protected $fetchers = [];
 
+  protected $issue_number;
+
   // TODO: accessor!
   public $masterBranch;
 
