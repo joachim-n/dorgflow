@@ -6,10 +6,10 @@ namespace Dorgflow\Fetcher;
 class UserInput {
 
   public function getIssueNumber() {
-    // todo: $argv[1]
-
-    // Testing:
-    return 230774;
+    // TODO: allow for a URL as input.
+    if (empty($argv[1]) && is_numeric($argv[1])) {
+      return $argv[1];
+    }
   }
 
 }
