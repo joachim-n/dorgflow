@@ -63,6 +63,7 @@ class Patch {
     // TODO: can't do this until we have index numbers.
     // (well, we could use fids, but then we'd have a backwards compatibility
     // issue in the future...)
+    // ARGH but we need this for interdiffs!
   }
 
   public function getFileEntity() {
