@@ -4,6 +4,16 @@ namespace Dorgflow\Fetcher;
 
 class CurrentProject {
 
+  protected $fetched;
+
+  public function getCurrentProjectName() {
+    if (empty($this->fetched)) {
+      $this->fetchData();
+    }
+
+    return $this->current_module;
+  }
+
   public function fetchData() {
     // * Get the name of the current module, based on the working directory.
     // TODO: drush-specific!!!
@@ -27,7 +37,7 @@ class CurrentProject {
     // and views-7 in my sandbox folder.)
     $current_module = preg_replace("@-.*$@", '', $current_module);
 
-    return $current_module;
+    $this->current_module = $current_module;
   }
 
 }
