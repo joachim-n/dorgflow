@@ -7,7 +7,7 @@ use stdClass;
 
 class DrupalOrgIssueNode {
 
-  // needed?
+  // needed? PROBABLY NOT, since we HAD an issue number in order to get this node!
   public function getIssueNumber() {
     $issue_node = $this->fetchData();
     return $issue_node->nid;
@@ -39,12 +39,20 @@ class DrupalOrgIssueNode {
     return $next_comment_index;
   }
 
+  /**
+   * Gets the files attached to the issue, in order of creation.
+   */
   public function getIssueFiles() {
     $issue_node = $this->fetchData();
-    // Ensure these are in creation order by ordering them by fid.
-    // TODO: in due course, get the comment index data!!! -- see d.org issue!
     $files = $issue_node->field_issue_files;
 
+    // TODO: filter out interdiffs!!!
+    // ... which we can't know till we have the file entities???
+
+    // TODO: filter out ones that are hidden?
+
+    // Ensure these are in creation order by ordering them by fid.
+    // TODO: in due course, get the comment index data!!! -- see d.org issue!
     usort($files, function($a, $b) {
       return ($a->file->id <=> $b->file->id);
     });
@@ -86,7 +94,7 @@ class DrupalOrgIssueNode {
     //$response = file_get_contents("https://www.drupal.org/api-d7/node.json?nid=$issue_number");
     $response = json_decode($response);
     //var_export($response);
-    
+
     // TODO! cache and return!!!
   }
 
