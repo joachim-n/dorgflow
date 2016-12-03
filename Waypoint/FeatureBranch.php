@@ -61,6 +61,20 @@ class FeatureBranch {
     return $this->exists;
   }
 
+  public function isCurrentBranch() {
+    return $this->isCurrentBranch;
+  }
+
+  public function getBranchDescription() {
+    $matches = [];
+    preg_match("@\d+-?(?P<description>.+)@", $current_branch, $matches_2);
+
+    if (!empty($matches['description'])) {
+      $branch_description = $matches['description'];
+      return $branch_description;
+    }
+  }
+
   public function gitCreate() {
     shell_exec("git checkout -b $this->branchName");
   }
