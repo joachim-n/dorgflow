@@ -19,6 +19,13 @@ class Situation {
    * Get the issue number.
    */
   public function getIssueNumber() {
+    /*
+    // TODO: cache?
+    if (isset($this->issue_number)) {
+      return $this->issue_number;
+    }
+    */
+
     // Try to deduce an issue number from the current branch.
     $current_branch = $this->GitBranchList->getCurrentBranch();
 
