@@ -8,6 +8,9 @@ class Situation {
 
   protected $fetchers = [];
 
+  // TODO: accessor!
+  public $masterBranch;
+
   /**
    * Magic method: get a data fetcher.
    */
