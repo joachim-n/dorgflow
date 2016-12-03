@@ -82,6 +82,12 @@ class Patch {
     return $this->patchFile;
   }
 
+  public function getPatchFilename() {
+    $file_entity = $this->getFileEntity();
+    $file_url = $file_entity->url;
+    return pathinfo($file_url, PATHINFO_BASENAME);
+  }
+
   public function commitPatch() {
     // Set the files back to the master branch, without changing the current
     // commit.
