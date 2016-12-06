@@ -2,6 +2,8 @@
 
 namespace Dorgflow\DataSource\Fetcher;
 
+use Dorgflow\Situation;
+
 /**
  * Interface for Fetchers.
  */
@@ -13,6 +15,6 @@ interface FetcherInterface {
    * @return
    *  Some sort of data.
    */
-  public function fetchData();
+  public function fetchData(Situation $situation);
 
 }

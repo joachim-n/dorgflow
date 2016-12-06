@@ -2,12 +2,14 @@
 
 namespace Dorgflow\DataSource\Fetcher;
 
+use Dorgflow\Situation;
+
 class GitBranchList implements FetcherInterface {
 
   /**
    * {@inheritdoc}
    */
-  public function fetchData() {
+  public function fetchData(Situation $situation) {
     // TODO: check in right dir!
 
     // Get the branches that are reachable.

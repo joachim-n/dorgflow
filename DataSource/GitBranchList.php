@@ -19,7 +19,7 @@ class GitBranchList extends DataSourceBase {
   /**
    * {@inheritdoc}
    */
-  public function parse() {
+  protected function parse() {
     // Split the lines of the input.
     $git_branch_list = explode("\n", rtrim($this->data));
     //print_r($git_branch_list);
