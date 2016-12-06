@@ -6,9 +6,17 @@ namespace Dorgflow\Fetcher;
 class UserInput {
 
   public function getIssueNumber() {
-    // TODO: allow for a URL as input.
-    if (empty($argv[1]) && is_numeric($argv[1])) {
-      return $argv[1];
+    global $argv;
+    if (!empty($argv[1])) {
+      if (is_numeric($argv[1])) {
+        return $argv[1];
+      }
+
+      // If the param is a URL, get the node ID from the end of it.
+      $matches = [];
+      if (preg_match("@www\.drupal\.org/node/(?P<number>\d+)$@", $argv[1], $matches)) {
+        return $matches['number'];
+      }
     }
   }
 
