@@ -6,6 +6,8 @@ namespace Dorgflow;
 // Is injected into Waypoints
 class Situation {
 
+  public $devel_mode = FALSE;
+
   protected $fetchers = [];
 
   protected $issue_number;
