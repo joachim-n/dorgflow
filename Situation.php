@@ -51,12 +51,13 @@ class Situation {
     if (!empty($issue_number)) {
       return $issue_number;
     }
-    else {
-      // TEMP! TESTING!
-      return 2801423;
 
-      throw new \Exception("Unable to find an issue number from command line parameter.");
+    // Dev mode.
+    if ($this->devel_mode) {
+      return 2801423;
     }
+
+    throw new \Exception("Unable to find an issue number from command line parameter or current git branch.");
   }
 
   public function setUpMasterBranch() {
