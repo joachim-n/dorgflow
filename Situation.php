@@ -24,6 +24,9 @@ class Situation {
 
   /**
    * Get the issue number.
+   *
+   * @return int
+   *  The issue number, which is the nid of the drupal.org issue node.
    */
   public function getIssueNumber() {
     /*
