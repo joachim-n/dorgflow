@@ -24,10 +24,9 @@ class Patch {
       static::$generator = $situation->DrupalOrgIssueNode->getNextIssueFile();
     }
 
-
-    $file = static::$generator->current();
-    dump($file);
-    if (empty($file)) {
+    $file_field_item = static::$generator->current();
+    dump($file_field_item);
+    if (empty($file_field_item)) {
       // Cancel this.
       // (Would throwing an exception be cleaner?)
       $this->cancel = TRUE;
@@ -39,14 +38,14 @@ class Patch {
     static::$generator->next();
 
     // Skip a patch file that is set to not be displayed.
-    if (!$file->display) {
+    if (!$file_field_item->display) {
       $this->cancel = TRUE;
       $this->status = 'skip';
       return;
     }
 
     // Set the file ID.
-    $this->fid = $file->file->id;
+    $this->fid = $file_field_item->file->id;
 
     // Skip if it's not a patch file.
     // Unfortunately, we have to retrieve the file entity from d.org API to
