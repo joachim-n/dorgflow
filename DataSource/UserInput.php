@@ -24,6 +24,7 @@ class UserInput extends DataSourceBase {
       }
       else {
         // If the param is a URL, get the node ID from the end of it.
+        // TODO! allow a #anchor at the end of the url for #new links.
         $matches = [];
         if (preg_match("@www\.drupal\.org/node/(?P<number>\d+)$@", $argv[1], $matches)) {
           $this->issueNumber = $matches['number'];
