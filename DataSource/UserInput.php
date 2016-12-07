@@ -17,6 +17,7 @@ class UserInput extends DataSourceBase {
    * {@inheritdoc}
    */
   protected function parse() {
+    // TODO move to fetcher as silly as this is!
     global $argv;
     if (!empty($argv[1])) {
       if (is_numeric($argv[1])) {
