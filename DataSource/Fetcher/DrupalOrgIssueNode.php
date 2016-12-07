@@ -5,7 +5,7 @@ namespace Dorgflow\DataSource\Fetcher;
 use Dorgflow\Situation;
 
 /**
- * Retrieve an issue node from drupal.org.
+ * Retrieves an issue node from drupal.org.
  */
 class DrupalOrgIssueNode implements FetcherInterface {
 
