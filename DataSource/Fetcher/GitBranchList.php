@@ -9,7 +9,7 @@ class GitBranchList implements FetcherInterface {
   /**
    * {@inheritdoc}
    */
-  public function fetchData(Situation $situation) {
+  public function fetchData(Situation $situation, $parameters) {
     // TODO: check in right dir!
 
     // Get the branches that are reachable.

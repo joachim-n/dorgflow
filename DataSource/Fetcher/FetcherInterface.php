@@ -15,6 +15,6 @@ interface FetcherInterface {
    * @return
    *  Some sort of data.
    */
-  public function fetchData(Situation $situation);
+  public function fetchData(Situation $situation, $parameters);
 
 }

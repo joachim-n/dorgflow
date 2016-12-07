@@ -12,7 +12,7 @@ class DrupalOrgIssueNode implements FetcherInterface {
   /**
    * {@inheritdoc}
    */
-  public function fetchData(Situation $situation) {
+  public function fetchData(Situation $situation, $parameters) {
     // Set the user-agent for the request to drupal.org's API, to be polite.
     // See https://www.drupal.org/api
     ini_set('user_agent', "dorgpatch - https://github.com/joachim-n/dorgpatch.");
