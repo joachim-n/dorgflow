@@ -158,7 +158,12 @@ class Situation {
       $data_source = new $fetcher_full_class_name($this);
       // TODO: not ideal; too much external driving of this class.
       $data_source->setParameters($parameters);
-      $data_source->setFetcher();
+      if (isset($parameters['fetcher'])) {
+        $data_source->setFetcher($parameters['fetcher']);
+      }
+      else {
+        $data_source->setFetcher();
+      }
       $data_source->fetchData();
       $fetchers[$name][$key] = $data_source;
     }
