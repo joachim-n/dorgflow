@@ -46,7 +46,7 @@ class Situation {
     */
 
     // Try to deduce an issue number from the current branch.
-    $current_branch = $this->GitBranchList->getCurrentBranch();
+    $current_branch = $this->GitBranchList()->getCurrentBranch();
 
     // TODO: analysis should be in Fetcher/Parser classes!
     $matches = [];
@@ -55,7 +55,7 @@ class Situation {
       return $matches['number'];
     }
 
-    $issue_number = $this->UserInput->getIssueNumber();
+    $issue_number = $this->UserInput()->getIssueNumber();
 
     if (!empty($issue_number)) {
       return $issue_number;
