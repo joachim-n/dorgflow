@@ -8,6 +8,7 @@ class Situation {
 
   public $devel_mode = FALSE;
 
+  // TODO: rename!
   protected $fetchers = [];
 
   protected $issue_number;
@@ -19,7 +20,15 @@ class Situation {
    * Magic method: get a data fetcher.
    */
   public function __get($name) {
-    return $this->getFetcher($name);
+    // TODO: decomission!
+    return $this->getDataSource($name, []);
+  }
+
+  /**
+   * Magic method: get a data fetcher.
+   */
+  public function __call($name, $parameters) {
+    return $this->getDataSource($name, $parameters);
   }
 
   /**
@@ -117,5 +126,42 @@ class Situation {
 
     return $fetchers[$name];
   }
+
+
+
+  /**
+   * Returns a new or cached data source object.
+   *
+   * @param $name
+   *  The class name of the data source object. This is a class in the
+   *  Dorgflow\DataSource namespace.
+   */
+  protected function getDataSource($name, $parameters) {
+    // Most data sources are singletons, and the parameters array will be empty.
+    // Create a key for our static cache.
+    if (empty($parameters)) {
+      $key = '';
+    }
+    else {
+      $key = serialize($parameters);
+    }
+
+    // Statically cache data sources, as they statically cache their own data.
+    if (!isset($fetchers[$name][$key])) {
+      $fetcher_full_class_name = 'Dorgflow\\DataSource\\' . $name;
+
+      $data_source = new $fetcher_full_class_name($this);
+      // TODO: not ideal; too much external driving of this class.
+      $data_source->setParameters($parameters);
+      $data_source->setFetcher();
+      $data_source->fetchData();
+      $fetchers[$name][$key] = $data_source;
+    }
+
+    return $fetchers[$name][$key];
+  }
+
+
+
 
 }

@@ -27,7 +27,15 @@ abstract class DataSourceBase {
    *  (optional) A fetcher to override the default. This is for testing purposes
    *  only.
    */
-  public function __construct(Situation $situation, FetcherInterface $fetcher = NULL) {
+  public function __construct(Situation $situation) {
+    $this->situation = $situation;
+  }
+
+  public function setParameters($parameters) {
+    $this->parameters = $parameters;
+  }
+
+  public function setFetcher(FetcherInterface $fetcher = NULL) {
     if (empty($fetcher)) {
       $reflect = new \ReflectionClass($this);
       $short_name = $reflect->getShortName();
@@ -38,7 +46,13 @@ abstract class DataSourceBase {
     }
 
     if (!empty($fetcher)) {
-      $this->data = $fetcher->fetchData($situation);
+      $this->fetcher = $fetcher;
+    }
+  }
+
+  public function fetchData() {
+    if (!empty($this->fetcher)) {
+      $this->data = $this->fetcher->fetchData($this->situation, $this->parameters);
     }
 
     $this->parse();
