@@ -6,6 +6,8 @@ use Dorgflow\Situation;
 use Dorgflow\DataSource\Fetcher\FetcherInterface;
 
 /**
+ * Base class for data sources.
+ *
  * Each data source class provides one piece of data, such as the list of git
  * branches, or the drupal.org issue node.
  */
@@ -18,6 +20,12 @@ abstract class DataSourceBase {
    *
    * Sets up the fetcher object of the same class name as this, if the class
    * exists. May be overridden with a parameter, for testing purposes.
+   *
+   * @param Dorgflow\Situation $situation
+   *  The situation wrapper.
+   * @param Dorgflow\DataSource\Fetcher\FetcherInterface
+   *  (optional) A fetcher to override the default. This is for testing purposes
+   *  only.
    */
   public function __construct(Situation $situation, FetcherInterface $fetcher = NULL) {
     if (empty($fetcher)) {
