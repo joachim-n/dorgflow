@@ -137,6 +137,11 @@ class Situation {
    *  Dorgflow\DataSource namespace.
    */
   protected function getDataSource($name, $parameters) {
+    // Expect a single param, which is itself an array of named parameters.
+    if (!empty($parameters)) {
+      $parameters = $parameters[0];
+    }
+
     // Most data sources are singletons, and the parameters array will be empty.
     // Create a key for our static cache.
     if (empty($parameters)) {
