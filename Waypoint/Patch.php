@@ -21,7 +21,7 @@ class Patch {
     // The generator must be stored, otherwise getting it again takes us back
     // to the start of the iterator.
     if (!isset(static::$generator)) {
-      static::$generator = $situation->DrupalOrgIssueNode->getNextIssueFile();
+      static::$generator = $situation->DrupalOrgIssueNode()->getNextIssueFile();
     }
 
     $file_field_item = static::$generator->current();
