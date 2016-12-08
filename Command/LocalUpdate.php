@@ -49,7 +49,7 @@ class LocalUpdate {
 
     // If no patches, we're done.
     if (empty($patches)) {
-      print "No patches to apply.";
+      print "No patches to apply.\n";
       return;
     }
 
