@@ -66,9 +66,9 @@ class Patch {
   }
 
   public function getFileEntity() {
-    // Lazy fetch the patch file.
+    // Lazy fetch the file entity for the patch.
     if (empty($this->fileEntity)) {
-      $this->fileEntity = $this->situation->DrupalOrgPatchFile->getFileEntity($this->fid);
+      $this->fileEntity = $this->situation->DrupalOrgFileEntity(['fid' => $this->fid])->getFileEntity();
     }
     return $this->fileEntity;
   }
@@ -76,7 +76,9 @@ class Patch {
   public function getPatchFile() {
     // Lazy fetch the patch file.
     if (empty($this->patchFile)) {
-      $this->patchFile = $this->situation->DrupalOrgPatchFile->getPatchFile($this->fid);
+      $file_entity = $this->getFileEntity();
+
+      $this->patchFile = $this->situation->DrupalOrgPatchFile(['url' => $file_entity->url])->getPatchFile($this->fid);
     }
     return $this->patchFile;
   }
