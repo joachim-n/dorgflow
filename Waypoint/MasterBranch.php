@@ -32,7 +32,7 @@ class MasterBranch {
       throw new \Exception("Can't find a master branch.");
     }
 
-    $this->isCurrentBranch = ($situation->GitBranchList->getCurrentBranch() == $this->branchName);
+    $this->isCurrentBranch = ($situation->GitBranchList()->getCurrentBranch() == $this->branchName);
   }
 
   public function getBranchName() {
