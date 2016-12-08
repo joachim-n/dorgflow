@@ -42,7 +42,7 @@ class LocalUpdate {
 
       $feature_branch->gitCreate();
 
-      print strtr("Feature branch !branch created.", [
+      print strtr("Feature branch !branch created.\n", [
         '!branch' => $feature_branch->getBranchName(),
       ]);
     }
@@ -59,12 +59,12 @@ class LocalUpdate {
 
       // Message.
       if ($patch_committed) {
-        print strtr("Applied patch !patchname.", [
+        print strtr("Applied patch !patchname.\n", [
           '!patchname' => $patch->getPatchFilename(),
         ]);
       }
       else {
-        print strtr("Patch !patchname did not apply.", [
+        print strtr("Patch !patchname did not apply.\n", [
           '!patchname' => $patch->getPatchFilename(),
         ]);
       }
@@ -77,7 +77,7 @@ class LocalUpdate {
       // Save the file so the user can apply it manually.
       file_put_contents($patch->getPatchFilename(), $patch->getPatchFile());
 
-      print strtr("The most recent patch, !patchname, did not apply. You should attempt to apply it manually. The patch file has been saved to the working directory.", [
+      print strtr("The most recent patch, !patchname, did not apply. You should attempt to apply it manually. The patch file has been saved to the working directory.\n", [
         '!patchname' => $patch->getPatchFilename(),
       ]);
     }
