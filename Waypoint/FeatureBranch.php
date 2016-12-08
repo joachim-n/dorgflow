@@ -49,6 +49,8 @@ class FeatureBranch {
       dump($this->branchName);
     }
 
+    $this->isCurrentBranch = ($situation->GitBranchList()->getCurrentBranch() == $this->branchName);
+
     // if current branch NOT feature branch, problem?
     // no, leave that to the command to determine.
   }
@@ -67,7 +69,7 @@ class FeatureBranch {
 
   public function getBranchDescription() {
     $matches = [];
-    preg_match("@\d+-?(?P<description>.+)@", $current_branch, $matches_2);
+    preg_match("@\d+-?(?P<description>.+)@", $this->branchName, $matches);
 
     if (!empty($matches['description'])) {
       $branch_description = $matches['description'];
