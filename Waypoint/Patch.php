@@ -123,7 +123,7 @@ class Patch {
     ];
 
     // The command.
-    $cmd = "git apply --index --verbose -";
+    $cmd = "git apply --index -";
 
     // Spawn the process.
     $pipes = [];
