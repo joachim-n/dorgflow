@@ -54,9 +54,9 @@ class CreatePatch {
 
   protected function getPatchName($feature_branch) {
     $issue_number = $this->situation->getIssueNumber();
-    $comment_number = $this->situation->DrupalOrgIssueNode->getNextCommentIndex();
+    $comment_number = $this->situation->DrupalOrgIssueNode()->getNextCommentIndex();
     $patch_number = "$issue_number-$comment_number";
-    $current_project = $this->situation->CurrentProject->getCurrentProjectName();
+    $current_project = $this->situation->CurrentProject()->getCurrentProjectName();
     $branch_description = $feature_branch->getBranchDescription();
 
     return "$patch_number.$current_project.$branch_description.patch";
