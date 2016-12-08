@@ -39,7 +39,7 @@ class CreatePatch {
 
     shell_exec("git $command $master_branch_name > $patch_name");
 
-    drush_print_r("Written patch $patch_name with diff from $master_branch to local branch.");
+    print("Written patch $patch_name with diff from $master_branch_name to local branch.\n");
 
 
     /*
