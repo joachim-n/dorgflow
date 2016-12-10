@@ -31,7 +31,7 @@ abstract class DataSourceBase {
     $this->situation = $situation;
   }
 
-  public function setParameters($parameters) {
+  public function setParameters($parameters = []) {
     $this->parameters = $parameters;
   }
 
