@@ -5,6 +5,13 @@ namespace Dorgflow\DataSource;
 class GitFeatureBranchLog extends DataSourceBase {
 
   public function getFeatureBranchLog() {
+    return $this->feature_branch_log;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function parse() {
     $feature_branch_log = [];
 
     $git_log_lines = explode("\n", rtrim($this->data));
@@ -15,7 +22,7 @@ class GitFeatureBranchLog extends DataSourceBase {
       $feature_branch_log[$sha] = $message;
     }
 
-    return $feature_branch_log;
+    $this->feature_branch_log = $feature_branch_log;
   }
 
 }
