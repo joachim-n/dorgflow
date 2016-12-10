@@ -13,6 +13,9 @@ class GitBranchList extends DataSourceBase {
   }
 
   public function getCurrentBranch() {
+    // TODO: move to a new datasource, using:
+    // git symbolic-ref --short HEAD
+    
     return $this->currentBranch;
   }
 
