@@ -4,7 +4,7 @@ namespace Dorgflow\DataSource\Fetcher;
 
 use Dorgflow\Situation;
 
-class DrupalOrgPatchFile implements FetcherInterface {
+class DrupalOrgPatchFile extends DrupalOrgFetcher implements FetcherInterface {
 
   /**
    * {@inheritdoc}
