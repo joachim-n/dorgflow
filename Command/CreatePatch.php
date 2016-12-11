@@ -9,7 +9,12 @@ class CreatePatch {
   public function execute() {
     $this->situation = new Situation();
 
-    // TODO: check git is clean!
+    // Check git is clean.
+    $clean = $situation->GitStatus()->gitIsClean();
+    if (!$clean) {
+      print "Git repository is not clean. Aborting.";
+      exit();
+    }
 
     // Create branches.
     $master_branch = $this->situation->setUpMasterBranch();

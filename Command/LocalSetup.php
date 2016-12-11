@@ -9,17 +9,12 @@ class LocalSetup {
   public function execute() {
     $situation = new Situation();
 
-    /*
-    $log = $situation->GitFeatureBranchLog()->getFeatureBranchLog();
-    dump($log);
-    exit();
-    */
-
-    /*
-    $patches = $situation->setUpPatches();
-    //dump($patches);
-    exit();
-    */
+    // Check git is clean.
+    $clean = $situation->GitStatus()->gitIsClean();
+    if (!$clean) {
+      print "Git repository is not clean. Aborting.";
+      exit();
+    }
 
     // Create branches.
     $master_branch = $situation->setUpMasterBranch();

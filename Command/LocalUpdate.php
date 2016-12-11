@@ -9,6 +9,13 @@ class LocalUpdate {
   public function execute() {
     $situation = new Situation();
 
+    // Check git is clean.
+    $clean = $situation->GitStatus()->gitIsClean();
+    if (!$clean) {
+      print "Git repository is not clean. Aborting.";
+      exit();
+    }
+
     // Create branches.
     $master_branch = $situation->setUpMasterBranch();
     $feature_branch = $situation->setUpFeatureBranch();
