@@ -11,41 +11,24 @@ class LocalUpdate {
 
     // Create branches.
     $master_branch = $situation->setUpMasterBranch();
+    $feature_branch = $situation->setUpFeatureBranch();
 
-    // If the master branch is not current, abort.
-    // TODO: support updating an existing feature branch.
-    if (!$master_branch->isCurrentBranch()) {
-      print strtr("Detected master branch !branch, but it is not the current branch. Aborting.", [
-        '!branch' => $master_branch->getBranchName(),
+    // If the feature branch is not current, abort.
+    if (!$feature_branch->exists()) {
+      print "Could not find a feature branch. Aborting.";
+      exit();
+    }
+    if (!$feature_branch->isCurrentBranch()) {
+      print strtr("Detected feature branch !branch, but it is not the current branch. Aborting.", [
+        '!branch' => $feature_branch->getBranchName(),
       ]);
       exit();
     }
-
-    $feature_branch = $situation->setUpFeatureBranch();
 
     // Get the patches and create them.
     // TODO: currently only the most recent patch is used.
     $patches = $situation->setUpPatches();
     //dump($patches);
-
-    // Check whether feature branch exists.
-    if ($feature_branch->exists()) {
-      // TEMPORARY: we don't yet support updates...
-      throw new \Exception("The feature branch already exists. Updating an existing branch is not yet supported.");
-    }
-    else {
-      // If feature branch doens't exist, create it in git.
-      // Check we are on the master branch -- if not, throw exception.
-      if (!$master_branch->isCurrentBranch()) {
-        throw new \Exception("The master branch is not current.");
-      }
-
-      $feature_branch->gitCreate();
-
-      print strtr("Feature branch !branch created.\n", [
-        '!branch' => $feature_branch->getBranchName(),
-      ]);
-    }
 
     // If no patches, we're done.
     if (empty($patches)) {
@@ -55,6 +38,8 @@ class LocalUpdate {
 
     // Output the patches.
     foreach ($patches as $patch) {
+      // !!!!! TODO! don't commit patches that have commits already!!!!!!!!!!
+
       $patch_committed = $patch->commitPatch();
 
       // Message.
