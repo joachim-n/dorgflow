@@ -4,65 +4,26 @@ namespace Dorgflow\Waypoint;
 
 class Patch {
 
-  protected static $generator;
-
-  /**
-   * Indicates that the patch is not a viable object and should be destroyed.
-   */
-  public $cancel;
-
   protected $fid;
 
   protected $patchFile;
 
-  function __construct(\Dorgflow\Situation $situation) {
+  public static function parseCommitMessage() {
+    // TODO!
+    return [
+      'fid' => 12345, // TODO
+      'comment_index' => 1, // TODO
+      'filename' => '',
+    ];
+  }
+
+  function __construct(\Dorgflow\Situation $situation, $file_field_item, $commit = NULL) {
     $this->situation = $situation;
-
-    // The generator must be stored, otherwise getting it again takes us back
-    // to the start of the iterator.
-    if (!isset(static::$generator)) {
-      static::$generator = $situation->DrupalOrgIssueNode()->getNextIssueFile();
-    }
-
-    $file_field_item = static::$generator->current();
-    dump($file_field_item);
-    if (empty($file_field_item)) {
-      // Cancel this.
-      // (Would throwing an exception be cleaner?)
-      $this->cancel = TRUE;
-      $this->status = 'end';
-      return;
-    }
-
-    // Advance the generator for the next use.
-    static::$generator->next();
-
-    // Skip a patch file that is set to not be displayed.
-    if (!$file_field_item->display) {
-      $this->cancel = TRUE;
-      $this->status = 'skip';
-      return;
-    }
 
     // Set the file ID.
     $this->fid = $file_field_item->file->id;
 
-    // Skip if it's not a patch file.
-    // Unfortunately, we have to retrieve the file entity from d.org API to
-    // know the file's URL and its extension.
-    $file_entity = $this->getFileEntity();
-    $file_url = $file_entity->url;
-    if (pathinfo($file_url, PATHINFO_EXTENSION) != 'patch') {
-      $this->cancel = TRUE;
-      $this->status = 'skip';
-      return;
-    }
-
-    // Try to find a commit.
-    // TODO: can't do this until we have index numbers.
-    // (well, we could use fids, but then we'd have a backwards compatibility
-    // issue in the future...)
-    // ARGH but we need this for interdiffs!
+    // TODO: set up commit!!
   }
 
   public function getFileEntity() {

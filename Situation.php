@@ -99,26 +99,136 @@ class Situation {
     return $this->feature_branch;
   }
 
-
+  /**
+   * Creates the Patch Waypoints for the issue.
+   *
+   * TODO: docs!
+   */
   public function setUpPatches() {
-    $patches = [];
+    // New:
 
-    do {
-      $patch = new Waypoint\Patch($this);
+    //$issue_file_field_items = $this->DrupalOrgIssueNode()->getIssueFiles();
+    //dump($issue_file_field_items);
+    //var_export($issue_file_field_items);
 
-      if ($patch->cancel) {
-        if ($patch->status == 'skip') {
-          continue;
-        }
+    $issue_file_field_items =
+    array (
+      0 =>
+      (object) (array(
+         'file' =>
+        (object) (array(
+           'uri' => 'https://www.drupal.org/api-d7/file/5755031',
+           'id' => '5755031',
+           'resource' => 'file',
+        )),
+         'display' => '0',
+      )),
+      1 =>
+      (object) (array(
+         'file' =>
+        (object) (array(
+           'uri' => 'https://www.drupal.org/api-d7/file/5755137',
+           'id' => '5755137',
+           'resource' => 'file',
+        )),
+         'display' => '0',
+      )),
+      2 =>
+      (object) (array(
+         'file' =>
+        (object) (array(
+           'uri' => 'https://www.drupal.org/api-d7/file/5755185',
+           'id' => '5755185',
+           'resource' => 'file',
+        )),
+         'display' => '1',
+      )),
+      3 =>
+      (object) (array(
+         'file' =>
+        (object) (array(
+           'uri' => 'https://www.drupal.org/api-d7/file/5755421',
+           'id' => '5755421',
+           'resource' => 'file',
+        )),
+         'display' => '1',
+      )),
+    );
 
-        break;
+    $feature_branch_log = $this->GitFeatureBranchLog()->getFeatureBranchLog();
+    dump($feature_branch_log);
+
+    $patch_waypoints = [];
+
+
+    /*
+    cream off next file field item from the node:
+      does it exist as a commit in the feature branch?
+      cream off feature branch commits until one matches.
+        YES: record the patch waypoint with the file item; no need to go further
+          as we won't be applying it
+          THIS COULD BE A PATCH WE UPLOADED, and therefore a DIFFERENT STYLE OF
+          commit message!
+        NO: get the file entity so we can look at the URL
+          Is it a patch?
+          YES: record the patch waypoint with the patch file
+          NO: skip
+    */
+
+
+    // Issue file items are returned in creation order, earliest first.
+    while ($issue_file_field_items) {
+      // Get the next file item.
+      $file_field_item = array_shift($issue_file_field_items);
+      //dump($file_field_item);
+
+      // Skip a file that is set to not be displayed.
+      if (!$file_field_item->display) {
+        continue;
       }
 
-      $patches[] = $patch;
+      $fid = $file_field_item->file->id;
 
-    } while (TRUE);
+      // Work through the feature branch commit list until we find a commit
+      // that matches.
+      while ($feature_branch_log) {
+        // Get the next commit.
+        // BAD: we lose the array key which is the SHA! TODO!
+        $commit = array_shift($feature_branch_log);
 
-    return $patches;
+        // Does it match? We only have the file ID to go on at this point.
+        // TODO: more than one commit message format!!! -- our OWN patches
+        // should have EMPTY commits made
+        $commit_info = \Dorgflow\Waypoint\Patch::parseCommitMessage();
+        if ($commit_info['fid'] == $fid) {
+
+          // TODO! set up the patch
+          // add it to patch array
+          $patch = new \Dorgflow\Waypoint\Patch($this, $file_field_item, $commit);
+          $patch_waypoints[] = $patch;
+
+          // Done with this file item.
+          continue 2;
+        }
+      }
+
+      // We didn't find a commit, so now get the file entity to see if it's a
+      // patch file
+      $file_entity = $this->DrupalOrgFileEntity(['fid' => $fid])->getFileEntity();
+      $file_url = $file_entity->url;
+
+      // Skip a file that is not a patch.
+      if (pathinfo($file_url, PATHINFO_EXTENSION) != 'patch') {
+        continue;
+      }
+
+      $patch = new \Dorgflow\Waypoint\Patch($this, $file_field_item);
+      $patch_waypoints[] = $patch;
+    }
+
+    //dump($patch_waypoints);
+
+    return $patch_waypoints;
   }
 
   public function getFeatureBranchLog() {
