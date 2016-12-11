@@ -7,6 +7,8 @@ namespace Dorgflow\DataSource;
  */
 class GitStatus extends DataSourceBase {
 
+  protected $is_clean;
+
   /**
    * Returns whether the current git repository is clean.
    *
@@ -21,9 +23,7 @@ class GitStatus extends DataSourceBase {
    * {@inheritdoc}
    */
   protected function parse() {
-    $diff_files = shell_exec("git diff-files");
-
-    $this->is_clean = (empty($diff_files));
+    $this->is_clean = (empty($this->data));
   }
 
 }
