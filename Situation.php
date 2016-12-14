@@ -92,12 +92,12 @@ class Situation {
    * TODO: docs!
    */
   public function setUpPatches() {
-    // New:
+    // Get the field items for the issue node's file field.
+    $issue_file_field_items = $this->DrupalOrgIssueNode()->getIssueFiles();
 
-    //$issue_file_field_items = $this->DrupalOrgIssueNode()->getIssueFiles();
     //dump($issue_file_field_items);
     //var_export($issue_file_field_items);
-
+    /*
     $issue_file_field_items =
     array (
       0 =>
@@ -141,6 +141,7 @@ class Situation {
          'display' => '1',
       )),
     );
+    */
 
     $feature_branch_log = $this->GitFeatureBranchLog()->getFeatureBranchLog();
     dump($feature_branch_log);
@@ -148,21 +149,11 @@ class Situation {
     $patch_waypoints = [];
 
 
-    /*
-    cream off next file field item from the node:
-      does it exist as a commit in the feature branch?
-      cream off feature branch commits until one matches.
-        YES: record the patch waypoint with the file item; no need to go further
-          as we won't be applying it
-          THIS COULD BE A PATCH WE UPLOADED, and therefore a DIFFERENT STYLE OF
-          commit message!
-        NO: get the file entity so we can look at the URL
-          Is it a patch?
-          YES: record the patch waypoint with the patch file
-          NO: skip
-    */
-
-
+    // We work over the file field items from the node:
+    //  - see whether it already exists as a feature branch commit
+    //    - Yes: create a Patch object that records this.
+    //    - No: get the file entity so we can check the actual patch file URL.
+    //      - If it's a patch file, create a Patch object.
     // Issue file items are returned in creation order, earliest first.
     while ($issue_file_field_items) {
       // Get the next file item.
@@ -180,17 +171,18 @@ class Situation {
       // that matches.
       while ($feature_branch_log) {
         // Get the next commit.
-        // BAD: we lose the array key which is the SHA! TODO!
+
+        // BAD: we throw away commits which might be the tip, and we NEED
+        // to know this!!!
+
         $commit = array_shift($feature_branch_log);
 
         // Does it match? We only have the file ID to go on at this point.
         // TODO: more than one commit message format!!! -- our OWN patches
-        // should have EMPTY commits made
+        // should have EMPTY commits made!!!
         $commit_message_data = \Dorgflow\Waypoint\Patch::parseCommitMessage($commit['message']);
         if (!empty($commit_message_data) && $commit_message_data['fid'] == $fid) {
-
-          // TODO! set up the patch
-          // add it to patch array
+          // Create a patch waypoint for this patch.
           $patch = new \Dorgflow\Waypoint\Patch($this, $file_field_item, $commit['sha']);
           $patch_waypoints[] = $patch;
 
@@ -209,6 +201,7 @@ class Situation {
         continue;
       }
 
+      // Create a patch waypoint for this patch.
       $patch = new \Dorgflow\Waypoint\Patch($this, $file_field_item);
       $patch_waypoints[] = $patch;
     }
