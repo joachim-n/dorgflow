@@ -37,7 +37,7 @@ class LocalSetup {
     // Check whether feature branch exists.
     if ($feature_branch->exists()) {
       // TEMPORARY: we don't yet support updates...
-      throw new \Exception("The feature branch already exists. Updating an existing branch is not yet supported.");
+      throw new \Exception("The feature branch already exists. Use the update command.");
     }
     else {
       // If feature branch doens't exist, create it in git.
