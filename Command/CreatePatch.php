@@ -46,6 +46,10 @@ class CreatePatch {
 
     print("Written patch $patch_name with diff from $master_branch_name to local branch.\n");
 
+    // Make an empty commit to record the patch.
+    // TODO: find nice place for this.
+    shell_exec("git commit --allow-empty -m 'Patch for Drupal.org. File: $patch_name. Automatic commit by dorgflow.'");
+
 
     /*
     TODO:
