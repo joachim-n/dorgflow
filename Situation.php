@@ -70,20 +70,6 @@ class Situation {
     throw new \Exception("Unable to find an issue number from command line parameter or current git branch.");
   }
 
-  // TODO: merge ---
-  public function setUpMasterBranch() {
-    $this->masterBranch = new \Dorgflow\Waypoint\MasterBranch($this);
-
-    return $this->masterBranch;
-  }
-
-  // TODO: merge ---
-  public function setUpFeatureBranch() {
-    $this->feature_branch = new Waypoint\FeatureBranch($this);
-
-    return $this->feature_branch;
-  }
-
   public function getMasterBranch() {
     if (empty($this->masterBranch)) {
       $this->masterBranch = new \Dorgflow\Waypoint\MasterBranch($this);
