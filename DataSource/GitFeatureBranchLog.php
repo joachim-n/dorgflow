@@ -4,6 +4,12 @@ namespace Dorgflow\DataSource;
 
 class GitFeatureBranchLog extends DataSourceBase {
 
+  /**
+   * Get the log data of the feature branch from the branch point with master.
+   *
+   * @return
+   *  An array keyed by SHA, whose items are arrays with 'sha' and 'message'.
+   */
   public function getFeatureBranchLog() {
     return $this->feature_branch_log;
   }
@@ -19,7 +25,11 @@ class GitFeatureBranchLog extends DataSourceBase {
       list($sha, $message) = explode(' ', $line, 2);
       //dump("$sha ::: $message");
 
-      $feature_branch_log[$sha] = $message;
+      // This gets used with array_shift(), so the key is mostly pointless.
+      $feature_branch_log[$sha] = [
+        'sha' => $sha,
+        'message' => $message,
+      ];
     }
 
     $this->feature_branch_log = $feature_branch_log;

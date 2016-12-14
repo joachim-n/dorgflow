@@ -204,7 +204,7 @@ class Situation {
 
           // TODO! set up the patch
           // add it to patch array
-          $patch = new \Dorgflow\Waypoint\Patch($this, $file_field_item, $commit);
+          $patch = new \Dorgflow\Waypoint\Patch($this, $file_field_item, $commit['sha']);
           $patch_waypoints[] = $patch;
 
           // Done with this file item.

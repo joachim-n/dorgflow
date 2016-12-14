@@ -17,7 +17,7 @@ class Patch {
     ];
   }
 
-  function __construct(\Dorgflow\Situation $situation, $file_field_item, $commit = NULL) {
+  function __construct(\Dorgflow\Situation $situation, $file_field_item, $sha = NULL) {
     $this->situation = $situation;
 
     // Set the file ID.
