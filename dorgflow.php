@@ -14,8 +14,17 @@ if (empty($argv[1])) {
   $command = new Command\CreatePatch;
 }
 else {
-  // For now, the only other thing we support is an update.
-  $command = new Command\LocalUpdate;
+  if ($argv[1] == 'cleanup') {
+    $command = new Command\Cleanup;
+  }
+  elseif ($argv[1] == 'update') {
+    $command = new Command\LocalUpdate;
+  }
+  else {
+    // If the parameter is something else, assume initial setup: the command
+    // checks for a URL or issue number.
+    $command = new Command\LocalSetup;
+  }
 }
 
 $command->execute();
