@@ -4,10 +4,19 @@ namespace Dorgflow\Waypoint;
 
 class Patch {
 
+  /**
+   * The file entity ID for this patch.
+   */
   protected $fid;
 
+  /**
+   * The filename for this patch.
+   */
   protected $patchFile;
 
+  /**
+   * The SHA for this patch, if it is already committed to the feature branch.
+   */
   protected $sha;
 
   function __construct(\Dorgflow\Situation $situation, $file_field_item, $sha = NULL) {
@@ -19,6 +28,12 @@ class Patch {
     $this->sha = $sha;
   }
 
+  /**
+   * Returns the Drupal file entity for this patch.
+   *
+   * @return \StdClass
+   *  The Drupal file entity, downloaded from drupal.org.
+   */
   public function getFileEntity() {
     // Lazy fetch the file entity for the patch.
     if (empty($this->fileEntity)) {
@@ -27,6 +42,12 @@ class Patch {
     return $this->fileEntity;
   }
 
+  /**
+   * Returns the patch file for this patch.
+   *
+   * @return string
+   *  The text of the patch file.
+   */
   public function getPatchFile() {
     // Lazy fetch the patch file.
     if (empty($this->patchFile)) {
@@ -43,6 +64,12 @@ class Patch {
     return pathinfo($file_url, PATHINFO_BASENAME);
   }
 
+  /**
+   * Returns whether this patch already has a feature branch commit.
+   *
+   * @return bool
+   *  TRUE if this patch has a commit; FALSE if not.
+   */
   public function hasCommit() {
     return !empty($this->sha);
   }
