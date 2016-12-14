@@ -12,7 +12,7 @@ class CreatePatch {
     // Check git is clean.
     $clean = $situation->GitStatus()->gitIsClean();
     if (!$clean) {
-      print "Git repository is not clean. Aborting.";
+      print "Git repository is not clean. Aborting.\n";
       exit();
     }
 
