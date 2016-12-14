@@ -8,6 +8,7 @@ class Patch {
 
   protected $patchFile;
 
+  protected $sha;
 
   function __construct(\Dorgflow\Situation $situation, $file_field_item, $sha = NULL) {
     $this->situation = $situation;
@@ -15,7 +16,7 @@ class Patch {
     // Set the file ID.
     $this->fid = $file_field_item->file->id;
 
-    // TODO: set up commit!!
+    $this->sha = $sha;
   }
 
   public function getFileEntity() {
@@ -40,6 +41,10 @@ class Patch {
     $file_entity = $this->getFileEntity();
     $file_url = $file_entity->url;
     return pathinfo($file_url, PATHINFO_BASENAME);
+  }
+
+  public function hasCommit() {
+    return !empty($this->sha);
   }
 
   public function commitPatch() {
