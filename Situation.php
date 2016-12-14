@@ -212,22 +212,6 @@ class Situation {
   }
 
   /**
-   *
-   */
-  protected function getFetcher($name) {
-    // statically cache fetchers, as they statically cache their own data.
-    if (!isset($fetchers[$name])) {
-
-      $fetcher_full_class_name = 'Dorgflow\\Fetcher\\' . $name;
-      $fetchers[$name] = new $fetcher_full_class_name();
-    }
-
-    return $fetchers[$name];
-  }
-
-
-
-  /**
    * Returns a new or cached data source object.
    *
    * @param $name
