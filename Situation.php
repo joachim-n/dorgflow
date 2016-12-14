@@ -199,8 +199,8 @@ class Situation {
         // Does it match? We only have the file ID to go on at this point.
         // TODO: more than one commit message format!!! -- our OWN patches
         // should have EMPTY commits made
-        $commit_info = \Dorgflow\Waypoint\Patch::parseCommitMessage();
-        if ($commit_info['fid'] == $fid) {
+        $commit_message_data = \Dorgflow\Waypoint\Patch::parseCommitMessage($commit['message']);
+        if (!empty($commit_message_data) && $commit_message_data['fid'] == $fid) {
 
           // TODO! set up the patch
           // add it to patch array

@@ -8,14 +8,6 @@ class Patch {
 
   protected $patchFile;
 
-  public static function parseCommitMessage() {
-    // TODO!
-    return [
-      'fid' => 12345, // TODO
-      'comment_index' => 1, // TODO
-      'filename' => '',
-    ];
-  }
 
   function __construct(\Dorgflow\Situation $situation, $file_field_item, $sha = NULL) {
     $this->situation = $situation;
@@ -119,7 +111,25 @@ class Patch {
   }
 
   protected function getCommitMessage() {
-    return "patch #??TODO; fid $this->fid. Automatic commit by dorgflow.";
+    // TODO: include comment index!!!!!!!!!
+    $filename = $this->getPatchFilename();
+    return "Patch from Drupal.org. File: $filename; fid $this->fid. Automatic commit by dorgflow.";
+  }
+
+  static public function parseCommitMessage($message) {
+    $pattern = "Patch from Drupal.org. File: (?P<filename>.+\.patch); fid (?P<fid>\d+). Automatic commit by dorgflow.";
+    $matches = [];
+    preg_match("@^$pattern@", $message, $matches);
+    if (!empty($matches)) {
+      $return = [
+        'filename' => $matches['filename'],
+        'fid' => $matches['fid'],
+        // TODO: 'comment_index'
+      ];
+    }
+    else {
+      return FALSE;
+    }
   }
 
   protected function makeGitCommit() {
