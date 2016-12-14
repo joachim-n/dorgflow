@@ -46,9 +46,10 @@ class Situation {
     */
 
     // Try to deduce an issue number from the current branch.
+    // TODO, no try to get a feature branch instead.
     $current_branch = $this->GitBranchList()->getCurrentBranch();
 
-    // TODO: analysis should be in Fetcher/Parser classes!
+    // TODO: analysis should be in DataSource classes!
     $matches = [];
     preg_match("@^(?P<number>\d+)-@", $current_branch, $matches);
     if (!empty($matches['number'])) {
