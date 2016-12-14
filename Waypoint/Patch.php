@@ -148,22 +148,6 @@ class Patch {
     return "Patch from Drupal.org. File: $filename; fid $this->fid. Automatic commit by dorgflow.";
   }
 
-  static public function parseCommitMessage($message) {
-    $pattern = "Patch from Drupal.org. File: (?P<filename>.+\.patch); fid (?P<fid>\d+). Automatic commit by dorgflow.";
-    $matches = [];
-    preg_match("@^$pattern@", $message, $matches);
-    if (!empty($matches)) {
-      $return = [
-        'filename' => $matches['filename'],
-        'fid' => $matches['fid'],
-        // TODO: 'comment_index'
-      ];
-    }
-    else {
-      return FALSE;
-    }
-  }
-
   protected function makeGitCommit() {
     $message = $this->getCommitMessage();
     // Allow empty commits, in case two sequential patches are identical.

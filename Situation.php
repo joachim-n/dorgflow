@@ -167,49 +167,112 @@ class Situation {
 
       $fid = $file_field_item->file->id;
 
+      // Get a copy of the feature branch log array that we can search in
+      // destructively, leaving the original to mark our place.
+      $feature_branch_log_to_search_in = $feature_branch_log;
+
       // Work through the feature branch commit list until we find a commit
       // that matches.
-      while ($feature_branch_log) {
+      while ($feature_branch_log_to_search_in) {
         // Get the next commit.
+        $commit = array_shift($feature_branch_log_to_search_in);
+        $commit_message_data = $this->parseCommitMessage($commit['message']);
 
-        // BAD: we throw away commits which might be the tip, and we NEED
-        // to know this!!!
-
-        $commit = array_shift($feature_branch_log);
-
-        // Does it match? We only have the file ID to go on at this point.
-        // TODO: more than one commit message format!!! -- our OWN patches
-        // should have EMPTY commits made!!!
-        $commit_message_data = \Dorgflow\Waypoint\Patch::parseCommitMessage($commit['message']);
-        if (!empty($commit_message_data) && $commit_message_data['fid'] == $fid) {
+        // If we find a commit from the feature branch that matches this patch,
+        // then create a Patch waypoint and move on to the next file.
+        if (!empty($commit_message_data['fid']) && $commit_message_data['fid'] == $fid) {
           // Create a patch waypoint for this patch.
           $patch = new \Dorgflow\Waypoint\Patch($this, $file_field_item, $commit['sha']);
           $patch_waypoints[] = $patch;
+
+          // Replace the original log with the search copy, as we've found a
+          // commit that works, and we want to start from here the next time we
+          // look for a patch in the log.
+          $feature_branch_log = $feature_branch_log_to_search_in;
 
           // Done with this file item.
           continue 2;
         }
       }
 
-      // We didn't find a commit, so now get the file entity to see if it's a
-      // patch file
+      // We didn't find a commit, so now get the file entity to look at the
+      // filename, to see if it's a patch file.
       $file_entity = $this->DrupalOrgFileEntity(['fid' => $fid])->getFileEntity();
       $file_url = $file_entity->url;
 
       // Skip a file that is not a patch.
-      if (pathinfo($file_url, PATHINFO_EXTENSION) != 'patch') {
+      $patch_filename = pathinfo($file_url, PATHINFO_FILENAME);
+      $patch_file_extension = pathinfo($file_url, PATHINFO_EXTENSION);
+      if ($patch_file_extension != 'patch') {
         continue;
       }
 
+      // Get a copy of the feature branch log array that we can search in
+      // destructively, leaving the original to mark our place.
+      $feature_branch_log_to_search_in = $feature_branch_log;
+
+      // Work through the feature branch commit list to see whether this is a
+      // patch we uploaded.
+      while ($feature_branch_log_to_search_in) {
+        // Get the next commit.
+        $commit = array_shift($feature_branch_log_to_search_in);
+        $commit_message_data = $this->parseCommitMessage($commit['message']);
+
+        // If we find a commit from the feature branch that matches this patch,
+        // then create a Patch waypoint and move on to the next file.
+        if (!empty($commit_message_data['filename']) && $commit_message_data['filename'] == $patch_filename) {
+          // Create a patch waypoint for this patch.
+          $patch = new \Dorgflow\Waypoint\Patch($this, $file_field_item, $commit['sha']);
+          $patch_waypoints[] = $patch;
+
+          // Replace the original log with the search copy, as we've found a
+          // commit that works, and we want to start from here the next time we
+          // look for a patch in the log.
+          $feature_branch_log = $feature_branch_log_to_search_in;
+
+          // Done with this file item.
+          continue 2;
+        }
+      }
+
+      // We've not found a commit.
       // Create a patch waypoint for this patch.
       $patch = new \Dorgflow\Waypoint\Patch($this, $file_field_item);
       $patch_waypoints[] = $patch;
+
+      // TODO:
+      // if $feature_branch_log still contains commits, that means that there
+      // are local commits at the tip of the branch!
     }
 
     //dump($patch_waypoints);
 
     return $patch_waypoints;
   }
+
+  protected function parseCommitMessage($message) {
+    // TODO: move this to the same sort of place as the creation as these
+    // messages!
+    $pattern_remote = "Patch from Drupal.org. File: (?P<filename>.+\.patch); fid (?P<fid>\d+). Automatic commit by dorgflow.";
+    $patern_local   = "Patch for Drupal.org. File: (?P<filename>.+\.patch). Automatic commit by dorgflow.";
+    $matches = [];
+    preg_match("@^($pattern_remote|$patern_local)@", $message, $matches);
+    if (!empty($matches)) {
+      $return = [
+        'filename' => $matches['filename'],
+      ];
+      if (isset($matches['fid'])) {
+        $return['fid'] = $matches['fid'];
+      }
+      // TODO: 'comment_index'
+    }
+    else {
+      $return = FALSE;
+    }
+
+    return $return;
+  }
+
 
   /**
    * Returns a new or cached data source object.
