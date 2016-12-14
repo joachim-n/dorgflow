@@ -211,17 +211,6 @@ class Situation {
     return $patch_waypoints;
   }
 
-  public function getFeatureBranchLog() {
-    // return array
-    // SHA => commit message
-    // Oldest first.
-
-
-    // ARGH need MastBranch!!!
-    $fetcher = $this->getFetcher('GitFeatureBranchLog');
-    return $fetcher->getFeatureBranchLog($this->masterBranch);
-  }
-
   /**
    *
    */
