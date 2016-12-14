@@ -17,7 +17,7 @@ class LocalSetup {
     }
 
     // Create branches.
-    $master_branch = $situation->setUpMasterBranch();
+    $master_branch = $situation->getMasterBranch();
 
     // If the master branch is not current, abort.
     // TODO: support updating an existing feature branch.
@@ -28,7 +28,7 @@ class LocalSetup {
       exit();
     }
 
-    $feature_branch = $situation->setUpFeatureBranch();
+    $feature_branch = $situation->getFeatureBranch();
 
     // Get the patches and create them.
     // TODO: currently only the most recent patch is used.

@@ -17,8 +17,8 @@ class LocalUpdate {
     }
 
     // Create branches.
-    $master_branch = $situation->setUpMasterBranch();
-    $feature_branch = $situation->setUpFeatureBranch();
+    $master_branch = $situation->getMasterBranch();
+    $feature_branch = $situation->getFeatureBranch();
 
     // If the feature branch is not current, abort.
     if (!$feature_branch->exists()) {

@@ -17,8 +17,8 @@ class CreatePatch {
     }
 
     // Create branches.
-    $master_branch = $this->situation->setUpMasterBranch();
-    $feature_branch = $this->situation->setUpFeatureBranch();
+    $master_branch = $this->situation->getMasterBranch();
+    $feature_branch = $this->situation->getFeatureBranch();
 
     // If the feature branch doesn't exist or is not current, abort.
     if (!$feature_branch->exists()) {
