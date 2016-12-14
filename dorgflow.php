@@ -19,10 +19,3 @@ else {
 }
 
 $command->execute();
-
-/*
-$a = new Analyser;
-$a->doStuff();
-*/
-
-
