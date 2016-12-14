@@ -44,13 +44,22 @@ class LocalUpdate {
     }
 
     // Output the patches.
+    $patches_committed = [];
     foreach ($patches as $patch) {
-      // !!!!! TODO! don't commit patches that have commits already!!!!!!!!!!
+      // Skip a patch with an existing commit.
+      if ($patch->hasCommit()) {
+        continue;
+      }
 
+
+      // Commit the patch.
       $patch_committed = $patch->commitPatch();
 
       // Message.
       if ($patch_committed) {
+        // Keep a list of the patches that we commit.
+        $patches_committed[] = $patch;
+
         print strtr("Applied patch !patchname.\n", [
           '!patchname' => $patch->getPatchFilename(),
         ]);
@@ -60,6 +69,12 @@ class LocalUpdate {
           '!patchname' => $patch->getPatchFilename(),
         ]);
       }
+    }
+
+    // If all the patches were already committed, we're done.
+    if (empty($patches_committed)) {
+      print "No new patches to apply.\n";
+      return;
     }
 
     // If final patch didn't apply, then output a message: the latest patch
