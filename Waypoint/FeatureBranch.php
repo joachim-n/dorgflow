@@ -49,7 +49,7 @@ class FeatureBranch {
       dump($this->branchName);
     }
 
-    $this->isCurrentBranch = ($situation->GitBranchList()->getCurrentBranch() == $this->branchName);
+    $this->isCurrentBranch = ($situation->GitCurrentBranch()->getCurrentBranch() == $this->branchName);
 
     // if current branch NOT feature branch, problem?
     // no, leave that to the command to determine.

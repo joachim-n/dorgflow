@@ -47,7 +47,7 @@ class Situation {
 
     // Try to deduce an issue number from the current branch.
     // TODO, no try to get a feature branch instead.
-    $current_branch = $this->GitBranchList()->getCurrentBranch();
+    $current_branch = $this->GitCurrentBranch()->getCurrentBranch();
 
     // TODO: analysis should be in DataSource classes!
     $matches = [];
