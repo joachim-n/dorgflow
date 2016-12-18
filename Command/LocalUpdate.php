@@ -6,9 +6,7 @@ use Dorgflow\Situation;
 
 class LocalUpdate {
 
-  public function execute() {
-    $situation = new Situation();
-
+  public function execute(Situation $situation) {
     // Check git is clean.
     $clean = $situation->GitStatus()->gitIsClean();
     if (!$clean) {
