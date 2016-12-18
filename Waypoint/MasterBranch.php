@@ -10,7 +10,7 @@ class MasterBranch {
 
   function __construct(\Dorgflow\Situation $situation) {
     // TODO: check order of the branch -- should be higher version numbers first!
-    $branch_list = $situation->GitBranchList->getBranchList();
+    $branch_list = $situation->GitBranchList()->getBranchList();
 
     foreach ($branch_list as $branch) {
       // Identify the main development branch, of one of the following forms:

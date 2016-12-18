@@ -17,7 +17,7 @@ class FeatureBranch {
     }
 
     // Is there a branch for this issue number, that is not a tests branch?
-    $branch_list = $situation->GitBranchList->getBranchList();
+    $branch_list = $situation->GitBranchList()->getBranchList();
     dump($branch_list);
 
     // Work over branch list.
@@ -38,7 +38,7 @@ class FeatureBranch {
       $this->exists = FALSE;
 
       // Invent a branch name.
-      $issue_title = $situation->DrupalOrgIssueNode->getIssueNodeTitle();
+      $issue_title = $situation->DrupalOrgIssueNode()->getIssueNodeTitle();
 
       $issue_title = str_replace([',', "'", '"', '.', '\\', '/'], '', $issue_title);
       $issue_title = str_replace(['-', '_'], ' ', $issue_title);

@@ -77,7 +77,7 @@ class Patch {
   public function commitPatch() {
     // Set the files back to the master branch, without changing the current
     // commit.
-    $this->situation->masterBranch->checkOutFiles();
+    $this->situation->getMasterBranch()->checkOutFiles();
 
     $patch_status = $this->applyPatchFile();
 
