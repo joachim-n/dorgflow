@@ -8,6 +8,11 @@ class Situation {
 
   public $devel_mode = FALSE;
 
+  /**
+   * The git handler.
+   */
+  protected $git;
+
   // TODO: rename!
   protected $fetchers = [];
 
@@ -16,11 +21,19 @@ class Situation {
   // TODO: accessor!
   public $masterBranch;
 
+  function __construct($git) {
+    $this->git = $git;
+  }
+
   /**
    * Magic method: get a data fetcher.
    */
   public function __call($name, $parameters) {
     return $this->getDataSource($name, $parameters);
+  }
+
+  public function git() {
+    return $this->git;
   }
 
   /**
