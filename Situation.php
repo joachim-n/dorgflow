@@ -19,14 +19,6 @@ class Situation {
   /**
    * Magic method: get a data fetcher.
    */
-  public function __get($name) {
-    // TODO: decomission!
-    return $this->getDataSource($name, []);
-  }
-
-  /**
-   * Magic method: get a data fetcher.
-   */
   public function __call($name, $parameters) {
     return $this->getDataSource($name, $parameters);
   }
