@@ -9,6 +9,8 @@ class FeatureBranch {
   protected $branchName;
 
   function __construct(\Dorgflow\Situation $situation) {
+    $this->situation = $situation;
+
     $issue_number = $situation->getIssueNumber();
     dump($issue_number);
     if (empty($issue_number)) {
@@ -78,7 +80,8 @@ class FeatureBranch {
   }
 
   public function gitCreate() {
-    shell_exec("git checkout -b $this->branchName");
+    // Create a new branch and check it out.
+    $this->situation->git()->createNewBranch($this->branchName, TRUE);
   }
 
 }
