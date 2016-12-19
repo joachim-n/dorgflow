@@ -25,7 +25,7 @@ class LocalSetup {
 
     // If the master branch is not current, abort.
     if (!$master_branch->isCurrentBranch()) {
-      print strtr("Detected master branch !branch, but it is not the current branch. Aborting.", [
+      print strtr("Detected master branch !branch, but it is not the current branch. Aborting.\n", [
         '!branch' => $master_branch->getBranchName(),
       ]);
       exit();
