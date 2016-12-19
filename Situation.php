@@ -270,8 +270,13 @@ class Situation {
     // messages!
     $pattern_remote = "Patch from Drupal.org. File: (?P<filename>.+\.patch); fid (?P<fid>\d+). Automatic commit by dorgflow.";
     $patern_local   = "Patch for Drupal.org. File: (?P<filename>.+\.patch). Automatic commit by dorgflow.";
+
     $matches = [];
-    preg_match("@^($pattern_remote|$patern_local)@", $message, $matches);
+    $matched = preg_match("@^$pattern_remote@", $message, $matches);
+    if (!$matched) {
+      $matched = preg_match("@^$patern_local@", $message, $matches);
+    }
+
     if (!empty($matches)) {
       $return = [
         'filename' => $matches['filename'],
