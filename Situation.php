@@ -4,6 +4,10 @@ namespace Dorgflow;
 
 // Wrapper around fetchers and parsers.
 // Is injected into Waypoints
+
+// TODO: split this up again into:
+// - situation aka fetcher container, which can be mocked
+// - analyser, which can be tested
 class Situation {
 
   public $devel_mode = FALSE;
@@ -314,6 +318,7 @@ class Situation {
       $data_source = new $fetcher_full_class_name($this);
       // TODO: not ideal; too much external driving of this class.
       $data_source->setParameters($parameters);
+      // TODO: move this out of the first array and into a 2nd param!!!!
       if (isset($parameters['fetcher'])) {
         $data_source->setFetcher($parameters['fetcher']);
       }
