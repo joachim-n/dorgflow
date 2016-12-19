@@ -9,6 +9,7 @@ print "Hello, this is Dorgflow!\n";
 require_once __DIR__ . '/vendor/autoload.php';
 
 // Helper objects to inject.
+// TODO: use a dedicated container class and inject that instead?
 $git = new \Dorgflow\Executor\Git();
 $situation = new \Dorgflow\Situation($git);
 // $analyser = new Analyser... ?
