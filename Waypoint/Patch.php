@@ -123,10 +123,12 @@ class Patch {
 
 
     $out = stream_get_contents($pipes[1]);
-    dump($out);
+    //dump('OUT:');
+    //dump($out);
 
     $errors = stream_get_contents($pipes[2]);
-    dump($errors);
+    //dump('ERROR:');
+    //dump($errors);
 
     // all done! Clean up
     fclose($pipes[1]);
