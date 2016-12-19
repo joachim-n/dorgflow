@@ -5,7 +5,7 @@ namespace Dorgflow\DataSource;
 class GitCurrentBranch extends DataSourceBase {
 
   public function getCurrentBranch() {
-    return $this->data;
+    return trim($this->data);
   }
 
 }
