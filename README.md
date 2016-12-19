@@ -6,9 +6,15 @@ on drupal.org. With Dorgflow, you don't need to download and apply patches, and
 creating patches and interdiffs is simplified. The only thing that Dorgflow
 doesn't handle is posting your files back to an issue for review.
 
+## Installation
+
+Either:
+  - symlink the file dorgflow into a folder that's in your path.
+  - set the root folder of this repository into your path.
+
 ## Usage
 
-### Starting work
+### Starting work on an issue
 
 Start with your local git clone clean and up to date on a release branch, e.g.
 8.3.x (for core) or 8.x-1.x (for contrib). We'll call this the *master branch*.
@@ -60,6 +66,7 @@ When you are ready to make a patch, just do:
 
     $ dorgflow
 
-This will create a patch with a systematic filename.
+This will create a patch with a systematic filename. You can then upload this to
+the issue node on drupal.org.
 
 WARNING: This does not yet make an interdiff from the most recent patch.
