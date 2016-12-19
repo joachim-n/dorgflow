@@ -31,9 +31,9 @@ class DrupalOrgIssueNode extends DataSourceBase {
   }
 
   /**
-   * Gets the files attached to the issue, in order of creation.
+   * Gets the field items for the issue files field, in order of creation.
    */
-  public function getIssueFiles() {
+  public function getIssueFileFieldItems() {
     $files = $this->data->field_issue_files;
 
     // TODO: filter out interdiffs!!!

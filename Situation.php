@@ -98,7 +98,7 @@ class Situation {
    */
   public function setUpPatches() {
     // Get the field items for the issue node's file field.
-    $issue_file_field_items = $this->DrupalOrgIssueNode()->getIssueFiles();
+    $issue_file_field_items = $this->DrupalOrgIssueNode()->getIssueFileFieldItems();
 
     //dump($issue_file_field_items);
     //var_export($issue_file_field_items);
