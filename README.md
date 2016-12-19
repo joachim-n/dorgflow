@@ -12,7 +12,11 @@ paternity leave and so intensely sleep-deprived ;)
 
 ## Installation
 
-Either:
+Install dependencies with Composer:
+
+    $ composer install
+
+Then either:
   - symlink the file dorgflow into a folder that's in your path.
   - set the root folder of this repository into your path.
 
