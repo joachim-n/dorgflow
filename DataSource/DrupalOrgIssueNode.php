@@ -2,9 +2,6 @@
 
 namespace Dorgflow\DataSource;
 
-use EclipseGc\DrupalOrg\Api\DrupalClient;
-use stdClass;
-
 class DrupalOrgIssueNode extends DataSourceBase {
 
   public function getPatchList() {
