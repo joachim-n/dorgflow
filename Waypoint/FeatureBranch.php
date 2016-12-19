@@ -48,7 +48,7 @@ class FeatureBranch {
       array_unshift($pieces, $issue_number);
 
       $this->branchName = implode('-', $pieces);
-      dump($this->branchName);
+      //dump($this->branchName);
     }
 
     $this->isCurrentBranch = ($situation->GitCurrentBranch()->getCurrentBranch() == $this->branchName);
