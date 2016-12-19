@@ -33,11 +33,6 @@ class LocalSetup {
 
     $feature_branch = $situation->getFeatureBranch();
 
-    // Get the patches and create them.
-    // TODO: currently only the most recent patch is used.
-    $patches = $situation->setUpPatches();
-    //dump($patches);
-
     // Check whether feature branch exists.
     // TODO: necessary???
     if ($feature_branch->exists()) {
@@ -56,6 +51,11 @@ class LocalSetup {
         '!branch' => $feature_branch->getBranchName(),
       ]);
     }
+
+    // Get the patches and create them.
+    // TODO: currently only the most recent patch is used.
+    $patches = $situation->setUpPatches();
+    //dump($patches);
 
     // If no patches, we're done.
     if (empty($patches)) {
