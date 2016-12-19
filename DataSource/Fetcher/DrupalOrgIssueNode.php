@@ -14,6 +14,9 @@ class DrupalOrgIssueNode extends DrupalOrgFetcher implements FetcherInterface {
    */
   public function fetchData(Situation $situation, $parameters) {
     $issue_number = $situation->getIssueNumber();
+
+    print "Fetching node $issue_number from drupal.org.\n";
+
     $response = file_get_contents("https://www.drupal.org/api-d7/node/{$issue_number}.json");
     $node = json_decode($response);
 
