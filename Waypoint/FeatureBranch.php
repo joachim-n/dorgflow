@@ -12,7 +12,7 @@ class FeatureBranch {
     $this->situation = $situation;
 
     $issue_number = $situation->getIssueNumber();
-    dump($issue_number);
+    //dump($issue_number);
     if (empty($issue_number)) {
       // If we can't figure out an issue numbner, FAIL.
       throw new \Exception("Can't find an issue number.");
@@ -20,7 +20,7 @@ class FeatureBranch {
 
     // Is there a branch for this issue number, that is not a tests branch?
     $branch_list = $situation->GitBranchList()->getBranchList();
-    dump($branch_list);
+    //dump($branch_list);
 
     // Work over branch list.
     foreach ($branch_list as $branch) {
@@ -29,8 +29,8 @@ class FeatureBranch {
         $this->exists = TRUE;
         // Set the current branch as WHAT WE ARE.
         $this->branchName = $branch;
-        dump('found!');
-        dump($this->branchName);
+        //dump('found!');
+        //dump($this->branchName);
 
         break;
       }
