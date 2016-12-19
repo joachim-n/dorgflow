@@ -33,8 +33,8 @@ class LocalSetup {
     //dump($patches);
 
     // Check whether feature branch exists.
+    // TODO: necessary???
     if ($feature_branch->exists()) {
-      // TEMPORARY: we don't yet support updates...
       throw new \Exception("The feature branch already exists. Use the update command.");
     }
     else {
