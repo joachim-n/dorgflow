@@ -1,14 +1,7 @@
 {
   "name": "joachim-n/dorgflow",
   "license": "GPL-2.0+",
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/EclipseGc/drupal-org-api"
-    }
-  ],
   "require": {
-    "EclipseGc/drupal-org-api": "dev-master"
   },
   "require-dev": {
     "phpunit/phpunit": ">=3.5",
