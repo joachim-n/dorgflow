@@ -12,7 +12,7 @@ class DrupalOrgFetcher {
   public function __construct() {
     // Set the user-agent for the request to drupal.org's API, to be polite.
     // See https://www.drupal.org/api
-    ini_set('user_agent', "Dorgflow - work in progress by joachim.");
+    ini_set('user_agent', "Dorgflow - https://github.com/joachim-n/dorgflow.");
   }
   
 }
