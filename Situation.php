@@ -317,7 +317,7 @@ class Situation {
     }
 
     // Statically cache data sources, as they statically cache their own data.
-    if (!isset($fetchers[$name][$key])) {
+    if (!isset($this->fetchers[$name][$key])) {
       $fetcher_full_class_name = 'Dorgflow\\DataSource\\' . $name;
 
       $data_source = new $fetcher_full_class_name($this);
@@ -331,10 +331,10 @@ class Situation {
         $data_source->setFetcher();
       }
       $data_source->fetchData();
-      $fetchers[$name][$key] = $data_source;
+      $this->fetchers[$name][$key] = $data_source;
     }
 
-    return $fetchers[$name][$key];
+    return $this->fetchers[$name][$key];
   }
 
 
