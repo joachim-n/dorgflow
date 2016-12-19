@@ -50,16 +50,6 @@ class DrupalOrgIssueNode extends DataSourceBase {
     return $files;
   }
 
-  // generator function, yields patch files from the issue node one by one
-  public function getNextIssueFile() {
-    $files = $this->getIssueFiles();
-
-    while ($files) {
-      $next_file = array_shift($files);
-      yield $next_file;
-    }
-  }
-
   // Todo:
   // most recent file
 
