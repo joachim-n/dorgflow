@@ -6,9 +6,7 @@ use Dorgflow\Situation;
 
 class CreatePatch {
 
-  public function execute() {
-    $this->situation = new Situation();
-
+  public function execute(Situation $situation) {
     // Check git is clean.
     $clean = $situation->GitStatus()->gitIsClean();
     if (!$clean) {
