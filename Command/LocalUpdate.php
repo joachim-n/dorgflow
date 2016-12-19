@@ -31,7 +31,6 @@ class LocalUpdate {
     }
 
     // Get the patches and create them.
-    // TODO: currently only the most recent patch is used.
     $patches = $situation->setUpPatches();
     //dump($patches);
 
