@@ -31,6 +31,10 @@ class LocalSetup {
       exit();
     }
 
+    print strtr("Detected master branch !branch.\n", [
+      '!branch' => $master_branch->getBranchName(),
+    ]);
+
     $feature_branch = $situation->getFeatureBranch();
 
     // Check whether feature branch exists.
