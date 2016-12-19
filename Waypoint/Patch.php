@@ -117,7 +117,7 @@ class Patch {
     // Send the patch to command as input, the close the input pipe so the
     // command knows to start processing.
     $patch_file = $this->getPatchFile();
-    dump($patch_file);
+    //dump($patch_file);
     fwrite($pipes[0], $patch_file);
     fclose($pipes[0]);
 
