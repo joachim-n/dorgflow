@@ -20,16 +20,18 @@ class GitFeatureBranchLog extends DataSourceBase {
   protected function parse() {
     $feature_branch_log = [];
 
-    $git_log_lines = explode("\n", rtrim($this->data));
-    foreach ($git_log_lines as $line) {
-      list($sha, $message) = explode(' ', $line, 2);
-      //dump("$sha ::: $message");
+    if (!empty($this->data)) {
+      $git_log_lines = explode("\n", rtrim($this->data));
+      foreach ($git_log_lines as $line) {
+        list($sha, $message) = explode(' ', $line, 2);
+        //dump("$sha ::: $message");
 
-      // This gets used with array_shift(), so the key is mostly pointless.
-      $feature_branch_log[$sha] = [
-        'sha' => $sha,
-        'message' => $message,
-      ];
+        // This gets used with array_shift(), so the key is mostly pointless.
+        $feature_branch_log[$sha] = [
+          'sha' => $sha,
+          'message' => $message,
+        ];
+      }
     }
 
     $this->feature_branch_log = $feature_branch_log;
