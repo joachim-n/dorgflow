@@ -6,7 +6,13 @@ use Dorgflow\Situation;
 
 class LocalSetup {
 
-  public function execute(Situation $situation) {
+  public function __construct(Situation $situation) {
+    $this->situation = $situation;
+  }
+
+  public function execute() {
+    $situation = $this->situation;
+
     // Check git is clean.
     $clean = $situation->GitStatus()->gitIsClean();
     if (!$clean) {
