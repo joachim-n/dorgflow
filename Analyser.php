@@ -2,8 +2,8 @@
 
 namespace Dorgflow;
 
+// NOT CURRENTLY IN USE.
 class Analyser {
-
 
   public function doStuff() {
     /*
@@ -71,7 +71,15 @@ class Analyser {
     } while (TRUE);
 
     dump($patches);
-
+    
+    $last_patch = end($patches);
+    dump($last_patch);
+    //$file = $last_patch->getPatchFile();
+    //dump($file);
+    
+    // Now ready for setup command to create branch and make commits!
+    
+    
     //foreach ($issue_files as $file) {
     //}
 
