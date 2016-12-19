@@ -27,6 +27,12 @@ class Situation {
 
   /**
    * Magic method: get a data fetcher.
+   *
+   * This allows the situation object to be used thus:
+   *
+   * @code
+   *   $situation->DataSourceClassName()->DataSourceMethod()
+   * @endcode
    */
   public function __call($name, $parameters) {
     return $this->getDataSource($name, $parameters);
