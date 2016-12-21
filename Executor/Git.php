@@ -36,10 +36,18 @@ class Git {
    */
   public function checkOutFiles($treeish) {
     // Read the tree for the given commit into the index.
-    exec("git read-tree $treeish");
+    shell_exec("git read-tree $treeish");
 
     // Check out the index.
-    exec('git checkout-index -f -a');
+    shell_exec('git checkout-index -f -a');
+
+    // ARGH, we have to call this for weird git reasons that are weird, all the
+    // more so that doing these commands manually doesn't require this, but when
+    // run in this script, causes an error of 'does not match index' when trying
+    // to apply patches.
+    // See http://git.661346.n2.nabble.com/quot-git-apply-check-quot-successes-but-git-am-says-quot-does-not-match-index-quot-td6684646.html
+    // for possible clues.
+    shell_exec('git update-index -q --refresh');
   }
 
   // Porcelain version.
