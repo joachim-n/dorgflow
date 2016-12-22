@@ -31,6 +31,8 @@ class Git {
    * back to $treeish. The point of this is a patch which is against $treeish
    * can now be applied.
    *
+   * See http://stackoverflow.com/questions/13896246/reset-git-to-commit-without-changing-head-to-detached-state
+   *
    * (The porcelain equivalent of this is:
    *   $ git reset --hard $treeish;
    *   $ git reset --soft $current_sha
@@ -56,6 +58,7 @@ class Git {
   }
 
   // Porcelain version.
+  // TODO: remove in due course.
   public function checkOutFilesPorcelain($treeish) {
     $current_sha = shell_exec("git rev-parse HEAD");
 
