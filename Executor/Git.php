@@ -123,6 +123,11 @@ class Git {
     }
   }
 
-  // make commit
+  /**
+   * Commit the currently staged changes.
+   */
+  public function commit($message) {
+    shell_exec("git commit  --allow-empty --message='$message'");
+  }
 
 }
