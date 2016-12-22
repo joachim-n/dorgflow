@@ -127,6 +127,7 @@ class Git {
    * Commit the currently staged changes.
    */
   public function commit($message) {
+    // Allow empty commits, in case two sequential patches are identical.
     shell_exec("git commit  --allow-empty --message='$message'");
   }
 
