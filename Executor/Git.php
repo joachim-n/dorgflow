@@ -71,7 +71,57 @@ class Git {
     shell_exec("git reset --soft $current_sha");
   }
 
-  // apply patch file
+  /**
+   * Apply a patch to the staging area.
+   *
+   * @param $patch_text
+   *  The text of the patch file.
+   *
+   * @return
+   *  TRUE if the patch applied, FALSE if it did not.
+   */
+  public function applyPatch($patch_text) {
+    // See https://www.sitepoint.com/proc-open-communicate-with-the-outside-world/
+    $desc = [
+      0 => array('pipe', 'r'), // 0 is STDIN for process
+      1 => array('pipe', 'w'), // 1 is STDOUT for process
+      2 => array('pipe', 'w'), // 2 is STDERR for process
+    ];
+
+    // The command.
+    $cmd = "git apply --index -";
+
+    // Spawn the process.
+    $pipes = [];
+    $process = proc_open($cmd, $desc, $pipes);
+
+    // Send the patch to command as input, the close the input pipe so the
+    // command knows to start processing.
+    fwrite($pipes[0], $patch_text);
+    fclose($pipes[0]);
+
+
+    $out = stream_get_contents($pipes[1]);
+    //dump('OUT:');
+    //dump($out);
+
+    $errors = stream_get_contents($pipes[2]);
+    //dump('ERROR:');
+    //dump($errors);
+
+    // all done! Clean up
+    fclose($pipes[1]);
+    fclose($pipes[2]);
+    proc_close($process);
+
+    // Check STDERR for errors.
+    if (!empty($errors)) {
+      return FALSE;
+    }
+    else {
+      return TRUE;
+    }
+  }
 
   // make commit
 
