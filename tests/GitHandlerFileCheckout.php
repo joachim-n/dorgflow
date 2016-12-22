@@ -18,17 +18,17 @@ class GitHandlerFileCheckout extends \PHPUnit_Framework_TestCase {
   protected function setUp() {
     chdir('Testing/repository');
     exec("git init .");
-    
+
     // Make a first commit with the test file.
     exec("git add main.txt");
     exec("git commit -m 'Initial commit.'");
-    
+
     $this->test_file_original_contents = file_get_contents('main.txt');
   }
 
   public function testFileCheckout() {
     $git = new \Dorgflow\Executor\Git;
-    
+
     $initial_sha = shell_exec("git rev-parse HEAD");
 
     // Apply a sequence of patches.
@@ -72,7 +72,7 @@ class GitHandlerFileCheckout extends \PHPUnit_Framework_TestCase {
   protected function tearDown() {
     // Restore the file we've changed.
     file_put_contents('main.txt', $this->test_file_original_contents);
-    
+
     // Remove the git repo. Be very careful it's the right one!
     $current_dir = getcwd();
     if (basename($current_dir) != 'repository') {
