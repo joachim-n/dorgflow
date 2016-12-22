@@ -37,30 +37,30 @@ class GitHandlerFileCheckout extends \PHPUnit_Framework_TestCase {
       'patch-c.patch',
     ];
     foreach ($patch_filenames as $patch_filename) {
-      $patch_b_text = file_get_contents($patch_filename);
-      $patch_b = $this->getMockBuilder(\Dorgflow\Waypoint\Patch::class)
+      $patch_text = file_get_contents($patch_filename);
+      $patch = $this->getMockBuilder(\Dorgflow\Waypoint\Patch::class)
         ->disableOriginalConstructor()
         ->setMethods(['getPatchFile', 'getCommitMessage'])
         ->getMock();
-      $patch_b->method('getPatchFile')
-        ->willReturn($patch_b_text);
-      $patch_b->method('getCommitMessage')
+      $patch->method('getPatchFile')
+        ->willReturn($patch_text);
+      $patch->method('getCommitMessage')
         ->willReturn("Commit for patch $patch_filename.");
 
       // Put the files back to the initial commit so that the patch applies.
       $git->checkOutFiles($initial_sha);
 
-      $applied = $patch_b->applyPatchFile();
+      $applied = $patch->applyPatchFile();
 
       if (!$applied) {
         $this->fail("Patch $patch_filename failed to apply");
       }
-      
+
       // Make the commit.
       // TODO: use Git handler when this gains the ability.
       shell_exec("git commit  --allow-empty --message='Commit for $patch_filename.'");
     }
-    
+
     $log = shell_exec("git rev-list master --pretty=oneline");
     $log_lines = explode("\n", trim($log));
     $this->assertEquals(3, count($log_lines), 'The git log has the expected number of commits.');
