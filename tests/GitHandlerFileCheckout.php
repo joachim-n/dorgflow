@@ -37,20 +37,11 @@ class GitHandlerFileCheckout extends \PHPUnit_Framework_TestCase {
       'patch-c.patch',
     ];
     foreach ($patch_filenames as $patch_filename) {
-      $patch_text = file_get_contents($patch_filename);
-      $patch = $this->getMockBuilder(\Dorgflow\Waypoint\Patch::class)
-        ->disableOriginalConstructor()
-        ->setMethods(['getPatchFile', 'getCommitMessage'])
-        ->getMock();
-      $patch->method('getPatchFile')
-        ->willReturn($patch_text);
-      $patch->method('getCommitMessage')
-        ->willReturn("Commit for patch $patch_filename.");
-
       // Put the files back to the initial commit so that the patch applies.
       $git->checkOutFiles($initial_sha);
 
-      $applied = $patch->applyPatchFile();
+      $patch_text = file_get_contents($patch_filename);
+      $applied = $git->applyPatch($patch_text);
 
       if (!$applied) {
         $this->fail("Patch $patch_filename failed to apply");
