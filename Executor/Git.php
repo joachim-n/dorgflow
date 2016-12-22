@@ -31,6 +31,11 @@ class Git {
    * back to $treeish. The point of this is a patch which is against $treeish
    * can now be applied.
    *
+   * (The porcelain equivalent of this is:
+   *   $ git reset --hard $treeish;
+   *   $ git reset --soft $current_sha
+   * )
+   *
    * @param $treeish
    *  A valid commit identifier, such as an SHA or branch name.
    */
