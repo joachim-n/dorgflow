@@ -27,23 +27,18 @@ class GitHandlerFileCheckout extends \PHPUnit_Framework_TestCase {
   }
 
   public function testFileCheckout() {
-    dump('hi');
-
     $git = new \Dorgflow\Executor\Git;
     
     $initial_sha = shell_exec("git rev-parse HEAD");
 
-    $mock_situation = $this->createMock(\Dorgflow\Situation::class);
-
+    // Apply a sequence of patches.
     $patch_filenames = [
       'patch-b.patch',
       'patch-c.patch',
     ];
-
     foreach ($patch_filenames as $patch_filename) {
       $patch_b_text = file_get_contents($patch_filename);
       $patch_b = $this->getMockBuilder(\Dorgflow\Waypoint\Patch::class)
-        //->setConstructorArgs([$mock_situation])
         ->disableOriginalConstructor()
         ->setMethods(['getPatchFile', 'getCommitMessage'])
         ->getMock();
@@ -52,26 +47,18 @@ class GitHandlerFileCheckout extends \PHPUnit_Framework_TestCase {
       $patch_b->method('getCommitMessage')
         ->willReturn("Commit for patch $patch_filename.");
 
+      // Put the files back to the initial commit so that the patch applies.
       $git->checkOutFiles($initial_sha);
-      //$git->checkOutFilesPorcelain($initial_sha);
 
-      dump('apply patch.......');
       $applied = $patch_b->applyPatchFile();
-      dump($applied);
 
       if (!$applied) {
-        $this->fail();
+        $this->fail("Patch $patch_filename failed to apply");
       }
       
-      // makeGitCommit
-      /*
-      $class = new \ReflectionClass($patch_b);
-      $method = $class->getMethod('makeGitCommit');
-      $method->setAccessible(TRUE);
-      $method->invokeArgs($patch_b, []);
-      */
+      // Make the commit.
+      // TODO: use Git handler when this gains the ability.
       shell_exec("git commit  --allow-empty --message='Commit for $patch_filename.'");
-      
     }
     
     $log = shell_exec("git rev-list master --pretty=oneline");
