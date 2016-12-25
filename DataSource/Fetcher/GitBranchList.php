@@ -28,7 +28,7 @@ class GitBranchList implements FetcherInterface {
       exec("git merge-base --is-ancestor $branch_name HEAD", $output, $return_var);
 
       if ($return_var === 0) {
-        $branch_list[] = $branch_name;
+        $branch_list[$sha] = $branch_name;
       }
     }
 
