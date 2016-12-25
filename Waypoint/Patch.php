@@ -29,6 +29,16 @@ class Patch {
   }
 
   /**
+   * Returns the SHA for the commit for this patch, or NULL if not committed.
+   *
+   * @return string|null
+   *  The SHA, or NULL if this patch has no corresponding commit.
+   */
+  public function getSHA() {
+    return $this->sha;
+  }
+
+  /**
    * Returns the Drupal file entity for this patch.
    *
    * @return \StdClass
