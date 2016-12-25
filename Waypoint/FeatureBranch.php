@@ -40,14 +40,7 @@ class FeatureBranch {
       $this->exists = FALSE;
 
       // Invent a branch name.
-      $issue_title = $situation->DrupalOrgIssueNode()->getIssueNodeTitle();
-
-      $issue_title = str_replace([',', "'", '"', '.', '\\', '/'], '', $issue_title);
-      $issue_title = str_replace(['-', '_'], ' ', $issue_title);
-      $pieces = preg_split('/\s+/', $issue_title);
-      array_unshift($pieces, $issue_number);
-
-      $this->branchName = implode('-', $pieces);
+      $this->branchName = $this->createBranchName();
       //dump($this->branchName);
     }
 
@@ -55,6 +48,22 @@ class FeatureBranch {
 
     // if current branch NOT feature branch, problem?
     // no, leave that to the command to determine.
+  }
+
+  /**
+   * Invents a name to give the branch if it does not actually exist yet.
+   */
+  public function createBranchName() {
+    $issue_number = $this->situation->getIssueNumber();
+    $issue_title = $this->situation->DrupalOrgIssueNode_getIssueNodeTitle();
+
+    $pieces = preg_split('/\s+/', $issue_title);
+    $pieces = preg_replace('/[[:^alnum:]]/', '', $pieces);
+    array_unshift($pieces, $issue_number);
+
+    $branch_name = implode('-', $pieces);
+
+    return $branch_name;
   }
 
   public function getBranchName() {
