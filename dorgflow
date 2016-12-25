@@ -36,4 +36,9 @@ else {
   }
 }
 
-$command->execute();
+try {
+  $command->execute();
+}
+catch (\Exception $e) {
+  print $e->message() . "\n";
+}
