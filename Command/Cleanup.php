@@ -13,7 +13,11 @@ class Cleanup {
   public function execute() {
     $situation = $this->situation;
     
-    // TODO: stop if git not clean
+    // Check git is clean.
+    $clean = $situation->GitStatus()->gitIsClean();
+    if (!$clean) {
+      throw new \Exception("Git repository is not clean. Aborting.");
+    }
 
     $master_branch = $situation->getMasterBranch();
     $feature_branch = $situation->getFeatureBranch();

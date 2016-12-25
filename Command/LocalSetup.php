@@ -16,8 +16,7 @@ class LocalSetup {
     // Check git is clean.
     $clean = $situation->GitStatus()->gitIsClean();
     if (!$clean) {
-      print "Git repository is not clean. Aborting.\n";
-      exit();
+      throw new \Exception("Git repository is not clean. Aborting.");
     }
 
     // Create branches.
