@@ -8,6 +8,11 @@ class FeatureBranch {
 
   protected $branchName;
 
+  /**
+   * The SHA for the tip commit of this branch.
+   */
+  protected $sha;
+
   function __construct(\Dorgflow\Situation $situation) {
     $this->situation = $situation;
 
@@ -23,11 +28,12 @@ class FeatureBranch {
     //dump($branch_list);
 
     // Work over branch list.
-    foreach ($branch_list as $branch) {
+    foreach ($branch_list as $sha => $branch) {
       if (substr($branch, 0, strlen($issue_number)) == $issue_number &&
         substr($branch, -6) != '-tests') {
         $this->exists = TRUE;
         // Set the current branch as WHAT WE ARE.
+        $this->sha = $sha;
         $this->branchName = $branch;
         //dump('found!');
         //dump($this->branchName);
@@ -48,6 +54,16 @@ class FeatureBranch {
 
     // if current branch NOT feature branch, problem?
     // no, leave that to the command to determine.
+  }
+
+  /**
+   * Returns the SHA for the commit for this patch, or NULL if not committed.
+   *
+   * @return string|null
+   *  The SHA, or NULL if this patch has no corresponding commit.
+   */
+  public function getSHA() {
+    return $this->sha;
   }
 
   /**
