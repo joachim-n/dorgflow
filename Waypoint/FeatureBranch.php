@@ -19,7 +19,7 @@ class FeatureBranch {
     }
 
     // Is there a branch for this issue number, that is not a tests branch?
-    $branch_list = $situation->GitBranchList()->getBranchList();
+    $branch_list = $situation->GitBranchList_getBranchList();
     //dump($branch_list);
 
     // Work over branch list.
@@ -44,7 +44,7 @@ class FeatureBranch {
       //dump($this->branchName);
     }
 
-    $this->isCurrentBranch = ($situation->GitCurrentBranch()->getCurrentBranch() == $this->branchName);
+    $this->isCurrentBranch = ($situation->GitCurrentBranch_getCurrentBranch() == $this->branchName);
 
     // if current branch NOT feature branch, problem?
     // no, leave that to the command to determine.
