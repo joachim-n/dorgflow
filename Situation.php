@@ -39,7 +39,19 @@ class Situation {
    * @endcode
    */
   public function __call($name, $parameters) {
-    return $this->getDataSource($name, $parameters);
+    // Might be a terrible idea, but I want mock objects in tests to be easier
+    // to make: a method of DataSource_DataSourceMethod() calls
+    // DataSourceMethod() on DataSource.
+    // This should be considered a temporary measure -- move to having the
+    // various DataSourceMethod() methods callable direct on this class.
+    if (strpos($name, '_') === FALSE) {
+      return $this->getDataSource($name, $parameters);
+    }
+    else {
+      list($data_source, $data_source_method) = explode('_', $name);
+
+      return $this->getDataSource($data_source, $parameters)->$data_source_method();
+    }
   }
 
   public function git() {
