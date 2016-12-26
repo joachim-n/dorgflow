@@ -21,6 +21,18 @@ class Git {
   }
 
   /**
+   * Resets the tip of a given branch.
+   *
+   * @param $branch_name
+   *  The short name of a branch, e.g. 'master'.
+   * @param $sha
+   *  An SHA to set the branch tip to.
+   */
+  public function moveBranch($branch_name, $sha) {
+    shell_exec("git update-ref refs/heads/$branch_name $sha");
+  }
+
+  /**
    * Checks out the files of the given commit, without moving branches.
    *
    * This causes both the working directory and the staging to look like the
