@@ -77,7 +77,7 @@ class LocalUpdate {
       // Reposition the FeatureBranch tip to the last committed patch.
       $this->situation->git()->moveBranch($feature_branch->getBranchName(), $last_committed_patch->getSHA());
 
-      print strtr("Moved your work at the tip of the feature branch to new branch !forkedbranchname.\n", [
+      print strtr("Moved your work at the tip of the feature branch to new branch !forkedbranchname. You should manually merge this into the feature branch to preserve your work.\n", [
         '!forkedbranchname' => $patch->getPatchFilename(),
       ]);
 
