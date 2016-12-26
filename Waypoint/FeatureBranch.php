@@ -82,6 +82,10 @@ class FeatureBranch {
     return $branch_name;
   }
 
+  public function createForkBranchName() {
+    return $this->branchName . '-forked-' . time();
+  }
+
   public function getBranchName() {
     return $this->branchName;
   }
