@@ -38,9 +38,9 @@ This creates a new git branch for you to work on. If there are patches on the
 issue, it will also download them and make commits for them. So you'll have
 something like this:
 
-     * (12345-fix-bug) Patch from Drupal.org. File: 12345-4.fix-bug.patch; fid 99999. Automatic commit by dorgflow.
-     * Patch from Drupal.org. File: 12345-1.fix-bug.permissions-author.patch; fid 88888. Automatic commit by dorgflow.
-    /
+      * (12345-fix-bug) Patch from Drupal.org. File: 12345-4.fix-bug.patch; fid 99999. Automatic commit by dorgflow.
+      * Patch from Drupal.org. File: 12345-1.fix-bug.permissions-author.patch; fid 88888. Automatic commit by dorgflow.
+     /
     * (8.3.x) Issue 11111 by whoever.
     * Issue 22222 by whoever.
 
