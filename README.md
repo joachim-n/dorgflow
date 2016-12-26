@@ -64,9 +64,31 @@ If there are new patches on the issue on drupal.org, do:
 
 This will create commits for the new patches on your branch.
 
-WARNING: This feature is not yet fully developed. Your commits will remain, but
-new patches will come after them on the branch. You will need to retrieve your
-work, possibly with cherry-picking to another branch and then merging.
+In the situation that the feature branch has your own commits at the tip of it,
+which have not been posted as a patch, these are moved to a separate branch.
+
+This situation:
+
+      * My commit.
+      * (12345-fix-bug) Patch 2 from Drupal.org.
+      * Patch 1 from Drupal.org.
+     /
+    * (8.3.x) Issue 11111 by whoever.
+    * Issue 22222 by whoever.
+
+becomes this:
+
+      * (12345-fix-bug) Patch 3 from Drupal.org.
+      | * (12345-fix-bug-forked-TIMESTAMP) My commit.
+      |/
+      * Patch 2 from Drupal.org.
+      * Patch 1 from Drupal.org.
+     /
+    * (8.3.x) Issue 11111 by whoever.
+    * Issue 22222 by whoever.
+
+You should then manually merge the forked branch back into the feature branch to
+preserve your work.
 
 ### Contributing your work
 
