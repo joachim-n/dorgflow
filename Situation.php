@@ -171,7 +171,7 @@ class Situation {
     */
 
     $feature_branch_log = $this->GitFeatureBranchLog()->getFeatureBranchLog();
-    dump($feature_branch_log);
+    //dump($feature_branch_log);
 
     $patch_waypoints = [];
 
