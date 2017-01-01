@@ -1,7 +1,6 @@
 #!/usr/bin/env php
 <?php
 
-// Just test stuff for now.
 namespace Dorgflow;
 
 print "Hello, this is Dorgflow!\n";
