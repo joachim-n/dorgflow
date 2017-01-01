@@ -2,6 +2,9 @@
 
 namespace Dorgflow\Waypoint;
 
+use \Dorgflow\Situation;
+use \Dorgflow\Executor\Git;
+
 class Patch {
 
   /**
@@ -19,8 +22,9 @@ class Patch {
    */
   protected $sha;
 
-  function __construct(\Dorgflow\Situation $situation, $file_field_item, $sha = NULL) {
+  function __construct(Situation $situation, Git $git, $file_field_item, $sha = NULL) {
     $this->situation = $situation;
+    $this->git = $git;
 
     // Set the file ID.
     $this->fid = $file_field_item->file->id;
