@@ -40,5 +40,5 @@ try {
   $command->execute();
 }
 catch (\Exception $e) {
-  print $e->message() . "\n";
+  print $e->getMessage() . "\n";
 }
