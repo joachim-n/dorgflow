@@ -2,6 +2,9 @@
 
 namespace Dorgflow\Waypoint;
 
+use \Dorgflow\Situation;
+use \Dorgflow\Executor\Git;
+
 class FeatureBranch {
 
   protected $exists;
@@ -13,8 +16,9 @@ class FeatureBranch {
    */
   protected $sha;
 
-  function __construct(\Dorgflow\Situation $situation) {
+  function __construct(Situation $situation, Git $git) {
     $this->situation = $situation;
+    $this->git = $git;
 
     $issue_number = $situation->getIssueNumber();
     //dump($issue_number);
