@@ -115,7 +115,7 @@ class Patch {
    */
   public function applyPatchFile() {
     $patch_file = $this->getPatchFile();
-    return $this->situation->git()->applyPatch($patch_file);
+    return $this->git->applyPatch($patch_file);
   }
 
   protected function getCommitMessage() {
@@ -126,7 +126,7 @@ class Patch {
 
   protected function makeGitCommit() {
     $message = $this->getCommitMessage();
-    $this->situation->git()->commit($message);
+    $this->git->commit($message);
   }
 
 }
