@@ -4,11 +4,7 @@ namespace Dorgflow\Command;
 
 use Dorgflow\Situation;
 
-class LocalUpdate {
-
-  public function __construct(Situation $situation) {
-    $this->situation = $situation;
-  }
+class LocalUpdate extends CommandBase {
 
   public function execute() {
     $situation = $this->situation;

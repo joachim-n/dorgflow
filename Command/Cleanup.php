@@ -4,11 +4,7 @@ namespace Dorgflow\Command;
 
 use Dorgflow\Situation;
 
-class Cleanup {
-  
-  public function __construct(Situation $situation) {
-    $this->situation = $situation;
-  }
+class Cleanup extends CommandBase {
 
   public function execute() {
     $situation = $this->situation;
