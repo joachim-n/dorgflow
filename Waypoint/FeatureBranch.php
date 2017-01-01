@@ -114,7 +114,7 @@ class FeatureBranch {
 
   public function gitCreate() {
     // Create a new branch and check it out.
-    $this->situation->git()->createNewBranch($this->branchName, TRUE);
+    $this->git->createNewBranch($this->branchName, TRUE);
   }
 
 }
