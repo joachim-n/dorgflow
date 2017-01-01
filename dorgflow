@@ -8,8 +8,16 @@ print "Hello, this is Dorgflow!\n";
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-$command_runner = new CommandBuilder();
-$command = $command_runner->getCommand($argv);
+$command_resolver = new CommandResolver();
+$command_class_name = $command_resolver->getCommandClass($argv);
+
+// Helper objects to inject.
+// TODO: use a dedicated container class and inject that instead?
+$git = new \Dorgflow\Executor\Git();
+$situation = new \Dorgflow\Situation($git);
+// $analyser = new Analyser... ?
+
+$command = new $command_class_name($situation, $git);
 
 try {
   $command->execute();

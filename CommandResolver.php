@@ -5,18 +5,18 @@ namespace Dorgflow;
 /**
  * Determines which command to run and creates it.
  */
-class CommandBuilder {
+class CommandResolver {
 
   /**
-   * Creates a command handler.
+   * Determines which class should handle the command.
    *
    * @param $parameters
    *  Input parameters.
    *
    * @return
-   *  The command object.
+   *  The full command class name.
    */
-  public function getCommand($parameters) {
+  public function getCommandClass($parameters) {
     if (empty($parameters[1])) {
       // If we're run with no parameter, we're creating a patch.
       $command_class_name = 'CreatePatch';
@@ -38,21 +38,8 @@ class CommandBuilder {
       }
     }
 
-    $command = $this->createCommand($command_class_name);
-    return $command;
-  }
-
-  protected function createCommand($command_class_name) {
-    // Helper objects to inject.
-    // TODO: use a dedicated container class and inject that instead?
-    $git = new \Dorgflow\Executor\Git();
-    $situation = new \Dorgflow\Situation($git);
-    // $analyser = new Analyser... ?
-
     $full_class_name = "\\Dorgflow\\Command\\$command_class_name";
-    $command = new $full_class_name($situation, $git);
-
-    return $command;
+    return $full_class_name;
   }
 
 }
