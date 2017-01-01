@@ -40,7 +40,7 @@ class FeatureBranchTest extends \PHPUnit_Framework_TestCase {
     $situation->method('DrupalOrgIssueNode_getIssueNodeTitle')
       ->willReturn('the title of the issue');
 
-    $feature_branch = $this->feature_branch = new \Dorgflow\Waypoint\FeatureBranch($situation);
+    $feature_branch = $this->feature_branch = new \Dorgflow\Waypoint\FeatureBranch($situation, $git);
 
     $exists = $feature_branch->exists();
     $this->assertFalse($exists);
