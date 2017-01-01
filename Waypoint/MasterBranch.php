@@ -49,7 +49,7 @@ class MasterBranch {
   }
 
   public function checkOutFiles() {
-    $this->situation->git()->checkOutFiles($this->branchName);
+    $this->git->checkOutFiles($this->branchName);
   }
 
 }
