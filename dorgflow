@@ -7,8 +7,7 @@ print "Hello, this is Dorgflow!\n";
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-$command_resolver = new CommandResolver();
-$command_class_name = $command_resolver->getCommandClass($argv);
+$command_class_name = CommandResolver::getCommandClass($argv);
 
 // Helper objects to inject.
 // TODO: use a dedicated container class and inject that instead?

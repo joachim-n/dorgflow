@@ -16,7 +16,7 @@ class CommandResolver {
    * @return
    *  The full command class name.
    */
-  public function getCommandClass($parameters) {
+  public static function getCommandClass($parameters) {
     if (empty($parameters[1])) {
       // If we're run with no parameter, we're creating a patch.
       $command_class_name = 'CreatePatch';
