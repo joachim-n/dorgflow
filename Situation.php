@@ -99,7 +99,7 @@ class Situation {
 
   public function getMasterBranch() {
     if (empty($this->masterBranch)) {
-      $this->masterBranch = new \Dorgflow\Waypoint\MasterBranch($this, $git);
+      $this->masterBranch = new \Dorgflow\Waypoint\MasterBranch($this, $this->git);
     }
 
     return $this->masterBranch;
@@ -107,7 +107,7 @@ class Situation {
 
   public function getFeatureBranch() {
     if (empty($this->feature_branch)) {
-      $this->feature_branch = new \Dorgflow\Waypoint\FeatureBranch($this, $git);
+      $this->feature_branch = new \Dorgflow\Waypoint\FeatureBranch($this, $this->git);
     }
 
     return $this->feature_branch;
