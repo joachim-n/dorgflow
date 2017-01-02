@@ -21,6 +21,17 @@ class Git {
   }
 
   /**
+   * Checks out the given branch.
+   *
+   * @param $branch_name
+   *  The short name of a branch, e.g. 'master'.
+   */
+  public function checkOutBranch($branch_name) {
+    // @todo change this to use git plumbing command.
+    exec("git checkout $branch_name");
+  }
+
+  /**
    * Resets the tip of a given branch.
    *
    * @param $branch_name
