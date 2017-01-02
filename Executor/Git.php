@@ -66,10 +66,12 @@ class Git {
    */
   public function checkOutFiles($treeish) {
     // Read the tree for the given commit into the index.
-    shell_exec("git read-tree $treeish");
+    // Use the -m option as this might be what causes false negatives for the
+    // git clean check on subsequent commands.
+    shell_exec("git read-tree -m $treeish");
 
     // Check out the index.
-    shell_exec('git checkout-index -f -a');
+    shell_exec('git checkout-index -f -a -u');
 
     // ARGH, we have to call this for weird git reasons that are weird, all the
     // more so that doing these commands manually doesn't require this, but when
