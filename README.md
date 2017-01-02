@@ -6,9 +6,10 @@ on drupal.org. With Dorgflow, you don't need to download and apply patches, and
 creating patches and interdiffs is simplified. The only thing that Dorgflow
 doesn't handle is posting your files back to an issue for review.
 
-WARNING: This is currently in heavy development. Things work, but lots of clean-
-up and refactoring is needed, as well as tests. I'm also writing this while on
-paternity leave and so intensely sleep-deprived ;)
+NOTICE: This is currently in heavy development. Things work, but there are more
+features to come, and lots of clean-up and refactoring is needed, as well as
+tests. I'm also writing this while on paternity leave and so intensely
+sleep-deprived ;)
 
 ## Installation
 
