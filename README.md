@@ -97,10 +97,8 @@ When you are ready to make a patch, just do:
 
     $ dorgflow
 
-This will create a patch with a systematic filename. You can then upload this to
-the issue node on drupal.org.
-
-WARNING: This does not yet make an interdiff from the most recent patch.
+This will create a patch with a systematic filename, and also an interdiff file.
+You can then upload these to the issue node on drupal.org.
 
 ### Committing a patch (maintainers only)
 
