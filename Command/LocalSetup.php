@@ -35,13 +35,13 @@ class LocalSetup extends CommandBase {
     // Check whether feature branch exists.
     // TODO: necessary???
     if ($feature_branch->exists()) {
-      throw new \Exception("The feature branch already exists. Use the update command.");
+      throw new \Exception("The feature branch already exists. Use the update command. Aborting.");
     }
     else {
       // If feature branch doens't exist, create it in git.
       // Check we are on the master branch -- if not, throw exception.
       if (!$master_branch->isCurrentBranch()) {
-        throw new \Exception("The master branch is not current.");
+        throw new \Exception("The master branch is not current. Aborting");
       }
 
       $feature_branch->gitCreate();
@@ -58,7 +58,7 @@ class LocalSetup extends CommandBase {
 
     // If no patches, we're done.
     if (empty($patches)) {
-      print "No patches to apply.\n";
+      print "There are no patches to apply.\n";
       return;
     }
 
