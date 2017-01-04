@@ -22,19 +22,20 @@ class CommandResolver {
       $command_class_name = 'CreatePatch';
     }
     else {
-      if ($parameters[1] == 'cleanup') {
-        $command_class_name = 'Cleanup';
-      }
-      elseif ($parameters[1] == 'update') {
-        $command_class_name = 'LocalUpdate';
-      }
-      elseif ($parameters[1] == 'test') {
-        $command_class_name = 'Test';
-      }
-      else {
-        // If the parameter is something else, assume initial setup: the command
-        // checks for a URL or issue number.
-        $command_class_name = 'LocalSetup';
+      switch ($parameters[1]) {
+        case 'cleanup':
+          $command_class_name = 'Cleanup';
+          break;
+        case 'update':
+          $command_class_name = 'LocalUpdate';
+          break;
+        case 'test':
+          $command_class_name = 'Test';
+          break;
+        default:
+          // If the parameter is something else, assume initial setup: the command
+          // checks for a URL or issue number.
+          $command_class_name = 'LocalSetup';
       }
     }
 
