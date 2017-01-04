@@ -46,7 +46,7 @@ class LocalSetup extends CommandBase {
 
       $feature_branch->gitCreate();
 
-      print strtr("Feature branch !branch created.\n", [
+      print strtr("Created feature branch !branch.\n", [
         '!branch' => $feature_branch->getBranchName(),
       ]);
     }
