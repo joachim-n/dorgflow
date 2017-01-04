@@ -116,7 +116,7 @@ class FeatureBranch {
    * Finds the most recent commit on the feature branch that is for a patch.
    *
    * @return \Dorgflow\Waypoint\Patch
-   *  The patch object.
+   *  The patch object, or NULL of none was found.
    */
   public function getMostRecentPatch() {
     $branch_log = $this->situation->GitFeatureBranchLog()->getFeatureBranchLog();
