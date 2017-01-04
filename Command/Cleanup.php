@@ -19,11 +19,19 @@ class Cleanup extends CommandBase {
     $feature_branch = $situation->getFeatureBranch();
 
     $master_branch_name = $master_branch->getBranchName();
+    $feature_branch_name = $feature_branch->getBranchName();
+
+    print "You are about to checkout branch $master_branch_name and DELETE branch $feature_branch_name!\n";
+    $confirmation = readline("Please enter 'delete' to confirm:");
+
+    if ($confirmation != 'delete') {
+      print "Clean up aborted.\n";
+      return;
+    }
+
+    $master_branch_name = $master_branch->getBranchName();
     shell_exec("git checkout $master_branch_name");
 
-    // TODO: confirmation!!!!!!!!!!!!!!
-
-    $feature_branch_name = $feature_branch->getBranchName();
     shell_exec("git branch -D $feature_branch_name");
   }
 
