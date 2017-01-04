@@ -4,6 +4,9 @@ namespace Dorgflow\Command;
 
 use Dorgflow\Situation;
 
+/**
+ * Deletes the current feature branch.
+ */
 class Cleanup extends CommandBase {
 
   public function execute() {
@@ -33,6 +36,8 @@ class Cleanup extends CommandBase {
     shell_exec("git checkout $master_branch_name");
 
     shell_exec("git branch -D $feature_branch_name");
+
+    // TODO: delete any patch files for this issue.
   }
 
 }
