@@ -45,19 +45,19 @@ class CreatePatch extends CommandBase {
 
     print("Written patch $patch_name with diff from $master_branch_name to local branch.\n");
 
+    // Make an interdiff from the most recent patch.
+    // (Before we make a recording patch, of course!)
+    $last_patch = $feature_branch->getMostRecentPatch();
+    $interdiff_name = $this->getInterdiffName($feature_branch, $last_patch);
+    $last_patch_sha = $last_patch->getSHA();
+
+    shell_exec("git diff $last_patch_sha > $interdiff_name");
+
+    print("Written interdiff $interdiff_name with diff from $last_patch_sha to local branch.\n");
+
     // Make an empty commit to record the patch.
     // TODO: find nice place for this.
     shell_exec("git commit --allow-empty -m 'Patch for Drupal.org. File: $patch_name. Automatic commit by dorgflow.'");
-
-
-    /*
-    TODO:
-      - figure out interdiff: what was the previous patch.
-        get the patch list. get the commit for the most recent patch.
-        diff from that commit
-
-    */
-
   }
 
   protected function getPatchName($feature_branch) {
@@ -68,6 +68,15 @@ class CreatePatch extends CommandBase {
     $branch_description = $feature_branch->getBranchDescription();
 
     return "$patch_number.$current_project.$branch_description.patch";
+  }
+
+  protected function getInterdiffName($feature_branch, $last_patch) {
+    // TODO: include the comment number of the previous patch, once we have
+    // these.
+    $issue_number = $this->situation->getIssueNumber();
+    $comment_number = $this->situation->DrupalOrgIssueNode()->getNextCommentIndex();
+
+    return "interdiff.$issue_number.$comment_number.txt";
   }
 
 }
