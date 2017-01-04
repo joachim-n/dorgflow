@@ -44,6 +44,10 @@ class CommandResolverTest extends \PHPUnit_Framework_TestCase {
         ['update'],
         'LocalUpdate',
       ],
+      'apply' => [
+        ['apply'],
+        'Apply',
+      ],
     ];
   }
 
