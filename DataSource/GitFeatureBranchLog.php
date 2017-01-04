@@ -9,6 +9,7 @@ class GitFeatureBranchLog extends DataSourceBase {
    *
    * @return
    *  An array keyed by SHA, whose items are arrays with 'sha' and 'message'.
+   *  The items are arranged in progressing order, that is, older commits first.
    */
   public function getFeatureBranchLog() {
     return $this->feature_branch_log;
