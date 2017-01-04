@@ -48,12 +48,14 @@ class CreatePatch extends CommandBase {
     // Make an interdiff from the most recent patch.
     // (Before we make a recording patch, of course!)
     $last_patch = $feature_branch->getMostRecentPatch();
-    $interdiff_name = $this->getInterdiffName($feature_branch, $last_patch);
-    $last_patch_sha = $last_patch->getSHA();
+    if (!empty($last_patch)) {
+      $interdiff_name = $this->getInterdiffName($feature_branch, $last_patch);
+      $last_patch_sha = $last_patch->getSHA();
 
-    shell_exec("git diff $last_patch_sha > $interdiff_name");
+      shell_exec("git diff $last_patch_sha > $interdiff_name");
 
-    print("Written interdiff $interdiff_name with diff from $last_patch_sha to local branch.\n");
+      print("Written interdiff $interdiff_name with diff from $last_patch_sha to local branch.\n");
+    }
 
     // Make an empty commit to record the patch.
     // TODO: find nice place for this.
