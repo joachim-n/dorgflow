@@ -29,7 +29,9 @@ class CommandResolverTest extends \PHPUnit_Framework_TestCase {
   public function provider() {
     return [
       'setup node id' => [
+        // Command-line arguments.
         [12345],
+        // Expected command class short name.
         'LocalSetup',
       ],
       'setup url' => [
@@ -47,6 +49,10 @@ class CommandResolverTest extends \PHPUnit_Framework_TestCase {
       'apply' => [
         ['apply'],
         'Apply',
+      ],
+      'cleanup' => [
+        ['cleanup'],
+        'Cleanup',
       ],
     ];
   }
