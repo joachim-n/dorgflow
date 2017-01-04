@@ -74,7 +74,7 @@ class LocalUpdate extends CommandBase {
       $this->git->moveBranch($feature_branch->getBranchName(), $last_committed_patch->getSHA());
 
       print strtr("Moved your work at the tip of the feature branch to new branch !forkedbranchname. You should manually merge this into the feature branch to preserve your work.\n", [
-        '!forkedbranchname' => $patch->getPatchFilename(),
+        '!forkedbranchname' => $forked_branch_name,
       ]);
 
       // We're now ready to apply the patches.
