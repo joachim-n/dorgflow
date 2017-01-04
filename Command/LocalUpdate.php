@@ -94,7 +94,7 @@ class LocalUpdate extends CommandBase {
         // Keep a list of the patches that we commit.
         $patches_committed[] = $patch;
 
-        print strtr("Applied patch !patchname.\n", [
+        print strtr("Applied and committed patch !patchname.\n", [
           '!patchname' => $patch->getPatchFilename(),
         ]);
       }

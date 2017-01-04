@@ -68,7 +68,7 @@ class LocalSetup extends CommandBase {
 
       // Message.
       if ($patch_committed) {
-        print strtr("Applied patch !patchname.\n", [
+        print strtr("Applied and committed patch !patchname.\n", [
           '!patchname' => $patch->getPatchFilename(),
         ]);
       }
