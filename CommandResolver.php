@@ -32,6 +32,9 @@ class CommandResolver {
         case 'test':
           $command_class_name = 'Test';
           break;
+        case 'apply':
+          $command_class_name = 'Apply';
+          break;
         default:
           // If the parameter is something else, assume initial setup: the command
           // checks for a URL or issue number.

@@ -101,3 +101,17 @@ This will create a patch with a systematic filename. You can then upload this to
 the issue node on drupal.org.
 
 WARNING: This does not yet make an interdiff from the most recent patch.
+
+### Committing a patch (maintainers only)
+
+If an issue is set to RTBC, and the corresponding feature branch is up to date
+with the most recent patch, you can apply the changes to the master branch ready
+to be committed:
+
+    $ dorgflow apply
+
+This puts git back on the master branch, and performs a squash merge so that all
+the changes from the feature branch are applied and staged.
+
+All you now need to is perform the git commit, using the command suggested by
+the issue node's credit and committing section.
