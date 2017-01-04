@@ -115,3 +115,11 @@ the changes from the feature branch are applied and staged.
 
 All you now need to is perform the git commit, using the command suggested by
 the issue node's credit and committing section.
+
+### Cleaning up
+
+When you're completely done with this branch, you can do:
+
+    $ dorgflow cleanup
+
+This performs a checkout of the master branch, and deletes the feature branch.
