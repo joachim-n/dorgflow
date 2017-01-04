@@ -22,12 +22,26 @@ class Patch {
    */
   protected $sha;
 
-  function __construct(Situation $situation, Git $git, $file_field_item, $sha = NULL) {
+  /**
+   * Constructor.
+   *
+   * @param Situation $situation
+   *  The situation object.
+   * @param Git $git
+   *  The git executor.
+   * @param $file_field_item = NULL
+   *  The file field item from the issue node for the patch file, if there is one.
+   * @param $sha = NULL
+   *  The SHA for the patch's commit, if there is a commit.
+   */
+  function __construct(Situation $situation, Git $git, $file_field_item = NULL, $sha = NULL) {
     $this->situation = $situation;
     $this->git = $git;
 
     // Set the file ID.
-    $this->fid = $file_field_item->file->id;
+    if (isset($file_field_item)) {
+      $this->fid = $file_field_item->file->id;
+    }
 
     $this->sha = $sha;
   }
