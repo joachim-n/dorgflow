@@ -8,7 +8,7 @@ class Cleanup extends CommandBase {
 
   public function execute() {
     $situation = $this->situation;
-    
+
     // Check git is clean.
     $clean = $situation->GitStatus()->gitIsClean();
     if (!$clean) {
@@ -26,5 +26,5 @@ class Cleanup extends CommandBase {
     $feature_branch_name = $feature_branch->getBranchName();
     shell_exec("git branch -D $feature_branch_name");
   }
-  
+
 }
