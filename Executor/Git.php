@@ -97,6 +97,14 @@ class Git {
   }
 
   /**
+   * Performs a squash merge of a given branch.
+   */
+  public function squashMerge($branch_name) {
+    // @todo change this to use git plumbing command.
+    exec("git merge --squash $branch_name");
+  }
+
+  /**
    * Apply a patch to the staging area.
    *
    * @param $patch_text
