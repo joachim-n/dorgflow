@@ -65,6 +65,8 @@ class LocalUpdate extends CommandBase {
     // If the feature branch's SHA is not the same as the last committed patch
     // SHA, then that means there are local commits on the branch that are
     // newer than the patch.
+    // @todo: bug: if the tip if MY patch (ie empty dorgflow commit), then this
+    // is triggering incorrectly!!
     if ($last_committed_patch->getSHA() != $feature_branch->getSHA()) {
       // Create a new branch at the tip of the feature branch.
       $forked_branch_name = $feature_branch->createForkBranchName();
