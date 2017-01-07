@@ -6,7 +6,7 @@ namespace Dorgflow\Service;
  * Provides general information from git such as branch list and status.
  */
 class GitInfo {
-  
+
   protected $is_clean;
 
   /**
@@ -24,15 +24,15 @@ class GitInfo {
 
     return $this->is_clean;
   }
-  
+
   public function getCurrentBranch() {
     // TODO cache
     $current_branch = trim(shell_exec("git symbolic-ref --short -q HEAD"));
-    
+
     return $current_branch;
   }
-  
-  
+
+
   /**
    * Returns a list of all the git branches which are currently reachable.
    *
@@ -41,7 +41,7 @@ class GitInfo {
    */
   public function getBranchList() {
     // TODO: caching!
-    
+
     // TODO: check in right dir!
 
     $branch_list = [];
@@ -63,5 +63,5 @@ class GitInfo {
 
     return $branch_list;
   }
-  
+
 }
