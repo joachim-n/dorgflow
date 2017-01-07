@@ -20,10 +20,10 @@ $command_class_name = CommandResolver::getCommandClass($argv);
 // Helper objects to inject.
 // TODO: use a dedicated container class and inject that instead?
 $git = new \Dorgflow\Executor\Git();
-$situation = new \Dorgflow\Situation($git);
+$situation = new \Dorgflow\Situation($git, $container);
 // $analyser = new Analyser... ?
 
-$command = new $command_class_name($situation, $git);
+$command = new $command_class_name($situation, $git, $container);
 
 try {
   $command->execute();
