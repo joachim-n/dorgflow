@@ -7,6 +7,11 @@ use Dorgflow\Situation;
 class LocalSetup extends CommandBase {
 
   public function execute() {
+    // TEMPORARY: get services from the container.
+    // @todo inject these.
+    $this->git_info = $this->container->get('git.info');
+    $this->waypoint_manager = $this->container->get('waypoint_manager');
+
     $situation = $this->situation;
 
     // Check git is clean.
