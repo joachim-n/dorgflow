@@ -14,9 +14,12 @@ class CommandBase {
 
   protected $git;
 
-  function __construct(Situation $situation, Git $git) {
+  function __construct(Situation $situation, Git $git, $container) {
     $this->situation = $situation;
     $this->git = $git;
+
+    // Temporary, until the commands get specific services injected.
+    $this->container = $container;
   }
 
 }
