@@ -25,8 +25,11 @@ class Situation {
   // TODO: accessor!
   public $masterBranch;
 
-  function __construct($git) {
+  function __construct($git, $container) {
     $this->git = $git;
+
+    // TEMPORARY.
+    $this->container = $container;
   }
 
   /**
