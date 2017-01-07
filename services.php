@@ -29,6 +29,8 @@ git executor
 patch name handler
 */
 
+$container
+  ->register('user_input', '\Dorgflow\Service\UserInput');
 
 $container
   ->register('git.log', '\Dorgflow\Service\GitLog');
