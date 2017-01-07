@@ -42,6 +42,11 @@ $container
   ->register('git.executor', '\Dorgflow\Executor\Git');
 
 $container
+  ->register('analyser', '\Dorgflow\Service\Analyser')
+  ->addArgument(new Reference('git.info'))
+  ->addArgument(new Reference('user_input'));
+
+$container
   ->register('waypoint_manager', \Dorgflow\Service\WaypointManager::class)
   ->addArgument(new Reference('git.info'))
   ->addArgument(new Reference('git.log'))
