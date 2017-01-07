@@ -11,12 +11,14 @@ class MasterBranch {
 
   protected $isCurrentBranch;
 
-  function __construct(Situation $situation, Git $git) {
-    $this->situation = $situation;
-    $this->git = $git;
+  // TODO: typehints
+  function __construct($git_info, $git_log, $git_executor) {
+    $this->git_info = $git_info;
+    $this->git_log = $git_log;
+    $this->git_executor = $git_executor;
 
     // TODO: check order of the branch -- should be higher version numbers first!
-    $branch_list = $situation->GitBranchList()->getBranchList();
+    $branch_list = $this->git_info->getBranchList();
 
     foreach ($branch_list as $branch) {
       // Identify the main development branch, of one of the following forms:
@@ -37,7 +39,7 @@ class MasterBranch {
       throw new \Exception("Can't find a master branch.");
     }
 
-    $this->isCurrentBranch = ($situation->GitCurrentBranch()->getCurrentBranch() == $this->branchName);
+    $this->isCurrentBranch = ($this->git_info->getCurrentBranch() == $this->branchName);
   }
 
   public function getBranchName() {
@@ -49,7 +51,7 @@ class MasterBranch {
   }
 
   public function checkOutFiles() {
-    $this->git->checkOutFiles($this->branchName);
+    $this->git_executor->checkOutFiles($this->branchName);
   }
 
 }
