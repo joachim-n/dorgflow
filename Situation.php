@@ -101,11 +101,8 @@ class Situation {
   }
 
   public function getMasterBranch() {
-    if (empty($this->masterBranch)) {
-      $this->masterBranch = new \Dorgflow\Waypoint\MasterBranch($this, $this->git);
-    }
-
-    return $this->masterBranch;
+    // @todo: remove in due course.
+    return $this->container->get('waypoint_manager')->getMasterBranch();
   }
 
   public function getFeatureBranch() {
