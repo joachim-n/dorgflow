@@ -3,9 +3,17 @@
 
 namespace Dorgflow;
 
-print "Hello, this is Dorgflow!\n";
-
 require_once __DIR__ . '/vendor/autoload.php';
+
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+
+$container = new ContainerBuilder();
+// Don't bother with PhpFileLoader; it's overkill.
+require 'services.php';
+
+print "Hello, this is Dorgflow!\n";
 
 $command_class_name = CommandResolver::getCommandClass($argv);
 
