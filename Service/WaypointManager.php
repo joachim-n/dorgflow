@@ -2,6 +2,8 @@
 
 namespace Dorgflow\Service;
 
+use Dorgflow\Waypoint\MasterBranch;
+
 // needs:
 // - git executor
 // - situation ERM?
@@ -15,7 +17,7 @@ class WaypointManager {
 
   public function getMasterBranch() {
     if (empty($this->masterBranch)) {
-      $this->masterBranch = new \Dorgflow\Waypoint\MasterBranch(
+      $this->masterBranch = new MasterBranch(
         $this->git_info,
         $this->git_log,
         $this->git_executor
