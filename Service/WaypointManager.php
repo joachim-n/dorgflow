@@ -4,9 +4,9 @@ namespace Dorgflow\Service;
 
 use Dorgflow\Waypoint\MasterBranch;
 
-// needs:
-// - git executor
-// - situation ERM?
+/**
+ * Creates objects that represent waypoints in the workflow.
+ */
 class WaypointManager {
 
   function __construct($git_info, $git_log, $git_executor) {
