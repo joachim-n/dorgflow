@@ -16,8 +16,11 @@ class GitInfo {
    *  TRUE if clean, FALSE if local files have changes.
    */
   public function gitIsClean() {
-    // TEMP: todo
-    return TRUE;
+    if (!isset($this->is_clean)) {
+      $diff_files = shell_exec("git diff-files");
+
+      $this->is_clean = (empty($diff_files));
+    }
 
     return $this->is_clean;
   }
