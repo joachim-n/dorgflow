@@ -15,13 +15,13 @@ class LocalSetup extends CommandBase {
     $situation = $this->situation;
 
     // Check git is clean.
-    $clean = $situation->GitStatus()->gitIsClean();
+    $clean = $this->git_info->gitIsClean();
     if (!$clean) {
       throw new \Exception("Git repository is not clean. Aborting.");
     }
 
     // Create branches.
-    $master_branch = $situation->getMasterBranch();
+    $master_branch = $this->waypoint_manager->getMasterBranch();
 
     // If the master branch is not current, abort.
     if (!$master_branch->isCurrentBranch()) {
