@@ -76,7 +76,7 @@ class DrupalOrg {
    * Fetches the issue node from drupal.org's REST API.
    */
   protected function fetchIssueNode() {
-    $issue_number = $situation->getIssueNumber();
+    $issue_number = $this->analyser->deduceIssueNumber();
 
     print "Fetching node $issue_number from drupal.org.\n";
 
