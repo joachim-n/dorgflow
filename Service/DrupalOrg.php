@@ -9,8 +9,14 @@ class DrupalOrg {
 
   protected $node_data;
 
+  protected $file_entities;
+
   function __construct($analyser) {
     $this->analyser = $analyser;
+
+    // Set the user-agent for the request to drupal.org's API, to be polite.
+    // See https://www.drupal.org/api
+    ini_set('user_agent', "Dorgflow - https://github.com/joachim-n/dorgflow.");
   }
 
   /**
@@ -66,10 +72,38 @@ class DrupalOrg {
     return $files;
   }
 
-  public function getFileEntity() {
+  /**
+   * Fetches a file entity from drupal.org's REST API.
+   *
+   * @param $fid
+   *  The file entity ID.
+   *
+   * @return
+   *  The file entity data.
+   */
+  public function getFileEntity($fid) {
+    if (!isset($file_entities[$fid])) {
+      $response = file_get_contents("https://www.drupal.org/api-d7/file/{$fid}.json");
+      $file_entities[$fid] = json_decode($response);
+    }
+
+    return $file_entities[$fid];
   }
 
-  public function getPatchFile() {
+  /**
+   * Fetches a patch file from drupal.org.
+   *
+   * @param $url
+   *  The patch file URL.
+   *
+   * @return
+   *  The patch file contents.
+   */
+  public function getPatchFile($url) {
+    // @todo: this probably doesn't need any caching, but check!
+
+    $file = file_get_contents($url);
+    return $file;
   }
 
   /**
