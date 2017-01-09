@@ -2,7 +2,6 @@
 
 namespace Dorgflow\Waypoint;
 
-use \Dorgflow\Situation;
 use \Dorgflow\Executor\Git;
 
 class Patch {
@@ -25,18 +24,15 @@ class Patch {
   /**
    * Constructor.
    *
-   * @param Situation $situation
-   *  The situation object.
-   * @param Git $git
-   *  The git executor.
    * @param $file_field_item = NULL
    *  The file field item from the issue node for the patch file, if there is one.
    * @param $sha = NULL
    *  The SHA for the patch's commit, if there is a commit.
    */
-  function __construct(Situation $situation, Git $git, $file_field_item = NULL, $sha = NULL) {
-    $this->situation = $situation;
-    $this->git = $git;
+  function __construct($drupal_org, $waypoint_manager, $git_executor, $file_field_item = NULL, $sha = NULL) {
+    $this->drupal_org = $drupal_org;
+    $this->waypoint_manager = $waypoint_manager;
+    $this->git_executor = $git_executor;
 
     // Set the file ID.
     if (isset($file_field_item)) {
@@ -65,7 +61,7 @@ class Patch {
   public function getFileEntity() {
     // Lazy fetch the file entity for the patch.
     if (empty($this->fileEntity)) {
-      $this->fileEntity = $this->situation->DrupalOrgFileEntity(['fid' => $this->fid])->getFileEntity();
+      $this->fileEntity = $this->drupal_org->getFileEntity($this->fid);
     }
     return $this->fileEntity;
   }
@@ -81,7 +77,7 @@ class Patch {
     if (empty($this->patchFile)) {
       $file_entity = $this->getFileEntity();
 
-      $this->patchFile = $this->situation->DrupalOrgPatchFile(['url' => $file_entity->url])->getPatchFile($this->fid);
+      $this->patchFile = $this->drupal_org->getPatchFile($file_entity->url);
     }
     return $this->patchFile;
   }
@@ -105,7 +101,7 @@ class Patch {
   public function commitPatch() {
     // Set the files back to the master branch, without changing the current
     // commit.
-    $this->situation->getMasterBranch()->checkOutFiles();
+    $this->waypoint_manager->getMasterBranch()->checkOutFiles();
 
     $patch_status = $this->applyPatchFile();
 
@@ -129,7 +125,7 @@ class Patch {
    */
   public function applyPatchFile() {
     $patch_file = $this->getPatchFile();
-    return $this->git->applyPatch($patch_file);
+    return $this->git_executor->applyPatch($patch_file);
   }
 
   protected function getCommitMessage() {
@@ -140,7 +136,7 @@ class Patch {
 
   protected function makeGitCommit() {
     $message = $this->getCommitMessage();
-    $this->git->commit($message);
+    $this->git_executor->commit($message);
   }
 
 }
