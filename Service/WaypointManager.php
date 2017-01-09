@@ -9,9 +9,10 @@ use Dorgflow\Waypoint\MasterBranch;
  */
 class WaypointManager {
 
-  function __construct($git_info, $git_log, $git_executor) {
+  function __construct($git_info, $git_log, $drupal_org, $git_executor) {
     $this->git_info = $git_info;
     $this->git_log = $git_log;
+    $this->drupal_org = $drupal_org;
     $this->git_executor = $git_executor;
   }
 

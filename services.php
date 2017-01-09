@@ -47,14 +47,15 @@ $container
   ->addArgument(new Reference('user_input'));
 
 $container
+  ->register('drupal_org', '\Dorgflow\Service\DrupalOrg')
+  ->addArgument(new Reference('analyser'));
+
+$container
   ->register('waypoint_manager', \Dorgflow\Service\WaypointManager::class)
   ->addArgument(new Reference('git.info'))
   ->addArgument(new Reference('git.log'))
+  ->addArgument(new Reference('drupal_org'))
   ->addArgument(new Reference('git.executor'));
-
-$container
-  ->register('drupal_org', '\Dorgflow\Service\DrupalOrg')
-  ->addArgument(new Reference('analyser'));
 
 /*
 $container
