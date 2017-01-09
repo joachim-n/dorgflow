@@ -52,6 +52,10 @@ $container
   ->addArgument(new Reference('git.log'))
   ->addArgument(new Reference('git.executor'));
 
+$container
+  ->register('drupal_org', '\Dorgflow\Service\DrupalOrg')
+  ->addArgument(new Reference('analyser'));
+
 /*
 $container
   ->register('newsletter_manager', 'NewsletterManager')
