@@ -41,7 +41,6 @@ class LocalSetup extends CommandBase {
     $feature_branch = $this->waypoint_manager_branches->getFeatureBranch();
 
     // Check whether feature branch exists.
-    // TODO: necessary???
     if ($feature_branch->exists()) {
       throw new \Exception("The feature branch already exists. Use the update command. Aborting.");
     }
@@ -60,7 +59,6 @@ class LocalSetup extends CommandBase {
     }
 
     // Get the patches and create them.
-    // TODO: currently only the most recent patch is used.
     $patches = $this->waypoint_manager_patches->setUpPatches();
 
     // If no patches, we're done.

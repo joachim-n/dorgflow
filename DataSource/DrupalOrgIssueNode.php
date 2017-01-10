@@ -29,14 +29,15 @@ class DrupalOrgIssueNode extends DataSourceBase {
 
   /**
    * Gets the field items for the issue files field, in order of creation.
+   *
+   * Note that:
+   *  - it's up to the caller to filter out files that aren't set to be
+   *    displayed.
+   *  - it's not possible with this data to filter out non-patch files; the full
+   *    file entity must be retrieved for this.
    */
   public function getIssueFileFieldItems() {
     $files = $this->data->field_issue_files;
-
-    // TODO: filter out interdiffs!!!
-    // ... which we can't know till we have the file entities???
-
-    // TODO: filter out ones that are hidden?
 
     // Ensure these are in creation order by ordering them by fid.
     // TODO: in due course, get the comment index data!!! -- see d.org issue!

@@ -24,8 +24,6 @@ class CommitMessageHandler {
    *      creating to be uploaded to drupal.org.
    */
   public function parseCommitMessage($message) {
-    // TODO: move this to the same sort of place as the creation as these
-    // messages!
     $pattern_remote = "Patch from Drupal.org. File: (?P<filename>.+\.patch); fid (?P<fid>\d+). Automatic commit by dorgflow.";
     $patern_local   = "Patch for Drupal.org. File: (?P<filename>.+\.patch). Automatic commit by dorgflow.";
 

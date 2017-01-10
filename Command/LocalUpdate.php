@@ -88,9 +88,6 @@ class LocalUpdate extends CommandBase {
     // Output the patches.
     $patches_committed = [];
     foreach ($patches_uncommitted as $patch) {
-      // TODO: handle case where there are local commits at the tip of the branch
-      // rather than a patch!
-
       // Commit the patch.
       $patch_committed = $patch->commitPatch();
 
