@@ -22,7 +22,7 @@ class FeatureBranch {
     $this->drupal_org = $drupal_org;
     $this->git_exec = $git_exec;
 
-    $issue_number = $this->analyser->getIssueNumber();
+    $issue_number = $this->analyser->deduceIssueNumber();
     //dump($issue_number);
     if (empty($issue_number)) {
       // If we can't figure out an issue numbner, FAIL.
@@ -76,7 +76,7 @@ class FeatureBranch {
    * Invents a name to give the branch if it does not actually exist yet.
    */
   public function createBranchName() {
-    $issue_number = $this->analyser->getIssueNumber();
+    $issue_number = $this->analyser->deduceIssueNumber();
     $issue_title = $this->drupal_org->getIssueNodeTitle();
 
     $pieces = preg_split('/\s+/', $issue_title);
