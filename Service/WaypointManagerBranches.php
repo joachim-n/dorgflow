@@ -3,6 +3,7 @@
 namespace Dorgflow\Service;
 
 use Dorgflow\Waypoint\MasterBranch;
+use Dorgflow\Waypoint\FeatureBranch;
 use Dorgflow\Waypoint\Patch;
 
 /**
@@ -10,10 +11,11 @@ use Dorgflow\Waypoint\Patch;
  */
 class WaypointManagerBranches {
 
-  function __construct($git_info, $drupal_org, $git_executor) {
+  function __construct($git_info, $drupal_org, $git_executor, $analyser) {
     $this->git_info = $git_info;
     $this->drupal_org = $drupal_org;
     $this->git_executor = $git_executor;
+    $this->analyser = $analyser;
   }
 
   public function getMasterBranch() {
@@ -28,7 +30,16 @@ class WaypointManagerBranches {
   }
 
   public function getFeatureBranch() {
+    if (empty($this->feature_branch)) {
+      $this->feature_branch = new FeatureBranch(
+        $this->git_info,
+        $this->analyser,
+        $this->drupal_org,
+        $this->git_exec
+      );
+    }
 
+    return $this->feature_branch;
   }
 
 }

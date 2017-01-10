@@ -44,7 +44,8 @@ $container
   ->register('waypoint_manager.branches', \Dorgflow\Service\WaypointManagerBranches::class)
   ->addArgument(new Reference('git.info'))
   ->addArgument(new Reference('drupal_org'))
-  ->addArgument(new Reference('git.executor'));
+  ->addArgument(new Reference('git.executor'))
+  ->addArgument(new Reference('analyser'));
 
 $container
   ->register('git.log', '\Dorgflow\Service\GitLog')
