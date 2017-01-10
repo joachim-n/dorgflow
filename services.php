@@ -8,24 +8,24 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Definition;
 
 $container
-  ->register('user_input', '\Dorgflow\Service\UserInput');
+  ->register('user_input', \Dorgflow\Service\UserInput::class);
 
 $container
-  ->register('git.info', '\Dorgflow\Service\GitInfo');
+  ->register('git.info', \Dorgflow\Service\GitInfo::class);
 
 $container
-  ->register('git.executor', '\Dorgflow\Executor\Git');
+  ->register('git.executor', \Dorgflow\Executor\Git::class);
 
 $container
   ->register('commit_message', \Dorgflow\Service\CommitMessageHandler::class);
 
 $container
-  ->register('analyser', '\Dorgflow\Service\Analyser')
+  ->register('analyser', \Dorgflow\Service\Analyser::class)
   ->addArgument(new Reference('git.info'))
   ->addArgument(new Reference('user_input'));
 
 $container
-  ->register('drupal_org', '\Dorgflow\Service\DrupalOrg')
+  ->register('drupal_org', \Dorgflow\Service\DrupalOrg::class)
   ->addArgument(new Reference('analyser'));
 
 $container
@@ -36,7 +36,7 @@ $container
   ->addArgument(new Reference('analyser'));
 
 $container
-  ->register('git.log', '\Dorgflow\Service\GitLog')
+  ->register('git.log', \Dorgflow\Service\GitLog::class)
   ->addArgument(new Reference('waypoint_manager.branches'));
 
 $container
