@@ -9,12 +9,12 @@ use Dorgflow\Waypoint\Patch;
  */
 class WaypointManagerPatches {
 
-  // TODO: add $waypoint_manager_branches
-  function __construct($git_info, $git_log, $drupal_org, $git_executor) {
-    $this->git_info = $git_info;
-    $this->git_log = $git_log;
+  function __construct($commit_message, $drupal_org, $git_log, $git_executor, $waypoint_manager_branches) {
+    $this->commit_message = $commit_message;
     $this->drupal_org = $drupal_org;
+    $this->git_log = $git_log;
     $this->git_executor = $git_executor;
+    $this->waypoint_manager_branches = $waypoint_manager_branches;
   }
 
   /**
@@ -24,7 +24,7 @@ class WaypointManagerPatches {
    */
   public function setUpPatches() {
     // Get the field items for the issue node's file field.
-    $issue_file_field_items = $this->DrupalOrgIssueNode()->getIssueFileFieldItems();
+    $issue_file_field_items = $this->drupal_org->getIssueFileFieldItems();
 
     //dump($issue_file_field_items);
     //var_export($issue_file_field_items);
@@ -74,7 +74,7 @@ class WaypointManagerPatches {
     );
     */
 
-    $feature_branch_log = $this->GitFeatureBranchLog()->getFeatureBranchLog();
+    $feature_branch_log = $this->git_log->getFeatureBranchLog();
     //dump($feature_branch_log);
 
     $patch_waypoints = [];
@@ -107,7 +107,7 @@ class WaypointManagerPatches {
       while ($feature_branch_log_to_search_in) {
         // Get the next commit.
         $commit = array_shift($feature_branch_log_to_search_in);
-        $commit_message_data = $this->parseCommitMessage($commit['message']);
+        $commit_message_data = $this->commit_message->parseCommitMessage($commit['message']);
 
         // If we find a commit from the feature branch that matches this patch,
         // then create a Patch waypoint and move on to the next file.
@@ -128,7 +128,7 @@ class WaypointManagerPatches {
 
       // We didn't find a commit, so now get the file entity to look at the
       // filename, to see if it's a patch file.
-      $file_entity = $this->DrupalOrgFileEntity(['fid' => $fid])->getFileEntity();
+      $file_entity = $this->drupal_org->getFileEntity($fid);
       $file_url = $file_entity->url;
 
       // Skip a file that is not a patch.
@@ -147,7 +147,7 @@ class WaypointManagerPatches {
       while ($feature_branch_log_to_search_in) {
         // Get the next commit.
         $commit = array_shift($feature_branch_log_to_search_in);
-        $commit_message_data = $this->parseCommitMessage($commit['message']);
+        $commit_message_data = $this->commit_message->parseCommitMessage($commit['message']);
 
         // If we find a commit from the feature branch that matches this patch,
         // then create a Patch waypoint and move on to the next file.
@@ -191,7 +191,7 @@ class WaypointManagerPatches {
     $branch_log = $this->git_log->getFeatureBranchLog();
     // Reverse this so we get the most recent first.
     foreach (array_reverse($branch_log) as $sha => $commit) {
-      $commit_data = $this->situation->parseCommitMessage($commit['message']);
+      $commit_data = $this->commit_message->parseCommitMessage($commit['message']);
 
       if (!empty($commit_data)) {
         // This is the most recent commit that has detectable commit data;
