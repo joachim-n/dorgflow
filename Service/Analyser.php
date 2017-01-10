@@ -53,5 +53,31 @@ class Analyser {
     throw new \Exception("Unable to find an issue number from command line parameter or current git branch.");
   }
 
+  public function getCurrentProjectName() {
+    // @todo caching?
+    $working_dir = getcwd();
+
+    // Special case for core; I for one have Drupal installed in lots of
+    // funnily-named folders.
+    // Drupal 8.
+    if (file_exists($working_dir . "/core/index.php")) {
+      return 'drupal';
+    }
+    // Drupal 7 and prior.
+    if (file_exists($working_dir . "/index.php")) {
+      return 'drupal';
+    }
+
+    // Get the module name.
+    $current_module = basename($working_dir);
+
+    // Allow for module folders to have a suffix. (E.g., I might have views-6
+    // and views-7 in my sandbox folder.)
+    $current_module = preg_replace("@-.*$@", '', $current_module);
+
+    $this->current_project = $current_module;
+
+    return $current_module;
+  }
 
 }
