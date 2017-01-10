@@ -29,9 +29,9 @@ class Patch {
    * @param $sha = NULL
    *  The SHA for the patch's commit, if there is a commit.
    */
-  function __construct($drupal_org, $waypoint_manager, $git_executor, $file_field_item = NULL, $sha = NULL) {
+  function __construct($drupal_org, $waypoint_manager_branches, $git_executor, $file_field_item = NULL, $sha = NULL) {
     $this->drupal_org = $drupal_org;
-    $this->waypoint_manager = $waypoint_manager;
+    $this->waypoint_manager_branches = $waypoint_manager_branches;
     $this->git_executor = $git_executor;
 
     // Set the file ID.
@@ -101,7 +101,7 @@ class Patch {
   public function commitPatch() {
     // Set the files back to the master branch, without changing the current
     // commit.
-    $this->waypoint_manager->getMasterBranch()->checkOutFiles();
+    $this->waypoint_manager_branches->getMasterBranch()->checkOutFiles();
 
     $patch_status = $this->applyPatchFile();
 
