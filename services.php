@@ -33,9 +33,6 @@ $container
   ->register('user_input', '\Dorgflow\Service\UserInput');
 
 $container
-  ->register('git.log', '\Dorgflow\Service\GitLog');
-
-$container
   ->register('git.info', '\Dorgflow\Service\GitInfo');
 
 $container
@@ -55,3 +52,7 @@ $container
   ->addArgument(new Reference('git.info'))
   ->addArgument(new Reference('drupal_org'))
   ->addArgument(new Reference('git.executor'));
+
+$container
+  ->register('git.log', '\Dorgflow\Service\GitLog')
+  ->addArgument(new Reference('waypoint_manager.branches'));
