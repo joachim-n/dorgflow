@@ -54,6 +54,8 @@ class GitInfo {
       $output = '';
       // Exit value is 0 if true, 1 if false.
       $return_var = '';
+      // @todo bug in the special case that the feature branch is at the same
+      // place as the master branch!
       exec("git merge-base --is-ancestor $branch_name HEAD", $output, $return_var);
 
       if ($return_var === 0) {
