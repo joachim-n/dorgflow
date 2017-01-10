@@ -7,7 +7,7 @@ use Dorgflow\Situation;
 class LocalSetup extends CommandBase {
 
   function XXXX__construct($git_status, $waypoint_manager_branches) {
-    $this->waypoint_manager_branches = $waypoint_manager;
+    $this->waypoint_manager_branches = $waypoint_manager_branches;
     $this->git_status = $git_status;
   }
 
