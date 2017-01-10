@@ -2,26 +2,26 @@
 
 namespace Dorgflow\Command;
 
-use Dorgflow\Situation;
-
 class CreatePatch extends CommandBase {
 
   public function execute() {
     // TEMPORARY: get services from the container.
     // @todo inject these.
+    $this->git_info = $this->container->get('git.info');
+    $this->analyser = $this->container->get('analyser');
+    $this->waypoint_manager_branches = $this->container->get('waypoint_manager.branches');
     $this->waypoint_manager_patches = $this->container->get('waypoint_manager.patches');
-
-    $situation = $this->situation;
+    $this->drupal_org = $this->container->get('drupal_org');
 
     // Check git is clean.
-    $clean = $situation->GitStatus()->gitIsClean();
+    $clean = $this->git_info->gitIsClean();
     if (!$clean) {
       throw new \Exception("Git repository is not clean. Aborting.");
     }
 
     // Create branches.
-    $master_branch = $this->situation->getMasterBranch();
-    $feature_branch = $this->situation->getFeatureBranch();
+    $master_branch = $this->waypoint_manager_branches->getMasterBranch();
+    $feature_branch = $this->waypoint_manager_branches->getFeatureBranch();
 
     // If the feature branch doesn't exist or is not current, abort.
     if (!$feature_branch->exists()) {
@@ -67,10 +67,10 @@ class CreatePatch extends CommandBase {
   }
 
   protected function getPatchName($feature_branch) {
-    $issue_number = $this->situation->getIssueNumber();
-    $comment_number = $this->situation->DrupalOrgIssueNode()->getNextCommentIndex();
+    $issue_number = $this->analyser->deduceIssueNumber();
+    $comment_number = $this->drupal_org->getNextCommentIndex();
     $patch_number = "$issue_number-$comment_number";
-    $current_project = $this->situation->CurrentProject()->getCurrentProjectName();
+    $current_project = $this->analyser->getCurrentProjectName();
     $branch_description = $feature_branch->getBranchDescription();
 
     return "$patch_number.$current_project.$branch_description.patch";
@@ -79,8 +79,8 @@ class CreatePatch extends CommandBase {
   protected function getInterdiffName($feature_branch, $last_patch) {
     // TODO: include the comment number of the previous patch, once we have
     // these.
-    $issue_number = $this->situation->getIssueNumber();
-    $comment_number = $this->situation->DrupalOrgIssueNode()->getNextCommentIndex();
+    $issue_number = $this->analyser->deduceIssueNumber();
+    $comment_number = $this->drupal_org->getNextCommentIndex();
 
     return "interdiff.$issue_number.$comment_number.txt";
   }
