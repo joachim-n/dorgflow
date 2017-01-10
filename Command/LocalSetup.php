@@ -2,12 +2,11 @@
 
 namespace Dorgflow\Command;
 
-use Dorgflow\Situation;
-
 class LocalSetup extends CommandBase {
 
-  function XXXX__construct($git_status, $waypoint_manager_branches) {
+  function XXXX__construct($git_status, $waypoint_manager_branches, $waypoint_manager_patches) {
     $this->waypoint_manager_branches = $waypoint_manager_branches;
+    $this->waypoint_manager_patches = $waypoint_manager_patches;
     $this->git_status = $git_status;
   }
 
@@ -16,8 +15,7 @@ class LocalSetup extends CommandBase {
     // @todo inject these.
     $this->git_info = $this->container->get('git.info');
     $this->waypoint_manager_branches = $this->container->get('waypoint_manager.branches');
-
-    $situation = $this->situation;
+    $this->waypoint_manager_patches = $this->container->get('waypoint_manager.patches');
 
     // Check git is clean.
     $clean = $this->git_info->gitIsClean();
@@ -40,7 +38,7 @@ class LocalSetup extends CommandBase {
       '!branch' => $master_branch->getBranchName(),
     ]);
 
-    $feature_branch = $situation->getFeatureBranch();
+    $feature_branch = $this->waypoint_manager_branches->getFeatureBranch();
 
     // Check whether feature branch exists.
     // TODO: necessary???
@@ -63,7 +61,7 @@ class LocalSetup extends CommandBase {
 
     // Get the patches and create them.
     // TODO: currently only the most recent patch is used.
-    $patches = $situation->setUpPatches();
+    $patches = $this->waypoint_manager_patches->setUpPatches();
     //dump($patches);
 
     // If no patches, we're done.
