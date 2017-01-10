@@ -2,7 +2,6 @@
 
 namespace Dorgflow\Waypoint;
 
-use \Dorgflow\Situation;
 use \Dorgflow\Executor\Git;
 
 class MasterBranch {
