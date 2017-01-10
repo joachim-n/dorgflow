@@ -6,11 +6,16 @@ use Dorgflow\Situation;
 
 class LocalSetup extends CommandBase {
 
+  function XXXX__construct($git_status, $waypoint_manager_branches) {
+    $this->waypoint_manager_branches = $waypoint_manager;
+    $this->git_status = $git_status;
+  }
+
   public function execute() {
     // TEMPORARY: get services from the container.
     // @todo inject these.
     $this->git_info = $this->container->get('git.info');
-    $this->waypoint_manager = $this->container->get('waypoint_manager');
+    $this->waypoint_manager_branches = $this->container->get('waypoint_manager.branches');
 
     $situation = $this->situation;
 
@@ -21,7 +26,7 @@ class LocalSetup extends CommandBase {
     }
 
     // Create branches.
-    $master_branch = $this->waypoint_manager->getMasterBranch();
+    $master_branch = $this->waypoint_manager_branches->getMasterBranch();
 
     // If the master branch is not current, abort.
     if (!$master_branch->isCurrentBranch()) {
