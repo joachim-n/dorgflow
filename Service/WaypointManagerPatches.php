@@ -113,7 +113,7 @@ class WaypointManagerPatches {
         // then create a Patch waypoint and move on to the next file.
         if (!empty($commit_message_data['fid']) && $commit_message_data['fid'] == $fid) {
           // Create a patch waypoint for this patch.
-          $patch = new \Dorgflow\Waypoint\Patch($this, $this->git, $file_field_item, $commit['sha']);
+          $patch = $this->getPatch($file_field_item, $commit['sha']);
           $patch_waypoints[] = $patch;
 
           // Replace the original log with the search copy, as we've found a
@@ -153,7 +153,7 @@ class WaypointManagerPatches {
         // then create a Patch waypoint and move on to the next file.
         if (!empty($commit_message_data['filename']) && $commit_message_data['filename'] == $patch_filename) {
           // Create a patch waypoint for this patch.
-          $patch = new \Dorgflow\Waypoint\Patch($this, $this->git, $file_field_item, $commit['sha']);
+          $patch = $this->getPatch($file_field_item, $commit['sha']);
           $patch_waypoints[] = $patch;
 
           // Replace the original log with the search copy, as we've found a
@@ -168,7 +168,7 @@ class WaypointManagerPatches {
 
       // We've not found a commit.
       // Create a patch waypoint for this patch.
-      $patch = new \Dorgflow\Waypoint\Patch($this, $this->git, $file_field_item);
+      $patch = $this->getPatch($file_field_item);
       $patch_waypoints[] = $patch;
 
       // TODO:
