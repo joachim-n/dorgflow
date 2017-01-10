@@ -16,11 +16,13 @@ class FeatureBranch {
    */
   protected $sha;
 
-  function __construct(Situation $situation, Git $git) {
-    $this->situation = $situation;
-    $this->git = $git;
+  function __construct($git_info, $analyser, $drupal_org, $git_exec) {
+    $this->git_info = $git_info;
+    $this->analyser = $analyser;
+    $this->drupal_org = $drupal_org;
+    $this->git_exec = $git_exec;
 
-    $issue_number = $situation->getIssueNumber();
+    $issue_number = $this->analyser->getIssueNumber();
     //dump($issue_number);
     if (empty($issue_number)) {
       // If we can't figure out an issue numbner, FAIL.
@@ -28,7 +30,7 @@ class FeatureBranch {
     }
 
     // Is there a branch for this issue number, that is not a tests branch?
-    $branch_list = $situation->GitBranchList_getBranchList();
+    $branch_list = $this->git_info->getBranchList();
     //dump($branch_list);
 
     // Work over branch list.
@@ -54,7 +56,7 @@ class FeatureBranch {
       //dump($this->branchName);
     }
 
-    $this->isCurrentBranch = ($situation->GitCurrentBranch_getCurrentBranch() == $this->branchName);
+    $this->isCurrentBranch = ($this->git_info->getCurrentBranch() == $this->branchName);
 
     // if current branch NOT feature branch, problem?
     // no, leave that to the command to determine.
@@ -74,8 +76,8 @@ class FeatureBranch {
    * Invents a name to give the branch if it does not actually exist yet.
    */
   public function createBranchName() {
-    $issue_number = $this->situation->getIssueNumber();
-    $issue_title = $this->situation->DrupalOrgIssueNode_getIssueNodeTitle();
+    $issue_number = $this->analyser->getIssueNumber();
+    $issue_title = $this->drupal_org->getIssueNodeTitle();
 
     $pieces = preg_split('/\s+/', $issue_title);
     $pieces = preg_replace('/[[:^alnum:]]/', '', $pieces);
@@ -114,7 +116,7 @@ class FeatureBranch {
 
   public function gitCreate() {
     // Create a new branch and check it out.
-    $this->git->createNewBranch($this->branchName, TRUE);
+    $this->git_exec->createNewBranch($this->branchName, TRUE);
   }
 
 }
