@@ -35,7 +35,7 @@ class WaypointManagerBranches {
         $this->git_info,
         $this->analyser,
         $this->drupal_org,
-        $this->git_exec
+        $this->git_executor
       );
     }
 
