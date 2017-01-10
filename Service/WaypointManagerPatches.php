@@ -224,6 +224,8 @@ class WaypointManagerPatches {
       $file_field_item,
       $sha
     );
+
+    return $patch;
   }
 
 }
