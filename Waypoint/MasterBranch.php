@@ -12,9 +12,8 @@ class MasterBranch {
   protected $isCurrentBranch;
 
   // TODO: typehints
-  function __construct($git_info, $git_log, $git_executor) {
+  function __construct($git_info, $git_executor) {
     $this->git_info = $git_info;
-    $this->git_log = $git_log;
     $this->git_executor = $git_executor;
 
     // TODO: check order of the branch -- should be higher version numbers first!
