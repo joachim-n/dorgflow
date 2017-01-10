@@ -7,6 +7,10 @@ use Dorgflow\Situation;
 class CreatePatch extends CommandBase {
 
   public function execute() {
+    // TEMPORARY: get services from the container.
+    // @todo inject these.
+    $this->waypoint_manager_patches = $this->container->get('waypoint_manager.patches');
+
     $situation = $this->situation;
 
     // Check git is clean.
@@ -47,7 +51,7 @@ class CreatePatch extends CommandBase {
 
     // Make an interdiff from the most recent patch.
     // (Before we make a recording patch, of course!)
-    $last_patch = $feature_branch->getMostRecentPatch();
+    $last_patch = $this->waypoint_manager_patches->getMostRecentPatch();
     if (!empty($last_patch)) {
       $interdiff_name = $this->getInterdiffName($feature_branch, $last_patch);
       $last_patch_sha = $last_patch->getSHA();
