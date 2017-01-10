@@ -13,34 +13,34 @@ namespace Dorgflow\Tests;
 class FeatureBranchTest extends \PHPUnit_Framework_TestCase {
 
   public function testFeatureBranch() {
-    $git = $this->getMockBuilder(\Dorgflow\Executor\Git::class)
+    $git_info = $this->getMockBuilder(\Dorgflow\Service\GitInfo::class)
       ->disableOriginalConstructor()
-      ->setMethods([])
+      ->setMethods(['getBranchList', 'getCurrentBranch'])
       ->getMock();
-
-    $situation = $this->getMockBuilder(\Dorgflow\Situation::class)
-      ->setConstructorArgs([$git])
-      ->setMethods([
-        'getIssueNumber',
-        'GitBranchList_getBranchList',
-        'GitCurrentBranch_getCurrentBranch',
-        'DrupalOrgIssueNode_getIssueNodeTitle',
-      ])
-      ->getMock();
-
-    $situation->method('getIssueNumber')
-      ->willReturn(123456);
-
-    $situation->method('GitBranchList_getBranchList')
+    $git_info->method('getBranchList')
       ->willReturn([]);
-
-    $situation->method('GitCurrentBranch_getCurrentBranch')
+    $git_info->method('getCurrentBranch')
       ->willReturn('notthebranchyouseek');
 
-    $situation->method('DrupalOrgIssueNode_getIssueNodeTitle')
+    $analyser = $this->getMockBuilder(\Dorgflow\Service\Analyser::class)
+      ->disableOriginalConstructor()
+      ->setMethods(['deduceIssueNumber'])
+      ->getMock();
+    $analyser->method('deduceIssueNumber')
+      ->willReturn(123456);
+
+    $drupal_org = $this->getMockBuilder(\Dorgflow\Service\DrupalOrg::class)
+      ->disableOriginalConstructor()
+      ->setMethods(['getIssueNodeTitle'])
+      ->getMock();
+    $drupal_org->method('getIssueNodeTitle')
       ->willReturn('the title of the issue');
 
-    $feature_branch = $this->feature_branch = new \Dorgflow\Waypoint\FeatureBranch($situation, $git);
+    $git_exec = $this->getMockBuilder(\Dorgflow\Executor\Git::class)
+      ->disableOriginalConstructor()
+      ->setMethods([]);
+
+    $feature_branch = new \Dorgflow\Waypoint\FeatureBranch($git_info, $analyser, $drupal_org, $git_exec);
 
     $exists = $feature_branch->exists();
     $this->assertFalse($exists);
