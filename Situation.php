@@ -102,7 +102,7 @@ class Situation {
 
   public function getMasterBranch() {
     // @todo: remove in due course.
-    return $this->container->get('waypoint_manager')->getMasterBranch();
+    return $this->container->get('waypoint_manager.branches')->getMasterBranch();
   }
 
   public function getFeatureBranch() {
