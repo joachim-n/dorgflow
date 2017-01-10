@@ -39,6 +39,9 @@ $container
   ->register('git.executor', '\Dorgflow\Executor\Git');
 
 $container
+  ->register('commit_message', \Dorgflow\Service\CommitMessageHandler::class);
+
+$container
   ->register('analyser', '\Dorgflow\Service\Analyser')
   ->addArgument(new Reference('git.info'))
   ->addArgument(new Reference('user_input'));
