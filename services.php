@@ -7,16 +7,6 @@
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Definition;
 
-//$container
-//  ->register('waypoint_manager', '\Dorgflow\Executor\Git');
-
-/*
-$container->setDefinition('waypoint_manager', new Definition(
-    \Dorgflow\Service\WaypointManager::class,
-    ['git.info']
-));
-*/
-
 /*
 waypoint manager: git info...
 git info (logs etc): analyser (for the current branch),
