@@ -112,28 +112,6 @@ class FeatureBranch {
     }
   }
 
-  /**
-   * Finds the most recent commit on the feature branch that is for a patch.
-   *
-   * @return \Dorgflow\Waypoint\Patch
-   *  The patch object, or NULL of none was found.
-   */
-  public function getMostRecentPatch() {
-    $branch_log = $this->situation->GitFeatureBranchLog()->getFeatureBranchLog();
-    // Reverse this so we get the most recent first.
-    foreach (array_reverse($branch_log) as $sha => $commit) {
-      $commit_data = $this->situation->parseCommitMessage($commit['message']);
-
-      if (!empty($commit_data)) {
-        // This is the most recent commit that has detectable commit data;
-        // therefore the most recent that has a patch.
-        // Create a patch object for this commit.
-        $patch = new Patch($this->situation, $this->git, NULL, $sha);
-        return $patch;
-      }
-    }
-  }
-
   public function gitCreate() {
     // Create a new branch and check it out.
     $this->git->createNewBranch($this->branchName, TRUE);
