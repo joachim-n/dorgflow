@@ -2,24 +2,25 @@
 
 namespace Dorgflow\Command;
 
-use Dorgflow\Situation;
-
 /**
  * Deletes the current feature branch.
  */
 class Cleanup extends CommandBase {
 
   public function execute() {
-    $situation = $this->situation;
+    // TEMPORARY: get services from the container.
+    // @todo inject these.
+    $this->git_info = $this->container->get('git.info');
+    $this->waypoint_manager_branches = $this->container->get('waypoint_manager.branches');
 
     // Check git is clean.
-    $clean = $situation->GitStatus()->gitIsClean();
+    $clean = $this->git_info->gitIsClean();
     if (!$clean) {
       throw new \Exception("Git repository is not clean. Aborting.");
     }
 
-    $master_branch = $situation->getMasterBranch();
-    $feature_branch = $situation->getFeatureBranch();
+    $master_branch = $this->waypoint_manager_branches->getMasterBranch();
+    $feature_branch = $this->waypoint_manager_branches->getFeatureBranch();
 
     $master_branch_name = $master_branch->getBranchName();
     $feature_branch_name = $feature_branch->getBranchName();
