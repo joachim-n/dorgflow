@@ -7,18 +7,6 @@
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Definition;
 
-/*
-waypoint manager: git info...
-git info (logs etc): analyser (for the current branch),
-analyser: d.org, git status
-d.org API (static caches things it fetches): git status
-git status (diff status and current branch)
-user input
-current folder
-git executor
-patch name handler
-*/
-
 $container
   ->register('user_input', '\Dorgflow\Service\UserInput');
 

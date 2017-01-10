@@ -62,7 +62,6 @@ class LocalSetup extends CommandBase {
     // Get the patches and create them.
     // TODO: currently only the most recent patch is used.
     $patches = $this->waypoint_manager_patches->setUpPatches();
-    //dump($patches);
 
     // If no patches, we're done.
     if (empty($patches)) {
