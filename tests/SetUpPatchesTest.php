@@ -3,7 +3,7 @@
 namespace Dorgflow;
 
 /**
- * Tests the GitBranchList class.
+ * Tests creating patch objects with the patch manager.
  *
  * Run with:
  * @code
@@ -15,7 +15,7 @@ class SetUpPatchesTest extends \PHPUnit_Framework_TestCase {
   /**
    * Test patches with no local branch.
    */
-  public function testSinglePatchNoLog() {
+  public function testPatchesNoLog() {
     // The file field items for the issue node.
     $issue_file_field_items =
     array (
