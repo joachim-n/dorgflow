@@ -7,6 +7,8 @@ namespace Dorgflow\Service;
  */
 class Analyser {
 
+  protected $issue_number;
+
   function __construct($git_info, $user_input) {
     $this->git_info = $git_info;
     $this->user_input = $user_input;
@@ -19,12 +21,9 @@ class Analyser {
    *  The issue number, which is the nid of the drupal.org issue node.
    */
   public function deduceIssueNumber() {
-    /*
-    // TODO: cache?
     if (isset($this->issue_number)) {
       return $this->issue_number;
     }
-    */
 
     // Try to deduce an issue number from the current branch.
     // TODO, no try to get a feature branch instead.
@@ -34,13 +33,14 @@ class Analyser {
     $matches = [];
     preg_match("@^(?P<number>\d+)-@", $current_branch, $matches);
     if (!empty($matches['number'])) {
-      return $matches['number'];
+      $this->issue_number = $matches['number'];
+      return $this->issue_number;
     }
 
-    $issue_number = $this->user_input->getIssueNumber();
+    $this->issue_number = $this->user_input->getIssueNumber();
 
     if (!empty($issue_number)) {
-      return $issue_number;
+      return $this->issue_number;
     }
 
     // Dev mode.
