@@ -79,6 +79,7 @@ class SetUpPatchesTest extends \PHPUnit_Framework_TestCase {
       ->method('getFileEntity')
       ->will($this->returnValueMap([
         // Note the params have to be strings, not numeric!
+        // For dummy file entities, we only need the url property.
         ['101', (object) ['url' => $file_urls[101]]],
         ['102', (object) ['url' => $file_urls[102]]],
         ['103', (object) ['url' => $file_urls[103]]],
@@ -100,7 +101,14 @@ class SetUpPatchesTest extends \PHPUnit_Framework_TestCase {
     );
 
     $patches = $wmp->setUpPatches();
-    dump($patches);
+
+    $this->assertCount(2, $patches);
+
+    $patch_102 = $patches[0];
+    $this->assertEquals($file_urls[102], $patch_102->getPatchFilename());
+
+    $patch_103 = $patches[1];
+    $this->assertEquals($file_urls[103], $patch_103->getPatchFilename());
 
     return;
   }
