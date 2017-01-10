@@ -2,22 +2,25 @@
 
 namespace Dorgflow\Command;
 
-use Dorgflow\Situation;
-
 class LocalUpdate extends CommandBase {
 
   public function execute() {
-    $situation = $this->situation;
+    // TEMPORARY: get services from the container.
+    // @todo inject these.
+    $this->git_info = $this->container->get('git.info');
+    $this->waypoint_manager_branches = $this->container->get('waypoint_manager.branches');
+    $this->waypoint_manager_patches = $this->container->get('waypoint_manager.patches');
+    $this->git_executor = $this->container->get('git.executor');
 
     // Check git is clean.
-    $clean = $situation->GitStatus()->gitIsClean();
+    $clean = $this->git_info->gitIsClean();
     if (!$clean) {
       throw new \Exception("Git repository is not clean. Aborting.");
     }
 
     // Create branches.
-    $master_branch = $situation->getMasterBranch();
-    $feature_branch = $situation->getFeatureBranch();
+    $master_branch = $this->waypoint_manager_branches->getMasterBranch();
+    $feature_branch = $this->waypoint_manager_branches->getFeatureBranch();
 
     // If the feature branch is not current, abort.
     if (!$feature_branch->exists()) {
@@ -32,7 +35,7 @@ class LocalUpdate extends CommandBase {
     }
 
     // Get the patches and create them.
-    $patches = $situation->setUpPatches();
+    $patches = $this->waypoint_manager_patches->setUpPatches();
     //dump($patches);
 
     // If no patches, we're done.
@@ -70,10 +73,10 @@ class LocalUpdate extends CommandBase {
     if ($last_committed_patch->getSHA() != $feature_branch->getSHA()) {
       // Create a new branch at the tip of the feature branch.
       $forked_branch_name = $feature_branch->createForkBranchName();
-      $this->git->createNewBranch($forked_branch_name);
+      $this->git_executor->createNewBranch($forked_branch_name);
 
       // Reposition the FeatureBranch tip to the last committed patch.
-      $this->git->moveBranch($feature_branch->getBranchName(), $last_committed_patch->getSHA());
+      $this->git_executor->moveBranch($feature_branch->getBranchName(), $last_committed_patch->getSHA());
 
       print strtr("Moved your work at the tip of the feature branch to new branch !forkedbranchname. You should manually merge this into the feature branch to preserve your work.\n", [
         '!forkedbranchname' => $forked_branch_name,
