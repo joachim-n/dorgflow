@@ -37,7 +37,7 @@ class Analyser {
 
     $this->issue_number = $this->user_input->getIssueNumber();
 
-    if (!empty($issue_number)) {
+    if (!empty($this->issue_number)) {
       return $this->issue_number;
     }
 
