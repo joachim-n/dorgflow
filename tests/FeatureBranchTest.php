@@ -36,7 +36,7 @@ class FeatureBranchTest extends \PHPUnit_Framework_TestCase {
     $drupal_org->method('getIssueNodeTitle')
       ->willReturn('the title of the issue');
 
-    $git_exec = $this->getMockBuilder(\Dorgflow\Executor\Git::class)
+    $git_exec = $this->getMockBuilder(\Dorgflow\Service\GitExecutor::class)
       ->disableOriginalConstructor()
       ->setMethods([]);
 

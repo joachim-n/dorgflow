@@ -1,9 +1,9 @@
 <?php
 
-namespace Dorgflow\Executor;
+namespace Dorgflow\Service;
 
 // TODO: consider replacing this with a library.
-class Git {
+class GitExecutor {
 
   // we need this for:
     // a: createf feature branch (HEAD, CHECKOUT!)

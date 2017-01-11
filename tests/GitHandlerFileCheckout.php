@@ -27,7 +27,7 @@ class GitHandlerFileCheckout extends \PHPUnit_Framework_TestCase {
   }
 
   public function testFileCheckout() {
-    $git = new \Dorgflow\Executor\Git;
+    $git = new \Dorgflow\Service\GitExecutor;
 
     $initial_sha = shell_exec("git rev-parse HEAD");
 

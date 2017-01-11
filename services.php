@@ -14,7 +14,7 @@ $container
   ->register('git.info', \Dorgflow\Service\GitInfo::class);
 
 $container
-  ->register('git.executor', \Dorgflow\Executor\Git::class);
+  ->register('git.executor', \Dorgflow\Service\GitExecutor::class);
 
 $container
   ->register('commit_message', \Dorgflow\Service\CommitMessageHandler::class);
