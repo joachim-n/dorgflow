@@ -2,8 +2,6 @@
 
 namespace Dorgflow\Waypoint;
 
-use \Dorgflow\Executor\Git;
-
 class FeatureBranch {
 
   protected $exists;
