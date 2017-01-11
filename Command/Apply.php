@@ -10,6 +10,7 @@ class Apply extends CommandBase {
   public function execute() {
     // TEMPORARY: get services from the container.
     // @todo inject these.
+    $this->git_info = $this->container->get('git.info');
     $this->waypoint_manager_branches = $this->container->get('waypoint_manager.branches');
     $this->git_executor = $this->container->get('git.executor');
     $this->analyser = $this->container->get('analyser');
