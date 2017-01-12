@@ -17,8 +17,7 @@ print "Hello, this is Dorgflow!\n";
 
 $command_class_name = CommandResolver::getCommandClass($argv);
 
-// Inject the entire container into commands for now.
-$command = new $command_class_name($container);
+$command = $command_class_name::create($container);
 
 try {
   $command->execute();

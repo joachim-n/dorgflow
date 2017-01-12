@@ -2,21 +2,28 @@
 
 namespace Dorgflow\Command;
 
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+
 class LocalSetup extends CommandBase {
 
-  function XXXX__construct($git_status, $waypoint_manager_branches, $waypoint_manager_patches) {
+  /**
+   * Creates an instance of this command, injecting services from the container.
+   */
+  static public function create(ContainerBuilder $container) {
+    return new static(
+      $container->get('git.info'),
+      $container->get('waypoint_manager.branches'),
+      $container->get('waypoint_manager.patches')
+    );
+  }
+
+  function __construct($git_info, $waypoint_manager_branches, $waypoint_manager_patches) {
+    $this->git_info = $git_info;
     $this->waypoint_manager_branches = $waypoint_manager_branches;
     $this->waypoint_manager_patches = $waypoint_manager_patches;
-    $this->git_status = $git_status;
   }
 
   public function execute() {
-    // TEMPORARY: get services from the container.
-    // @todo inject these.
-    $this->git_info = $this->container->get('git.info');
-    $this->waypoint_manager_branches = $this->container->get('waypoint_manager.branches');
-    $this->waypoint_manager_patches = $this->container->get('waypoint_manager.patches');
-
     // Check git is clean.
     $clean = $this->git_info->gitIsClean();
     if (!$clean) {
