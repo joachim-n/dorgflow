@@ -2,17 +2,32 @@
 
 namespace Dorgflow\Command;
 
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+
 class CreatePatch extends CommandBase {
 
-  public function execute() {
-    // TEMPORARY: get services from the container.
-    // @todo inject these.
-    $this->git_info = $this->container->get('git.info');
-    $this->analyser = $this->container->get('analyser');
-    $this->waypoint_manager_branches = $this->container->get('waypoint_manager.branches');
-    $this->waypoint_manager_patches = $this->container->get('waypoint_manager.patches');
-    $this->drupal_org = $this->container->get('drupal_org');
+  /**
+   * Creates an instance of this command, injecting services from the container.
+   */
+  static public function create(ContainerBuilder $container) {
+    return new static(
+      $container->get('git.info'),
+      $container->get('analyser'),
+      $container->get('waypoint_manager.branches'),
+      $container->get('waypoint_manager.patches'),
+      $container->get('drupal_org')
+    );
+  }
 
+  function __construct($git_info, $analyser, $waypoint_manager_branches, $waypoint_manager_patches, $drupal_org) {
+    $this->git_info = $git_info;
+    $this->analyser = $analyser;
+    $this->waypoint_manager_branches = $waypoint_manager_branches;
+    $this->waypoint_manager_patches = $waypoint_manager_patches;
+    $this->drupal_org = $drupal_org;
+  }
+
+  public function execute() {
     // Check git is clean.
     $clean = $this->git_info->gitIsClean();
     if (!$clean) {
