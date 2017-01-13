@@ -70,22 +70,6 @@ class FeatureBranch {
     return $this->sha;
   }
 
-  /**
-   * Invents a name to give the branch if it does not actually exist yet.
-   */
-  public function createBranchName() {
-    $issue_number = $this->analyser->deduceIssueNumber();
-    $issue_title = $this->drupal_org->getIssueNodeTitle();
-
-    $pieces = preg_split('/\s+/', $issue_title);
-    $pieces = preg_replace('/[[:^alnum:]]/', '', $pieces);
-    array_unshift($pieces, $issue_number);
-
-    $branch_name = implode('-', $pieces);
-
-    return $branch_name;
-  }
-
   public function createForkBranchName() {
     return $this->branchName . '-forked-' . time();
   }
@@ -100,6 +84,25 @@ class FeatureBranch {
     }
 
     return $this->branchName;
+  }
+
+  /**
+   * Invents a name to give the branch if it does not actually exist yet.
+   *
+   * @return string
+   *  The proposed branch name.
+   */
+  protected function createBranchName() {
+    $issue_number = $this->analyser->deduceIssueNumber();
+    $issue_title = $this->drupal_org->getIssueNodeTitle();
+
+    $pieces = preg_split('/\s+/', $issue_title);
+    $pieces = preg_replace('/[[:^alnum:]]/', '', $pieces);
+    array_unshift($pieces, $issue_number);
+
+    $branch_name = implode('-', $pieces);
+
+    return $branch_name;
   }
 
   public function exists() {
