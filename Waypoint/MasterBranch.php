@@ -16,7 +16,7 @@ class MasterBranch {
     // TODO: check order of the branch -- should be higher version numbers first!
     $branch_list = $this->git_info->getBranchList();
 
-    foreach ($branch_list as $branch) {
+    foreach ($branch_list as $branch => $sha) {
       // Identify the main development branch, of one of the following forms:
       //  - '7.x-1.x'
       //  - '7.x'

@@ -33,7 +33,7 @@ class FeatureBranch {
     //dump($branch_list);
 
     // Work over branch list.
-    foreach ($branch_list as $sha => $branch) {
+    foreach ($branch_list as $branch => $sha) {
       if (substr($branch, 0, strlen($issue_number)) == $issue_number &&
         substr($branch, -6) != '-tests') {
         $this->exists = TRUE;

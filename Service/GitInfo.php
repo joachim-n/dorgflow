@@ -37,7 +37,7 @@ class GitInfo {
    * Returns a list of all the git branches which are currently reachable.
    *
    * @return
-   *  An array of branch names keyed by the SHA of the tip commit.
+   *  An array whose keys are branch names, and values are the SHA of the tip.
    */
   public function getBranchList() {
     // TODO: caching!
@@ -59,7 +59,7 @@ class GitInfo {
       exec("git merge-base --is-ancestor $branch_name HEAD", $output, $return_var);
 
       if ($return_var === 0) {
-        $branch_list[$sha] = $branch_name;
+        $branch_list[$branch_name] = $sha;
       }
     }
 
