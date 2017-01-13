@@ -15,16 +15,18 @@ class CreatePatch extends CommandBase {
       $container->get('analyser'),
       $container->get('waypoint_manager.branches'),
       $container->get('waypoint_manager.patches'),
-      $container->get('drupal_org')
+      $container->get('drupal_org'),
+      $container->get('git.executor')
     );
   }
 
-  function __construct($git_info, $analyser, $waypoint_manager_branches, $waypoint_manager_patches, $drupal_org) {
+  function __construct($git_info, $analyser, $waypoint_manager_branches, $waypoint_manager_patches, $drupal_org, $git_executor) {
     $this->git_info = $git_info;
     $this->analyser = $analyser;
     $this->waypoint_manager_branches = $waypoint_manager_branches;
     $this->waypoint_manager_patches = $waypoint_manager_patches;
     $this->drupal_org = $drupal_org;
+    $this->git_executor = $git_executor;
   }
 
   public function execute() {
@@ -49,18 +51,10 @@ class CreatePatch extends CommandBase {
     // TODO: get this from user input.
     $sequential = FALSE;
 
-    // Select the diff command to use.
-    if ($sequential) {
-      $command = 'format-patch --stdout';
-    }
-    else {
-      $command = 'diff';
-    }
-
     $master_branch_name = $master_branch->getBranchName();
     $patch_name = $this->getPatchName($feature_branch);
 
-    shell_exec("git $command $master_branch_name > $patch_name");
+    $this->git_executor->createPatch($master_branch_name, $patch_name, $sequential);
 
     print("Written patch $patch_name with diff from $master_branch_name to local branch.\n");
 
@@ -71,7 +65,7 @@ class CreatePatch extends CommandBase {
       $interdiff_name = $this->getInterdiffName($feature_branch, $last_patch);
       $last_patch_sha = $last_patch->getSHA();
 
-      shell_exec("git diff $last_patch_sha > $interdiff_name");
+      $this->git_executor->createPatch($last_patch_sha, $interdiff_name);
 
       print("Written interdiff $interdiff_name with diff from $last_patch_sha to local branch.\n");
     }

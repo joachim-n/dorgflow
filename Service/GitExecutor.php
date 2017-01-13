@@ -164,4 +164,27 @@ class GitExecutor {
     shell_exec("git commit  --allow-empty --message='$message'");
   }
 
+  /**
+   * Writes a patch file based on a git diff.
+   *
+   * @param $treeish
+   *  The commit to take the diff from.
+   * @param $patch_name
+   *  The filename to write for the patch.
+   * @param $sequential
+   *  (optional) If TRUE, the patch is sequential: composed of multiple
+   *  changesets, one for each commit from $treeish to HEAD. Defaults to FALSE.
+   */
+  public function createPatch($treeish, $patch_name, $sequential = FALSE) {
+    // Select the diff command to use.
+    if ($sequential) {
+      $command = 'format-patch --stdout';
+    }
+    else {
+      $command = 'diff';
+    }
+
+    shell_exec("git $command $treeish > $patch_name");
+  }
+
 }
