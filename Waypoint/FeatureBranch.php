@@ -8,6 +8,8 @@ class FeatureBranch {
 
   protected $branchName;
 
+  protected $isCurrentBranch;
+
   /**
    * The SHA for the tip commit of this branch.
    */
@@ -46,14 +48,13 @@ class FeatureBranch {
     }
 
     if (empty($this->exists)) {
+      // If we didn't find a branch for the issue number, then set ourselves
+      // as not existing yet.
       $this->exists = FALSE;
-
-      // Invent a branch name.
-      $this->branchName = $this->createBranchName();
-      //dump($this->branchName);
+      // Note we don't set the branch name at this point, as it incurs a call to
+      // drupal.org, and it might be that we don't need it (such as if the
+      // command fails for some reason).
     }
-
-    $this->isCurrentBranch = ($this->git_info->getCurrentBranch() == $this->branchName);
 
     // if current branch NOT feature branch, problem?
     // no, leave that to the command to determine.
@@ -90,6 +91,14 @@ class FeatureBranch {
   }
 
   public function getBranchName() {
+    // If the branch name hasn't been set yet, it's because the branch doesn't
+    // exist, and we need to invent the name.
+    if (empty($this->branchName)) {
+      // Invent a branch name.
+      $this->branchName = $this->createBranchName();
+      //dump($this->branchName);
+    }
+
     return $this->branchName;
   }
 
@@ -98,6 +107,16 @@ class FeatureBranch {
   }
 
   public function isCurrentBranch() {
+    // If the branch doesn't exist, it can't be current.
+    if (!$this->exists) {
+      return FALSE;
+    }
+
+    // If the property hasn't been set yet, determine its value from git.
+    if (!isset($this->isCurrentBranch)) {
+      $this->isCurrentBranch = ($this->git_info->getCurrentBranch() == $this->branchName);
+    }
+
     return $this->isCurrentBranch;
   }
 
@@ -112,8 +131,14 @@ class FeatureBranch {
   }
 
   public function gitCreate() {
+    // Get the branch name from the method, so this lazy-loads.
+    $branch_name = $this->getBranchName();
+
     // Create a new branch and check it out.
-    $this->git_exec->createNewBranch($this->branchName, TRUE);
+    $this->git_exec->createNewBranch($branch_name, TRUE);
+
+    // This now exists.
+    $this->exists = TRUE;
   }
 
 }
