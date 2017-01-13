@@ -33,7 +33,6 @@ class LocalUpdate extends CommandBase {
     }
 
     // Create branches.
-    $master_branch = $this->waypoint_manager_branches->getMasterBranch();
     $feature_branch = $this->waypoint_manager_branches->getFeatureBranch();
 
     // If the feature branch is not current, abort.
