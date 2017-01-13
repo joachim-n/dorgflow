@@ -38,14 +38,12 @@ class LocalUpdate extends CommandBase {
 
     // If the feature branch is not current, abort.
     if (!$feature_branch->exists()) {
-      print "Could not find a feature branch. Aborting.";
-      exit();
+      throw new \Exception("Could not find a feature branch. Aborting.");
     }
     if (!$feature_branch->isCurrentBranch()) {
-      print strtr("Detected feature branch !branch, but it is not the current branch. Aborting.", [
+      throw new \Exception(strtr("Detected feature branch !branch, but it is not the current branch. Aborting.", [
         '!branch' => $feature_branch->getBranchName(),
-      ]);
-      exit();
+      ]));
     }
 
     // Get the patches and create them.
