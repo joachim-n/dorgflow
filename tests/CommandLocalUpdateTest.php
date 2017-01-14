@@ -87,18 +87,11 @@ class CommandLocalUpdateTest extends \PHPUnit_Framework_TestCase {
       ->willReturn('file-patch-0.patch');
     $patches[] = $patch;
 
-    $waypoint_manager_patches = $this->getMockBuilder(\Dorgflow\Service\WaypointManagerPatches::class)
-      ->disableOriginalConstructor()
-      ->setMethods(['setUpPatches'])
-      ->getMock();
-    $waypoint_manager_patches->method('setUpPatches')
-      ->willReturn($patches);
-
     $command = new \Dorgflow\Command\LocalUpdate(
       // Mock services that allow the command to pass its sanity checks.
       $this->getMockGitInfoClean(),
       $this->getMockWaypointManagerFeatureBranchCurrent(),
-      $waypoint_manager_patches,
+      $this->getMockWaypointManagerWithPatches($patches),
       NULL
     );
 
