@@ -49,6 +49,7 @@ class CommandLocalUpdateTest extends \PHPUnit_Framework_TestCase {
       $this->getMockGitInfoClean(),
       $waypoint_manager_branches,
       // We don't need these services, but the command expects them.
+      // Passing NULL also means the test fails if these services are called.
       NULL,
       NULL
     );
@@ -107,6 +108,60 @@ class CommandLocalUpdateTest extends \PHPUnit_Framework_TestCase {
   }
 
   /**
+   * Tests a new patch that applies on a feature branch with a patch.
+   */
+  public function testNewPatchBranchWithPatch() {
+    // Set up two new patch on the issue, one which is already committed.
+    $patches = [];
+
+    // Already committed patch.
+    $patch = $this->getMockBuilder(\Dorgflow\Waypoint\Patch::class)
+      ->disableOriginalConstructor()
+      ->setMethods(['hasCommit', 'commitPatch', 'getSHA'])
+      ->getMock();
+    // Patch is new: it has no commit.
+    $patch->method('hasCommit')
+      ->willReturn(TRUE);
+    $patch->method('hasCommit')
+      ->willReturn(TRUE);
+    // The branch has no local commits, so the last committed patch is at the
+    // feature branch tip.
+    $patch->method('getSHA')
+      ->willReturn('sha-feature');
+    // We expect the patch will not get committed.
+    $patch->expects($this->never())
+      ->method('commitPatch');
+    $patches[] = $patch;
+
+    // New patch.
+    $patch = $this->getMockBuilder(\Dorgflow\Waypoint\Patch::class)
+      ->disableOriginalConstructor()
+      ->setMethods(['hasCommit', 'commitPatch', 'getPatchFilename'])
+      ->getMock();
+    // Patch is new: it has no commit.
+    $patch->method('hasCommit')
+      ->willReturn(FALSE);
+    // We expect the patch will get committed (and that it will apply OK).
+    $patch->expects($this->once())
+      ->method('commitPatch')
+      ->willReturn(TRUE);
+    // The patch filename; needed for output message.
+    $patch->method('getPatchFilename')
+      ->willReturn('file-patch-1.patch');
+    $patches[] = $patch;
+
+    $command = new \Dorgflow\Command\LocalUpdate(
+      // Mock services that allow the command to pass its sanity checks.
+      $this->getMockGitInfoClean(),
+      $this->getMockWaypointManagerFeatureBranchCurrent(),
+      $this->getMockWaypointManagerWithPatches($patches),
+      NULL
+    );
+
+    $command->execute();
+  }
+
+  /**
    * Creates a mock git.info service that will state that git is clean.
    *
    * @return
@@ -127,17 +182,21 @@ class CommandLocalUpdateTest extends \PHPUnit_Framework_TestCase {
    * Creates a mock branch service whose feature branch is current.
    *
    * @return
-   *  The mocked waypoint_manager.branches service object.
+   *  The mocked waypoint_manager.branches service object. It will provide a
+   *  feature branch which reports it exists, is current, and returns a SHA of
+   *  'sha-feature'.
    */
   protected function getMockWaypointManagerFeatureBranchCurrent() {
     $feature_branch = $this->getMockBuilder(\Dorgflow\Waypoint\FeatureBranch::class)
       ->disableOriginalConstructor()
-      ->setMethods(['exists', 'isCurrentBranch'])
+      ->setMethods(['exists', 'isCurrentBranch', 'getSHA'])
       ->getMock();
     $feature_branch->method('exists')
       ->willReturn(TRUE);
     $feature_branch->method('isCurrentBranch')
       ->willReturn(TRUE);
+    $feature_branch->method('getSHA')
+      ->willReturn('sha-feature');
 
     $waypoint_manager_branches = $this->getMockBuilder(\Dorgflow\Service\WaypointManagerBranches::class)
       ->disableOriginalConstructor()
@@ -147,6 +206,26 @@ class CommandLocalUpdateTest extends \PHPUnit_Framework_TestCase {
       ->willReturn($feature_branch);
 
     return $waypoint_manager_branches;
+  }
+
+  /**
+   * Creates a mock patch manager that will provide the given array of patches.
+   *
+   * @param $patches
+   *  An array of mock patch objects.
+   *
+   * @return
+   *  The mocked waypoint_manager.patches service object.
+   */
+  protected function getMockWaypointManagerWithPatches($patches) {
+    $waypoint_manager_patches = $this->getMockBuilder(\Dorgflow\Service\WaypointManagerPatches::class)
+      ->disableOriginalConstructor()
+      ->setMethods(['setUpPatches'])
+      ->getMock();
+    $waypoint_manager_patches->method('setUpPatches')
+      ->willReturn($patches);
+
+    return $waypoint_manager_patches;
   }
 
 }
