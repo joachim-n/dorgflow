@@ -155,6 +155,75 @@ class CommandLocalUpdateTest extends \PHPUnit_Framework_TestCase {
   }
 
   /**
+   * Tests a new patch that applies on a feature branch with local commits.
+   */
+  public function testNewPatchBranchWithLocalCommits() {
+    // Set up two new patch on the issue, one which is already committed.
+    $patches = [];
+
+    // Already committed patch.
+    $patch = $this->getMockBuilder(\Dorgflow\Waypoint\Patch::class)
+      ->disableOriginalConstructor()
+      ->setMethods(['hasCommit', 'commitPatch', 'getSHA'])
+      ->getMock();
+    // Patch is new: it has no commit.
+    $patch->method('hasCommit')
+      ->willReturn(TRUE);
+    $patch->method('hasCommit')
+      ->willReturn(TRUE);
+    // The branch has local commits, so the last committed patch has an SHA
+    // different from the feature branch tip.
+    $patch->method('getSHA')
+      ->willReturn('sha-patch-0');
+    // We expect the patch will not get committed.
+    $patch->expects($this->never())
+      ->method('commitPatch');
+    $patches[] = $patch;
+
+    // New patch.
+    $patch = $this->getMockBuilder(\Dorgflow\Waypoint\Patch::class)
+      ->disableOriginalConstructor()
+      ->setMethods(['hasCommit', 'commitPatch', 'getPatchFilename'])
+      ->getMock();
+    // Patch is new: it has no commit.
+    $patch->method('hasCommit')
+      ->willReturn(FALSE);
+    // We expect the patch will get committed (and that it will apply OK).
+    $patch->expects($this->once())
+      ->method('commitPatch')
+      ->willReturn(TRUE);
+    // The patch filename; needed for output message.
+    $patch->method('getPatchFilename')
+      ->willReturn('file-patch-1.patch');
+    $patches[] = $patch;
+
+    // Git executor.
+    $git_executor = $this->getMockBuilder(\Dorgflow\Service\GitExecutor::class)
+      ->disableOriginalConstructor()
+      ->setMethods(['createNewBranch', 'moveBranch'])
+      ->getMock();
+    // We expect the Git Exec to create a new branch with a forked branch name.
+    $git_executor->expects($this->once())
+      ->method('createNewBranch')
+      ->with($this->matchesRegularExpression('/^123456-feature-forked-/'));
+    // We expect the Git Exec to move the feature branch to the SHA of the last
+    // committed patch.
+    $git_executor->expects($this->once())
+      ->method('moveBranch')
+      ->with($this->isType('string'), 'sha-patch-0');
+
+    $command = new \Dorgflow\Command\LocalUpdate(
+      // Mock services that allow the command to pass its sanity checks.
+      $this->getMockGitInfoClean(),
+      $this->getMockWaypointManagerFeatureBranchCurrent(),
+      $this->getMockWaypointManagerWithPatches($patches),
+      $git_executor
+    );
+
+    $command->execute();
+  }
+
+  /**
    * Creates a mock git.info service that will state that git is clean.
    *
    * @return
@@ -176,18 +245,23 @@ class CommandLocalUpdateTest extends \PHPUnit_Framework_TestCase {
    *
    * @return
    *  The mocked waypoint_manager.branches service object. It will provide a
-   *  feature branch which reports it exists, is current, and returns a SHA of
-   *  'sha-feature'.
+   *  feature branch which:
+   *  - reports it exists
+   *  - reports it is current
+   *  - has a branch name of '123456-feature'
+   *  - has an SHA of 'sha-feature'
    */
   protected function getMockWaypointManagerFeatureBranchCurrent() {
     $feature_branch = $this->getMockBuilder(\Dorgflow\Waypoint\FeatureBranch::class)
       ->disableOriginalConstructor()
-      ->setMethods(['exists', 'isCurrentBranch', 'getSHA'])
+      ->setMethods(['exists', 'isCurrentBranch', 'getSHA', 'getBranchName'])
       ->getMock();
     $feature_branch->method('exists')
       ->willReturn(TRUE);
     $feature_branch->method('isCurrentBranch')
       ->willReturn(TRUE);
+    $feature_branch->method('getBranchName')
+      ->willReturn('123456-feature');
     $feature_branch->method('getSHA')
       ->willReturn('sha-feature');
 
