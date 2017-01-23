@@ -13,8 +13,11 @@ class MasterBranch {
     $this->git_info = $git_info;
     $this->git_executor = $git_executor;
 
-    // TODO: check order of the branch -- should be higher version numbers first!
     $branch_list = $this->git_info->getBranchList();
+
+    // Sort the branches by version number, with highest first.
+    uasort($branch_list, 'version_compare');
+    $branch_list = array_reverse($branch_list);
 
     foreach ($branch_list as $branch => $sha) {
       // Identify the main development branch, of one of the following forms:
