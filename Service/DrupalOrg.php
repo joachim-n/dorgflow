@@ -7,8 +7,14 @@ namespace Dorgflow\Service;
  */
 class DrupalOrg {
 
+  /**
+   * The issue node data array from drupal.org.
+   */
   protected $node_data;
 
+  /**
+   * An array of file entities from drupal.org, keyed by fid.
+   */
   protected $file_entities;
 
   function __construct($analyser) {
