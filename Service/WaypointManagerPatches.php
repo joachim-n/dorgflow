@@ -221,6 +221,7 @@ class WaypointManagerPatches {
       $this->drupal_org,
       $this->waypoint_manager_branches,
       $this->git_executor,
+      $this->commit_message,
       $file_field_item,
       $sha
     );

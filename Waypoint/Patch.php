@@ -36,10 +36,11 @@ class Patch {
    * @param $sha = NULL
    *  The SHA for the patch's commit, if there is a commit.
    */
-  function __construct($drupal_org, $waypoint_manager_branches, $git_executor, $file_field_item = NULL, $sha = NULL) {
+  function __construct($drupal_org, $waypoint_manager_branches, $git_executor, $commit_message, $file_field_item = NULL, $sha = NULL) {
     $this->drupal_org = $drupal_org;
     $this->waypoint_manager_branches = $waypoint_manager_branches;
     $this->git_executor = $git_executor;
+    $this->commit_message = $commit_message;
 
     // Set the file ID and index.
     if (isset($file_field_item)) {
