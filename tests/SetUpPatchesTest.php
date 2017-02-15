@@ -106,9 +106,13 @@ class SetUpPatchesTest extends \PHPUnit_Framework_TestCase {
 
     $patch_102 = $patches[0];
     $this->assertEquals($file_urls[102], $patch_102->getPatchFilename());
+    $this->assertEquals("Patch from Drupal.org. File: fix-102.patch; fid 102. Automatic commit by dorgflow.",
+      $patch_102->getCommitMessage());
 
     $patch_103 = $patches[1];
     $this->assertEquals($file_urls[103], $patch_103->getPatchFilename());
+    $this->assertEquals("Patch from Drupal.org. File: fix-103.patch; fid 103. Automatic commit by dorgflow.",
+      $patch_103->getCommitMessage());
 
     return;
   }
