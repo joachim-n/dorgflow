@@ -106,17 +106,19 @@ class SetUpPatchesTest extends \PHPUnit_Framework_TestCase {
 
     $patches = $wmp->setUpPatches();
 
+    $commit_message_handler = new \Dorgflow\Service\CommitMessageHandler;
+
     $this->assertCount(2, $patches);
 
     $patch_102 = $patches[0];
     $this->assertEquals($file_urls[102], $patch_102->getPatchFilename());
     $this->assertEquals("Patch from Drupal.org. File: fix-102.patch; fid 102. Automatic commit by dorgflow.",
-      $patch_102->getCommitMessage());
+      $commit_message_handler->createCommitMessage($patch_102));
 
     $patch_103 = $patches[1];
     $this->assertEquals($file_urls[103], $patch_103->getPatchFilename());
     $this->assertEquals("Patch from Drupal.org. File: fix-103.patch; fid 103. Automatic commit by dorgflow.",
-      $patch_103->getCommitMessage());
+      $commit_message_handler->createCommitMessage($patch_103));
 
     return;
   }
