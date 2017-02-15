@@ -2,12 +2,27 @@
 
 namespace Dorgflow\Service;
 
+use Dorgflow\Waypoint\Patch;
+
 /**
  * Parses commit messages for our automatic git commits.
- *
- * @todo move creation of commit messages here too.
  */
 class CommitMessageHandler {
+
+  /**
+   * Creates a commit message to use for a patch..
+   *
+   * @return string
+   *  The commit message.
+   */
+  public function createCommitMessage(Patch $patch) {
+    // TODO: throw or bail if the patch object is already committed.
+    // TODO: include comment index!!!!!!!!!
+    $filename = $patch->getPatchFilename();
+    $fid = $patch->getPatchFileFid();
+    return "Patch from Drupal.org. File: $filename; fid $fid. Automatic commit by dorgflow.";
+  }
+
 
   /**
    * Extract data from a commit message previously created by Dorgflow.

@@ -96,6 +96,14 @@ class Patch {
     return pathinfo($file_url, PATHINFO_BASENAME);
   }
 
+  public function getPatchFileFid() {
+    return $this->fid;
+  }
+
+  public function getPatchFileIndex() {
+    return $this->index;
+  }
+
   /**
    * Returns whether this patch already has a feature branch commit.
    *
