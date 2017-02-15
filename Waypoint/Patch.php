@@ -148,15 +148,11 @@ class Patch {
   /**
    * Creates a commit message to use for the patch.
    *
-   * (Public just for testing.)
-   *
    * @return string
    *  The commit message.
    */
-  public function getCommitMessage() {
-    // TODO: include comment index!!!!!!!!!
-    $filename = $this->getPatchFilename();
-    return "Patch from Drupal.org. File: $filename; fid $this->fid. Automatic commit by dorgflow.";
+  protected function getCommitMessage() {
+    return $this->commit_message->createCommitMessage($this);
   }
 
   protected function makeGitCommit() {
