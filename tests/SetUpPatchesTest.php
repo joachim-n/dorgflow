@@ -29,6 +29,7 @@ class SetUpPatchesTest extends \PHPUnit_Framework_TestCase {
            'resource' => 'file',
         )),
          'display' => '0',
+         'index' => 1,
       )),
       // Not a patch file: should be omitted once the file entity has been seen.
       1 =>
@@ -40,6 +41,7 @@ class SetUpPatchesTest extends \PHPUnit_Framework_TestCase {
            'resource' => 'file',
         )),
          'display' => '1',
+         'index' => 2,
       )),
       2 =>
       (object) (array(
@@ -50,6 +52,7 @@ class SetUpPatchesTest extends \PHPUnit_Framework_TestCase {
            'resource' => 'file',
         )),
          'display' => '1',
+         'index' => 4,
       )),
       3 =>
       (object) (array(
@@ -60,6 +63,7 @@ class SetUpPatchesTest extends \PHPUnit_Framework_TestCase {
            'resource' => 'file',
         )),
          'display' => '1',
+         'index' => 10,
       )),
     );
 
