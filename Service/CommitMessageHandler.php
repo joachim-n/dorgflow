@@ -17,10 +17,10 @@ class CommitMessageHandler {
    */
   public function createCommitMessage(Patch $patch) {
     // TODO: throw or bail if the patch object is already committed.
-    // TODO: include comment index!!!!!!!!!
     $filename = $patch->getPatchFilename();
     $fid = $patch->getPatchFileFid();
-    return "Patch from Drupal.org. File: $filename; fid $fid. Automatic commit by dorgflow.";
+    $index = $patch->getPatchFileIndex();
+    return "Patch from Drupal.org. Comment: $index; file: $filename; fid $fid. Automatic commit by dorgflow.";
   }
 
 
@@ -39,7 +39,7 @@ class CommitMessageHandler {
    *      creating to be uploaded to drupal.org.
    */
   public function parseCommitMessage($message) {
-    $pattern_remote = "Patch from Drupal.org. File: (?P<filename>.+\.patch); fid (?P<fid>\d+). Automatic commit by dorgflow.";
+    $pattern_remote = "Patch from Drupal.org. Comment: (?P<index>\d+); file: (?P<filename>.+\.patch); fid (?P<fid>\d+). Automatic commit by dorgflow.";
     $patern_local   = "Patch for Drupal.org. File: (?P<filename>.+\.patch). Automatic commit by dorgflow.";
 
     $matches = [];
