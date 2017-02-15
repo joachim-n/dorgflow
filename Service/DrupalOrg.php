@@ -60,7 +60,17 @@ class DrupalOrg {
    * Gets the field items for the issue files field, in order of creation.
    *
    * @return
-   *  An array of Drupal file field items.
+   *  An array of Drupal file field items. This has the structure:
+   *  - (delta): The key is the file field delta. Contains an array with these
+   *    properties:
+   *    - display: A boolean indicating whether the file is set to be displayed
+   *      in the node output.
+   *    - file: An object with these properties:
+   *      - uri: The file URI.
+   *      - id: The file entity ID.
+   *      - resource: The type of the resource, in this case, 'file'.
+   *      - cid: The comment entity ID of the comment at which this file was
+   *      added.
    */
   public function getIssueFileFieldItems() {
     if (!isset($this->node_data)) {
