@@ -71,6 +71,7 @@ class DrupalOrg {
    *      - resource: The type of the resource, in this case, 'file'.
    *      - cid: The comment entity ID of the comment at which this file was
    *      added.
+   *    - index: The natural index of the comment this file was added with.
    */
   public function getIssueFileFieldItems() {
     if (!isset($this->node_data)) {
@@ -79,10 +80,24 @@ class DrupalOrg {
 
     $files = $this->node_data->field_issue_files;
 
-    // Ensure these are in creation order by ordering them by fid.
-    // TODO: in due course, get the comment index data!!! -- see d.org issue!
-    usort($files, function($a, $b) {
-      return ($a->file->id <=> $b->file->id);
+    // Get the comment data from the node, so we can add the comment index
+    // number to each file.
+    // Create a lookup from comment ID to natural index.
+    $comment_id_natural_indexes = [];
+    foreach ($this->node_data->comments as $index => $comment_item) {
+      // On d.org, the comments are output with a natural index starting from 1.
+      $natural_index = $index + 1;
+
+      $comment_id_natural_indexes[$comment_item->id] = $natural_index;
+    }
+
+    foreach ($files as &$file_item) {
+      $file_item->index = $comment_id_natural_indexes[$file_item->file->cid];
+    }
+
+    // Ensure these are in creation order by ordering them by the comment index.
+    uasort($files, function($a, $b) {
+      return ($a->index <=> $b->index);
     });
 
     return $files;
