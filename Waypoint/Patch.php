@@ -10,6 +10,14 @@ class Patch {
   protected $fid;
 
   /**
+   * The comment index for this patch.
+   *
+   * This is the number of the comment that was added to the node when the file
+   * was added. Comment numbers start at 1 and increment for each comment.
+   */
+  protected $index;
+
+  /**
    * The filename for this patch.
    */
   protected $patchFile;
@@ -32,9 +40,10 @@ class Patch {
     $this->waypoint_manager_branches = $waypoint_manager_branches;
     $this->git_executor = $git_executor;
 
-    // Set the file ID.
+    // Set the file ID and index.
     if (isset($file_field_item)) {
       $this->fid = $file_field_item->file->id;
+      $this->index = $file_field_item->index;
     }
 
     $this->sha = $sha;
