@@ -39,16 +39,17 @@ This creates a new git branch for you to work on. If there are patches on the
 issue, it will also download them and make commits for them. So you'll have
 something like this:
 
-      * (12345-fix-bug) Patch from Drupal.org. File: 12345-4.fix-bug.patch; fid 99999. Automatic commit by dorgflow.
-      * Patch from Drupal.org. File: 12345-1.fix-bug.permissions-author.patch; fid 88888. Automatic commit by dorgflow.
+      * (12345-fix-bug) Patch from Drupal.org. Comment: 4; file: 12345-4.fix-bug.patch; fid 99999. Automatic commit by dorgflow.
+      * Patch from Drupal.org. Comment: 2; file: 12345-1.fix-bug.permissions-author.patch; fid 88888. Automatic commit by dorgflow.
      /
     * (8.3.x) Issue 11111 by whoever.
     * Issue 22222 by whoever.
 
 The branch name is formed from the issue number and title: 12345-fix-bug. Each
-automatic patch commit gives you the patch filename and file entity ID (the
-file's comment index is not yet available from drupal.org's REST API; this is on
-the roadmap!).
+automatic patch commit gives you:
+  - the index number of the comment the file was added with,
+  - the patch filename,
+  - the patch file's entity ID.
 
 You can now start work on your own fix to the issue!
 
