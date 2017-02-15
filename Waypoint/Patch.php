@@ -31,7 +31,8 @@ class Patch {
    * Constructor.
    *
    * @param $file_field_item = NULL
-   *  The file field item from the issue node for the patch file, if there is one.
+   *  The file field item from the issue node for the patch file, if there is
+   *  one.
    * @param $sha = NULL
    *  The SHA for the patch's commit, if there is a commit.
    */
@@ -135,6 +136,12 @@ class Patch {
     return $this->git_executor->applyPatch($patch_file);
   }
 
+  /**
+   * Creates a commit message to use for the patch.
+   *
+   * @return string
+   *  The commit message.
+   */
   protected function getCommitMessage() {
     // TODO: include comment index!!!!!!!!!
     $filename = $this->getPatchFilename();
