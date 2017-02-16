@@ -35,10 +35,9 @@ class LocalSetup extends CommandBase {
 
     // If the master branch is not current, abort.
     if (!$master_branch->isCurrentBranch()) {
-      print strtr("Detected master branch !branch, but it is not the current branch. Aborting.\n", [
+      throw new \Exception(strtr("Detected master branch !branch, but it is not the current branch. Aborting.\n", [
         '!branch' => $master_branch->getBranchName(),
-      ]);
-      exit();
+      ]));
     }
 
     print strtr("Detected master branch !branch.\n", [
@@ -50,12 +49,6 @@ class LocalSetup extends CommandBase {
     // Check whether feature branch exists.
     if ($feature_branch->exists()) {
       throw new \Exception("The feature branch already exists. Use the update command. Aborting.");
-    }
-
-    // If feature branch doens't exist, create it in git.
-    // Check we are on the master branch -- if not, throw exception.
-    if (!$master_branch->isCurrentBranch()) {
-      throw new \Exception("The master branch is not current. Aborting");
     }
 
     $feature_branch->gitCreate();
