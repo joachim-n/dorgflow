@@ -51,19 +51,18 @@ class LocalSetup extends CommandBase {
     if ($feature_branch->exists()) {
       throw new \Exception("The feature branch already exists. Use the update command. Aborting.");
     }
-    else {
-      // If feature branch doens't exist, create it in git.
-      // Check we are on the master branch -- if not, throw exception.
-      if (!$master_branch->isCurrentBranch()) {
-        throw new \Exception("The master branch is not current. Aborting");
-      }
 
-      $feature_branch->gitCreate();
-
-      print strtr("Created feature branch !branch.\n", [
-        '!branch' => $feature_branch->getBranchName(),
-      ]);
+    // If feature branch doens't exist, create it in git.
+    // Check we are on the master branch -- if not, throw exception.
+    if (!$master_branch->isCurrentBranch()) {
+      throw new \Exception("The master branch is not current. Aborting");
     }
+
+    $feature_branch->gitCreate();
+
+    print strtr("Created feature branch !branch.\n", [
+      '!branch' => $feature_branch->getBranchName(),
+    ]);
 
     // Get the patches and create them.
     $patches = $this->waypoint_manager_patches->setUpPatches();
