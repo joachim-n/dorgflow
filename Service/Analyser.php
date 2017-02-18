@@ -19,6 +19,9 @@ class Analyser {
    *
    * @return int
    *  The issue number, which is the nid of the drupal.org issue node.
+   *
+   * @throws \Exception
+   *  Throws an exception if no issue number can be found from any input.
    */
   public function deduceIssueNumber() {
     if (isset($this->issue_number)) {
