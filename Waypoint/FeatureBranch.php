@@ -22,11 +22,6 @@ class FeatureBranch {
     $this->git_exec = $git_exec;
 
     $issue_number = $this->analyser->deduceIssueNumber();
-    //dump($issue_number);
-    if (empty($issue_number)) {
-      // If we can't figure out an issue numbner, FAIL.
-      throw new \Exception("Can't find an issue number.");
-    }
 
     // Is there a branch for this issue number, that is not a tests branch?
     $branch_list = $this->git_info->getBranchList();
