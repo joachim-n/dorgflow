@@ -10,7 +10,7 @@ namespace Dorgflow;
  *   vendor/bin/phpunit tests/SetUpPatchesTest.php
  * @endcode
  */
-class SetUpPatchesTest extends \PHPUnit_Framework_TestCase {
+class SetUpPatchesTest extends \PHPUnit\Framework\TestCase {
 
   /**
    * Test patches with no local branch.

@@ -10,7 +10,7 @@ namespace Dorgflow\Tests;
  *   vendor/bin/phpunit tests/FeatureBranchTest.php
  * @endcode
  */
-class FeatureBranchTest extends \PHPUnit_Framework_TestCase {
+class FeatureBranchTest extends \PHPUnit\Framework\TestCase {
 
   public function testFeatureBranch() {
     $git_info = $this->getMockBuilder(\Dorgflow\Service\GitInfo::class)

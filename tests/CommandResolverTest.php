@@ -10,7 +10,7 @@ namespace Dorgflow\Tests;
  *   vendor/bin/phpunit tests/CommandResolverTest.php
  * @endcode
  */
-class CommandResolverTest extends \PHPUnit_Framework_TestCase {
+class CommandResolverTest extends \PHPUnit\Framework\TestCase {
 
   /**
    * @dataProvider provider

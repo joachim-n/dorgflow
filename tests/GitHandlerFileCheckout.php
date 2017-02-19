@@ -10,7 +10,7 @@ namespace Dorgflow\Tests;
  *   vendor/bin/phpunit  tests/GitHandlerFileCheckout.php
  * @endcode
  */
-class GitHandlerFileCheckout extends \PHPUnit_Framework_TestCase {
+class GitHandlerFileCheckout extends \PHPUnit\Framework\TestCase {
 
   /**
    * Set up a git repository for the folder Testing/repository.
