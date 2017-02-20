@@ -2,6 +2,8 @@
 
 namespace Dorgflow\Tests;
 
+use Symfony\Component\DependencyInjection\Reference;
+
 /**
  * System test for the local setup command.
  *
@@ -81,10 +83,10 @@ class CommandLocalSetupTest extends \PHPUnit\Framework\TestCase {
     // object from it, based on the mocked git.info service.
     $container
       ->register('waypoint_manager.branches', \Dorgflow\Service\WaypointManagerBranches::class)
-      ->addArgument(new \Symfony\Component\DependencyInjection\Reference('git.info'))
-      ->addArgument(new \Symfony\Component\DependencyInjection\Reference('drupal_org'))
-      ->addArgument(new \Symfony\Component\DependencyInjection\Reference('git.executor'))
-      ->addArgument(new \Symfony\Component\DependencyInjection\Reference('analyser'));
+      ->addArgument(new Reference('git.info'))
+      ->addArgument(new Reference('drupal_org'))
+      ->addArgument(new Reference('git.executor'))
+      ->addArgument(new Reference('analyser'));
 
     $container->set('waypoint_manager.patches', $this->getMockBuilder(\Dorgflow\Service\WaypointManagerPatches::class));
 
@@ -144,10 +146,10 @@ class CommandLocalSetupTest extends \PHPUnit\Framework\TestCase {
 
     $container
       ->register('waypoint_manager.branches', \Dorgflow\Service\WaypointManagerBranches::class)
-      ->addArgument(new \Symfony\Component\DependencyInjection\Reference('git.info'))
-      ->addArgument(new \Symfony\Component\DependencyInjection\Reference('drupal_org'))
-      ->addArgument(new \Symfony\Component\DependencyInjection\Reference('git.executor'))
-      ->addArgument(new \Symfony\Component\DependencyInjection\Reference('analyser'));
+      ->addArgument(new Reference('git.info'))
+      ->addArgument(new Reference('drupal_org'))
+      ->addArgument(new Reference('git.executor'))
+      ->addArgument(new Reference('analyser'));
 
     $waypoint_manager_patches = $this->createMock(\Dorgflow\Service\WaypointManagerPatches::class);
     $container->set('waypoint_manager.patches', $waypoint_manager_patches);
@@ -211,10 +213,10 @@ class CommandLocalSetupTest extends \PHPUnit\Framework\TestCase {
 
     $container
       ->register('waypoint_manager.branches', \Dorgflow\Service\WaypointManagerBranches::class)
-      ->addArgument(new \Symfony\Component\DependencyInjection\Reference('git.info'))
-      ->addArgument(new \Symfony\Component\DependencyInjection\Reference('drupal_org'))
-      ->addArgument(new \Symfony\Component\DependencyInjection\Reference('git.executor'))
-      ->addArgument(new \Symfony\Component\DependencyInjection\Reference('analyser'));
+      ->addArgument(new Reference('git.info'))
+      ->addArgument(new Reference('drupal_org'))
+      ->addArgument(new Reference('git.executor'))
+      ->addArgument(new Reference('analyser'));
 
     $waypoint_manager_patches = $this->createMock(\Dorgflow\Service\WaypointManagerPatches::class);
     $container->set('waypoint_manager.patches', $waypoint_manager_patches);
