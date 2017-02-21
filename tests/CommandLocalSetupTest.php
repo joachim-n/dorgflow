@@ -226,4 +226,139 @@ class CommandLocalSetupTest extends \PHPUnit\Framework\TestCase {
     $command->execute();
   }
 
+  /**
+   * Test setup on an issue with patches.
+   */
+  public function testIssueWithPatches() {
+    $container = new \Symfony\Component\DependencyInjection\ContainerBuilder();
+
+    $git_info = $this->createMock(\Dorgflow\Service\GitInfo::class);
+    // Git is clean so the command proceeds.
+    $git_info->method('gitIsClean')
+      ->willReturn(TRUE);
+    // Master branch is current.
+    $git_info->method('getCurrentBranch')
+      ->willReturn('8.3.x');
+    $git_info->method('getBranchList')
+      ->willReturn(['8.3.x' => 'sha']);
+    $container->set('git.info', $git_info);
+
+    $analyser = $this->createMock(\Dorgflow\Service\Analyser::class);
+    $analyser->method('deduceIssueNumber')
+      ->willReturn(123456);
+    $container->set('analyser', $analyser);
+
+    $drupal_org = $this->createMock(\Dorgflow\Service\DrupalOrg::class);
+    $drupal_org->method('getIssueNodeTitle')
+      ->willReturn('Terribly awful bug');
+    $patch_file_data = [
+      0 => [
+        'fid' => 200,
+        'cid' => 400,
+        'index' => 1,
+        'filename' => 'fix-1.patch',
+        'display' => TRUE,
+      ],
+      1 => [
+        'fid' => 210,
+        'cid' => 410,
+        'index' => 10,
+        'filename' => 'fix-10.patch',
+        'display' => TRUE,
+      ],
+    ];
+    $this->setUpDrupalOrgExpectations($drupal_org, $patch_file_data);
+    $container->set('drupal_org', $drupal_org);
+
+    $git_executor = $this->createMock(\Dorgflow\Service\GitExecutor::class);
+    // A new branch will be created.
+    $git_executor->expects($this->once())
+      ->method('createNewBranch')
+      ->with($this->equalTo('123456-Terribly-awful-bug'), $this->equalTo(TRUE));
+    // Both patches will be applied.
+    // TODO: test method parameters.
+    $git_executor
+      ->expects($this->exactly(2))
+      ->method('checkOutFiles');
+    $git_executor
+      ->expects($this->exactly(2))
+      ->method('applyPatch')
+      ->willReturn(TRUE);
+    $git_executor
+      ->expects($this->exactly(2))
+      ->method('commit');
+    $container->set('git.executor', $git_executor);
+
+    $container->set('commit_message', $this->createMock(\Dorgflow\Service\CommitMessageHandler::class));
+    $container->set('git.log', $this->createMock(\Dorgflow\Service\GitLog::class));
+
+    // Use the real branches manager service.
+    $container
+      ->register('waypoint_manager.branches', \Dorgflow\Service\WaypointManagerBranches::class)
+      ->addArgument(new Reference('git.info'))
+      ->addArgument(new Reference('drupal_org'))
+      ->addArgument(new Reference('git.executor'))
+      ->addArgument(new Reference('analyser'));
+
+    // Use the real patches manager service.
+    $container
+      ->register('waypoint_manager.patches', \Dorgflow\Service\WaypointManagerPatches::class)
+      ->addArgument(new Reference('commit_message'))
+      ->addArgument(new Reference('drupal_org'))
+      ->addArgument(new Reference('git.log'))
+      ->addArgument(new Reference('git.executor'))
+      ->addArgument(new Reference('waypoint_manager.branches'));
+
+    $command = \Dorgflow\Command\LocalSetup::create($container);
+
+    $command->execute();
+  }
+
+  /**
+   * Sets up the mock drupal_org service with the given patch file data.
+   *
+   * @param $drupal_org
+   *  The mock drupal_org service.
+   * @param $patch_file_data
+   *  An array of data for the patch files.
+   */
+  protected function setUpDrupalOrgExpectations($drupal_org, $patch_file_data) {
+    $getIssueFileFieldItems_return = [];
+    $getFileEntity_value_map = [];
+    $getPatchFile_value_map = [];
+
+    foreach ($patch_file_data as $patch_file_data_item) {
+      $file_field_item = (object) [
+        'file' => (object) [
+          'uri' => 'https://www.drupal.org/api-d7/file/' . $patch_file_data_item['fid'],
+          'id' => $patch_file_data_item['fid'],
+          'resource' => 'file',
+        ],
+        'display' => $patch_file_data_item['display'],
+        'index' => $patch_file_data_item['index'],
+      ];
+      $getIssueFileFieldItems_return[] = $file_field_item;
+
+      $getFileEntity_value_map[] = [
+        $patch_file_data_item['fid'],
+        // For dummy file entities, we only need the url property.
+        (object) ['url' => $patch_file_data_item['filename']]
+      ];
+
+      $getPatchFile_value_map[] = [
+        $patch_file_data_item['filename'],
+        'patch-file-data-' . $patch_file_data_item['fid']
+      ];
+    }
+
+    $drupal_org->method('getIssueFileFieldItems')
+      ->willReturn($getIssueFileFieldItems_return);
+    $drupal_org->expects($this->any())
+      ->method('getFileEntity')
+      ->will($this->returnValueMap($getFileEntity_value_map));
+    $drupal_org->expects($this->any())
+      ->method('getPatchFile')
+      ->will($this->returnValueMap($getPatchFile_value_map));
+  }
+
 }
