@@ -259,7 +259,23 @@ class CommandLocalSetupTest extends \PHPUnit\Framework\TestCase {
         'filename' => 'fix-1.patch',
         'display' => TRUE,
       ],
+      // Not displayed; will be skipped.
       1 => [
+        'fid' => 205,
+        'cid' => 405,
+        'index' => 5,
+        'filename' => 'fix-5.patch',
+        'display' => FALSE,
+      ],
+      // Not a patch; will be skipped.
+      2 => [
+        'fid' => 206,
+        'cid' => 406,
+        'index' => 6,
+        'filename' => 'fix-5.not.patch.txt',
+        'display' => TRUE,
+      ],
+      3 => [
         'fid' => 210,
         'cid' => 410,
         'index' => 10,
