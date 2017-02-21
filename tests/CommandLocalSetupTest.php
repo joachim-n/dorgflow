@@ -276,13 +276,20 @@ class CommandLocalSetupTest extends \PHPUnit\Framework\TestCase {
       ->method('createNewBranch')
       ->with($this->equalTo('123456-Terribly-awful-bug'), $this->equalTo(TRUE));
     // Both patches will be applied.
-    // TODO: test method parameters.
+    // For each patch, the master branch files will be checked out.
     $git_executor
       ->expects($this->exactly(2))
-      ->method('checkOutFiles');
+      ->method('checkOutFiles')
+      ->with('8.3.x');
+    // For each patch, the patch file contents will be applied.
     $git_executor
       ->expects($this->exactly(2))
       ->method('applyPatch')
+      ->withConsecutive(
+        ['patch-file-data-200'],
+        ['patch-file-data-210']
+      )
+      // Patch file applies correctly.
       ->willReturn(TRUE);
     $git_executor
       ->expects($this->exactly(2))
@@ -347,6 +354,7 @@ class CommandLocalSetupTest extends \PHPUnit\Framework\TestCase {
 
       $getPatchFile_value_map[] = [
         $patch_file_data_item['filename'],
+        // The contents of the patch file.
         'patch-file-data-' . $patch_file_data_item['fid']
       ];
     }
