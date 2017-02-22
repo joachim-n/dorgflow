@@ -18,7 +18,9 @@ class CommitMessageHandlerTest extends \PHPUnit\Framework\TestCase {
    * @dataProvider providerCommitMessages
    */
   public function testCommitMessageParser($message, $expected_data) {
-    $commit_message_handler = new \Dorgflow\Service\CommitMessageHandler();
+    $analyser = $this->createMock(\Dorgflow\Service\Analyser::class);
+
+    $commit_message_handler = new \Dorgflow\Service\CommitMessageHandler($analyser);
 
     $commit_data = $commit_message_handler->parseCommitMessage($message);
 
