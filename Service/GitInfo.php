@@ -9,6 +9,8 @@ class GitInfo {
 
   protected $is_clean;
 
+  protected $current_branch;
+
   /**
    * Returns whether the current git repository is clean.
    *
@@ -26,10 +28,11 @@ class GitInfo {
   }
 
   public function getCurrentBranch() {
-    // TODO cache
-    $current_branch = trim(shell_exec("git symbolic-ref --short -q HEAD"));
+    if (!isset($this->current_branch)) {
+      $this->current_branch = trim(shell_exec("git symbolic-ref --short -q HEAD"));
+    }
 
-    return $current_branch;
+    return $this->current_branch;
   }
 
 
