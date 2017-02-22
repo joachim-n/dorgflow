@@ -40,9 +40,13 @@ something like this:
     * (8.3.x) Issue 11111 by whoever.
     * Issue 22222 by whoever.
 
-The branch name is formed from the issue number and title: 12345-fix-bug. Each
-automatic patch commit gives you:
+The branch name is formed from the issue number and title: 12345-fix-bug. You
+may change this branch name if you wish, provided you keep the issue number and
+hyphen prefix.
+
+Each automatic patch commit gives you:
   - the index number of the comment the file was added with,
+  - the URL of the comment,
   - the patch filename,
   - the patch file's entity ID.
 
