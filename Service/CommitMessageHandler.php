@@ -39,26 +39,30 @@ class CommitMessageHandler {
    *      creating to be uploaded to drupal.org.
    */
   public function parseCommitMessage($message) {
-    $pattern_remote = "Patch from Drupal.org. Comment: (?P<index>\d+); file: (?P<filename>.+\.patch); fid (?P<fid>\d+). Automatic commit by dorgflow.";
-    $patern_local   = "Patch for Drupal.org. File: (?P<filename>.+\.patch). Automatic commit by dorgflow.";
+    // Bail if not a dorgflow commit.
+    if (!preg_match('@Automatic commit by dorgflow.$@', $message)) {
+      return FALSE;
+    }
+
+    $return = [];
 
     $matches = [];
-    $matched = preg_match("@^$pattern_remote@", $message, $matches);
-    if (!$matched) {
-      $matched = preg_match("@^$patern_local@", $message, $matches);
+    // Allow for pre-1.0.0 format, where the file is the first item in the list
+    // and has a capital letter.
+    if (preg_match('@[Ff]ile: (?P<filename>.+\.patch)@', $message, $matches)) {
+      $return['filename'] = $matches['filename'];
     }
 
-    if (!empty($matches)) {
-      $return = [
-        'filename' => $matches['filename'],
-      ];
-      if (isset($matches['fid'])) {
-        $return['fid'] = $matches['fid'];
-      }
-      // TODO: 'comment_index'
+    $matches = [];
+    if (preg_match('@fid (?P<fid>\d+)@', $message, $matches)) {
+      $return['fid'] = $matches['fid'];
     }
-    else {
-      $return = FALSE;
+
+    // TODO: 'comment_index'
+
+    if (empty($return)) {
+      // We shouldn't come here, but just in case, return the right thing.
+      return FALSE;
     }
 
     return $return;
