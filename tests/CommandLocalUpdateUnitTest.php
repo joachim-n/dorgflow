@@ -10,7 +10,7 @@ namespace Dorgflow\Tests;
  *   vendor/bin/phpunit tests/CommandLocalUpdateTest.php
  * @endcode
  */
-class CommandLocalUpdateTest extends \PHPUnit\Framework\TestCase {
+class CommandLocalUpdateUnitTest extends \PHPUnit\Framework\TestCase {
 
   /*
   TODO:
