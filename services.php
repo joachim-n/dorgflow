@@ -17,12 +17,13 @@ $container
   ->register('git.executor', \Dorgflow\Service\GitExecutor::class);
 
 $container
-  ->register('commit_message', \Dorgflow\Service\CommitMessageHandler::class);
-
-$container
   ->register('analyser', \Dorgflow\Service\Analyser::class)
   ->addArgument(new Reference('git.info'))
   ->addArgument(new Reference('user_input'));
+
+$container
+  ->register('commit_message', \Dorgflow\Service\CommitMessageHandler::class)
+  ->addArgument(new Reference('analyser'));
 
 $container
   ->register('drupal_org', \Dorgflow\Service\DrupalOrg::class)

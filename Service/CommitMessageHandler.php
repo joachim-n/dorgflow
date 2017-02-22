@@ -9,6 +9,10 @@ use Dorgflow\Waypoint\Patch;
  */
 class CommitMessageHandler {
 
+  function __construct($analyser) {
+    $this->analyser = $analyser;
+  }
+
   /**
    * Creates a commit message to use for a patch..
    *
