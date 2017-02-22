@@ -10,6 +10,11 @@ class Patch {
   protected $fid;
 
   /**
+   * The comment ID for this patch.
+   */
+  protected $cid;
+
+  /**
    * The comment index for this patch.
    *
    * This is the number of the comment that was added to the node when the file
@@ -46,6 +51,7 @@ class Patch {
     if (isset($file_field_item)) {
       $this->fid = $file_field_item->file->id;
       $this->index = $file_field_item->index;
+      $this->cid = $file_field_item->file->cid;
     }
 
     $this->sha = $sha;
@@ -103,6 +109,10 @@ class Patch {
 
   public function getPatchFileIndex() {
     return $this->index;
+  }
+
+  public function getPatchFileCid() {
+    return $this->cid;
   }
 
   /**
