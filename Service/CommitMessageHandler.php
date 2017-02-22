@@ -32,7 +32,7 @@ class CommitMessageHandler {
       ':cid' => $patch->getPatchFileCid(),
     ]);
 
-    return "Patch from Drupal.org. Comment: $index; URL: $url; file: $filename; fid $fid. Automatic commit by dorgflow.";
+    return "Patch from Drupal.org. Comment: $index; URL: $url; file: $filename; fid: $fid. Automatic commit by dorgflow.";
   }
 
 
@@ -66,7 +66,8 @@ class CommitMessageHandler {
     }
 
     $matches = [];
-    if (preg_match('@fid (?P<fid>\d+)@', $message, $matches)) {
+    // Allow for pre-1.1.0 format, where the ':' after 'fid' is missing.
+    if (preg_match('@fid:? (?P<fid>\d+)@', $message, $matches)) {
       $return['fid'] = $matches['fid'];
     }
 

@@ -54,7 +54,7 @@ class CommitMessageHandlerTest extends \PHPUnit\Framework\TestCase {
       // 1.1.0 format.
       'd.org patch 1.1.0' => [
         // Message.
-        'Patch from Drupal.org. Comment: 10; URL: https://www.drupal.org/node/12345#comment-67890; file: myfile.patch; fid 16. Automatic commit by dorgflow.',
+        'Patch from Drupal.org. Comment: 10; URL: https://www.drupal.org/node/12345#comment-67890; file: myfile.patch; fid: 16. Automatic commit by dorgflow.',
         // Expected data.
         [
           'filename' => 'myfile.patch',
