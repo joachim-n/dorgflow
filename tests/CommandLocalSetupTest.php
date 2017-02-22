@@ -356,6 +356,7 @@ class CommandLocalSetupTest extends \PHPUnit\Framework\TestCase {
           'uri' => 'https://www.drupal.org/api-d7/file/' . $patch_file_data_item['fid'],
           'id' => $patch_file_data_item['fid'],
           'resource' => 'file',
+          'cid' => $patch_file_data_item['cid'],
         ],
         'display' => $patch_file_data_item['display'],
         'index' => $patch_file_data_item['index'],
