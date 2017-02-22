@@ -110,18 +110,22 @@ class SetUpPatchesTest extends \PHPUnit\Framework\TestCase {
 
     $patches = $wmp->setUpPatches();
 
-    $commit_message_handler = new \Dorgflow\Service\CommitMessageHandler;
+    $analyser = $this->createMock(\Dorgflow\Service\Analyser::class);
+    $analyser->method('deduceIssueNumber')
+      ->willReturn(123456);
+
+    $commit_message_handler = new \Dorgflow\Service\CommitMessageHandler($analyser);
 
     $this->assertCount(2, $patches);
 
     $patch_102 = $patches[0];
     $this->assertEquals($file_urls[102], $patch_102->getPatchFilename());
-    $this->assertEquals("Patch from Drupal.org. Comment: 4; file: fix-102.patch; fid 102. Automatic commit by dorgflow.",
+    $this->assertEquals("Patch from Drupal.org. Comment: 4; URL: https://www.drupal.org/node/123456#comment-402; file: fix-102.patch; fid 102. Automatic commit by dorgflow.",
       $commit_message_handler->createCommitMessage($patch_102));
 
     $patch_103 = $patches[1];
     $this->assertEquals($file_urls[103], $patch_103->getPatchFilename());
-    $this->assertEquals("Patch from Drupal.org. Comment: 10; file: fix-103.patch; fid 103. Automatic commit by dorgflow.",
+    $this->assertEquals("Patch from Drupal.org. Comment: 10; URL: https://www.drupal.org/node/123456#comment-403; file: fix-103.patch; fid 103. Automatic commit by dorgflow.",
       $commit_message_handler->createCommitMessage($patch_103));
 
     return;

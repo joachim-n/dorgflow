@@ -24,7 +24,15 @@ class CommitMessageHandler {
     $filename = $patch->getPatchFilename();
     $fid = $patch->getPatchFileFid();
     $index = $patch->getPatchFileIndex();
-    return "Patch from Drupal.org. Comment: $index; file: $filename; fid $fid. Automatic commit by dorgflow.";
+
+    // Construct the anchor URL for the comment on the issue node where the
+    // patch was added.
+    $url = strtr('https://www.drupal.org/node/:nid#comment-:cid', [
+      ':nid' => $this->analyser->deduceIssueNumber(),
+      ':cid' => $patch->getPatchFileCid(),
+    ]);
+
+    return "Patch from Drupal.org. Comment: $index; URL: $url; file: $filename; fid $fid. Automatic commit by dorgflow.";
   }
 
 
