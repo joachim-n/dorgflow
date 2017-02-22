@@ -11,6 +11,8 @@ class GitInfo {
 
   protected $current_branch;
 
+  protected $branch_list;
+
   /**
    * Returns whether the current git repository is clean.
    *
@@ -43,30 +45,32 @@ class GitInfo {
    *  An array whose keys are branch names, and values are the SHA of the tip.
    */
   public function getBranchList() {
-    // TODO: caching!
+    if (!isset($this->branch_list)) {
+      // TODO: check in right dir!
 
-    // TODO: check in right dir!
+      $branch_list = [];
 
-    $branch_list = [];
+      // Get the list of local branches as 'SHA BRANCHNAME'.
+      $refs = shell_exec("git for-each-ref refs/heads/ --format='%(objectname) %(refname:short)'");
+      foreach (explode("\n", trim($refs)) as $line) {
+        list($sha, $branch_name) = explode(' ', $line);
 
-    // Get the list of local branches as 'SHA BRANCHNAME'.
-    $refs = shell_exec("git for-each-ref refs/heads/ --format='%(objectname) %(refname:short)'");
-    foreach (explode("\n", trim($refs)) as $line) {
-      list($sha, $branch_name) = explode(' ', $line);
+        $output = '';
+        // Exit value is 0 if true, 1 if false.
+        $return_var = '';
+        // @todo bug in the special case that the feature branch is at the same
+        // place as the master branch!
+        exec("git merge-base --is-ancestor $branch_name HEAD", $output, $return_var);
 
-      $output = '';
-      // Exit value is 0 if true, 1 if false.
-      $return_var = '';
-      // @todo bug in the special case that the feature branch is at the same
-      // place as the master branch!
-      exec("git merge-base --is-ancestor $branch_name HEAD", $output, $return_var);
-
-      if ($return_var === 0) {
-        $branch_list[$branch_name] = $sha;
+        if ($return_var === 0) {
+          $branch_list[$branch_name] = $sha;
+        }
       }
+
+      $this->branch_list = $branch_list;
     }
 
-    return $branch_list;
+    return $this->branch_list;
   }
 
 }
