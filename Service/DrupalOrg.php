@@ -70,7 +70,7 @@ class DrupalOrg {
    *      - id: The file entity ID.
    *      - resource: The type of the resource, in this case, 'file'.
    *      - cid: The comment entity ID of the comment at which this file was
-   *      added.
+   *        added.
    *    - index: The natural index of the comment this file was added with.
    */
   public function getIssueFileFieldItems() {
