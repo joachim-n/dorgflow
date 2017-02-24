@@ -71,8 +71,8 @@ class CreatePatch extends CommandBase {
     }
 
     // Make an empty commit to record the patch.
-    // TODO: find nice place for this.
-    shell_exec("git commit --allow-empty -m 'Patch for Drupal.org. File: $patch_name. Automatic commit by dorgflow.'");
+    // TODO: use the commit message service to create the message.
+    $this->git_executor->commit("Patch for Drupal.org. File: $patch_name. Automatic commit by dorgflow.");
   }
 
   protected function getPatchName($feature_branch) {
