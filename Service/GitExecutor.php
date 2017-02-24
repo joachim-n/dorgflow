@@ -158,9 +158,13 @@ class GitExecutor {
 
   /**
    * Commit the currently staged changes.
+   *
+   * @param $message
+   *  The message for the commit.
    */
   public function commit($message) {
-    // Allow empty commits, in case two sequential patches are identical.
+    // Allow empty commits, for local patches and also in case two sequential
+    // patches are identical.
     shell_exec("git commit  --allow-empty --message='$message'");
   }
 
