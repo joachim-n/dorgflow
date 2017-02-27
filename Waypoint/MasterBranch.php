@@ -16,7 +16,7 @@ class MasterBranch {
     $branch_list = $this->git_info->getBranchList();
 
     // Sort the branches by version number, with highest first.
-    uasort($branch_list, 'version_compare');
+    uksort($branch_list, 'version_compare');
     $branch_list = array_reverse($branch_list);
 
     foreach ($branch_list as $branch => $sha) {
