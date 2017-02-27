@@ -114,7 +114,7 @@ class CommandLocalUpdateTest extends \PHPUnit\Framework\TestCase {
     $git_info->method('getBranchList')
       ->willReturn([
         // There is a feature branch.
-        '123456-terrible-bug',
+        '123456-terrible-bug' => 'sha-feature',
         '8.x-2.x' => 'sha',
         'some-branch-name' => 'sha',
         'something-else' => 'sha',
