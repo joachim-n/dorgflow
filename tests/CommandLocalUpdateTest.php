@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *   vendor/bin/phpunit tests/CommandLocalUpdateTest.php
  * @endcode
  */
-class CommandLocalUpdateTest extends \PHPUnit\Framework\TestCase {
+class CommandLocalUpdateTest extends CommandTestBase {
 
   /**
    * Test the command bails when git is not clean.
@@ -160,6 +160,129 @@ class CommandLocalUpdateTest extends \PHPUnit\Framework\TestCase {
     catch (\Exception $e) {
       $this->assertTrue(TRUE, "The exception was thrown as expected.");
     }
+  }
+
+  /**
+   * Tests the case the feature branch has nothing and there are new patches.
+   */
+  public function testEmptyFeatureBranchNewPatches() {
+    $container = new \Symfony\Component\DependencyInjection\ContainerBuilder();
+
+    $git_info = $this->createMock(\Dorgflow\Service\GitInfo::class);
+    // Git is clean so the command proceeds.
+    $git_info->method('gitIsClean')
+      ->willReturn(TRUE);
+    $git_info->method('getBranchList')
+      ->willReturn([
+        // There is a feature branch, and its SHA is the same as the master
+        // branch.
+        '123456-terrible-bug' => 'sha-master',
+        '8.3.x' => 'sha-master',
+        'some-branch-name' => 'sha',
+        'something-else' => 'sha',
+      ]);
+    // Feature branch is current.
+    $git_info->method('getCurrentBranch')
+      ->willReturn('123456-terrible-bug');
+    $container->set('git.info', $git_info);
+
+    $git_log = $this->createMock(\Dorgflow\Service\GitLog::class);
+    // Feature branch log is empty.
+    $git_log->method('getFeatureBranchLog')
+      ->willReturn([]);
+    $container->set('git.log', $git_log);
+
+    // The analyser returns an issue number.
+    $analyser = $this->createMock(\Dorgflow\Service\Analyser::class);
+    $analyser->method('deduceIssueNumber')
+      ->willReturn(123456);
+    $container->set('analyser', $analyser);
+
+    $drupal_org = $this->createMock(\Dorgflow\Service\DrupalOrg::class);
+    $drupal_org->method('getIssueNodeTitle')
+      ->willReturn('Terribly awful bug');
+    $patch_file_data = [
+      0 => [
+        'fid' => 200,
+        'cid' => 400,
+        'index' => 1,
+        'filename' => 'fix-1.patch',
+        'display' => TRUE,
+      ],
+      // Not displayed; will be skipped.
+      1 => [
+        'fid' => 205,
+        'cid' => 405,
+        'index' => 5,
+        'filename' => 'fix-5.patch',
+        'display' => FALSE,
+      ],
+      // Not a patch; will be skipped.
+      2 => [
+        'fid' => 206,
+        'cid' => 406,
+        'index' => 6,
+        'filename' => 'fix-5.not.patch.txt',
+        'display' => TRUE,
+      ],
+      3 => [
+        'fid' => 210,
+        'cid' => 410,
+        'index' => 10,
+        'filename' => 'fix-10.patch',
+        'display' => TRUE,
+      ],
+    ];
+    $this->setUpDrupalOrgExpectations($drupal_org, $patch_file_data);
+    $container->set('drupal_org', $drupal_org);
+
+    $container->set('commit_message', $this->createMock(\Dorgflow\Service\CommitMessageHandler::class));
+
+    $git_executor = $this->createMock(\Dorgflow\Service\GitExecutor::class);
+    // No new branches will be created.
+    $git_executor->expects($this->never())
+      ->method('createNewBranch');
+    // Both patches will be applied.
+    // For each patch, the master branch files will be checked out.
+    $git_executor
+      ->expects($this->exactly(2))
+      ->method('checkOutFiles')
+      ->with('8.3.x');
+    // For each patch, the patch file contents will be applied.
+    $git_executor
+      ->expects($this->exactly(2))
+      ->method('applyPatch')
+      ->withConsecutive(
+        ['patch-file-data-200'],
+        ['patch-file-data-210']
+      )
+      // Patch file applies correctly.
+      ->willReturn(TRUE);
+    $git_executor
+      ->expects($this->exactly(2))
+      ->method('commit');
+    $container->set('git.executor', $git_executor);
+
+    // Use the real branches manager service.
+    $container
+      ->register('waypoint_manager.branches', \Dorgflow\Service\WaypointManagerBranches::class)
+      ->addArgument(new Reference('git.info'))
+      ->addArgument(new Reference('drupal_org'))
+      ->addArgument(new Reference('git.executor'))
+      ->addArgument(new Reference('analyser'));
+
+    // Use the real patches manager service.
+    $container
+      ->register('waypoint_manager.patches', \Dorgflow\Service\WaypointManagerPatches::class)
+      ->addArgument(new Reference('commit_message'))
+      ->addArgument(new Reference('drupal_org'))
+      ->addArgument(new Reference('git.log'))
+      ->addArgument(new Reference('git.executor'))
+      ->addArgument(new Reference('waypoint_manager.branches'));
+
+    $command = \Dorgflow\Command\LocalUpdate::create($container);
+
+    $command->execute();
   }
 
 }
