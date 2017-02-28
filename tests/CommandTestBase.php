@@ -30,7 +30,13 @@ abstract class CommandTestBase extends \PHPUnit\Framework\TestCase {
    * @param $drupal_org
    *  The mock drupal_org service.
    * @param $patch_file_data
-   *  An array of data for the patch files.
+   *  An array of data for the patch files. The key is the filefield delta; each
+   *  item is an array with the following properties:
+   *    - 'fid': The file entity ID.
+   *    - 'cid': The comment entity ID for this file.
+   *    - 'index': The comment index.
+   *    - 'filename': The patch filename.
+   *    - 'display': Boolean indicating whether the file is displayed.
    */
   protected function setUpDrupalOrgExpectations($drupal_org, $patch_file_data) {
     $getIssueFileFieldItems_return = [];
