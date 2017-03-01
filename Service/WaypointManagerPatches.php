@@ -26,54 +26,6 @@ class WaypointManagerPatches {
     // Get the field items for the issue node's file field.
     $issue_file_field_items = $this->drupal_org->getIssueFileFieldItems();
 
-    //dump($issue_file_field_items);
-    //var_export($issue_file_field_items);
-    /*
-    $issue_file_field_items =
-    array (
-      0 =>
-      (object) (array(
-         'file' =>
-        (object) (array(
-           'uri' => 'https://www.drupal.org/api-d7/file/5755031',
-           'id' => '5755031',
-           'resource' => 'file',
-        )),
-         'display' => '0',
-      )),
-      1 =>
-      (object) (array(
-         'file' =>
-        (object) (array(
-           'uri' => 'https://www.drupal.org/api-d7/file/5755137',
-           'id' => '5755137',
-           'resource' => 'file',
-        )),
-         'display' => '0',
-      )),
-      2 =>
-      (object) (array(
-         'file' =>
-        (object) (array(
-           'uri' => 'https://www.drupal.org/api-d7/file/5755185',
-           'id' => '5755185',
-           'resource' => 'file',
-        )),
-         'display' => '1',
-      )),
-      3 =>
-      (object) (array(
-         'file' =>
-        (object) (array(
-           'uri' => 'https://www.drupal.org/api-d7/file/5755421',
-           'id' => '5755421',
-           'resource' => 'file',
-        )),
-         'display' => '1',
-      )),
-    );
-    */
-
     $feature_branch_log = $this->git_log->getFeatureBranchLog();
     //dump($feature_branch_log);
 
