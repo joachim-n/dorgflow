@@ -61,6 +61,12 @@ class LocalUpdate extends CommandBase {
     // Find the first new, uncommitted patch.
     foreach ($patches as $patch) {
       if ($patch->hasCommit()) {
+        // Any patches prior to a committed patch don't count as uncomitted:
+        // they have presumably been examined before and a commit attempted and
+        // failed. Hence, if we've found a committed patch, zap the array of
+        // uncomitted patches, as what's come before should be ignored.
+        $patches_uncommitted = [];
+
         // Keep updating this, so the last time it's set gives us the last
         // committed patch.
         $last_committed_patch = $patch;
