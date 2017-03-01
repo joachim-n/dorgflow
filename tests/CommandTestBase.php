@@ -2,6 +2,9 @@
 
 namespace Dorgflow\Tests;
 
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
+
 /**
  * Base class for command tests.
  */
@@ -77,6 +80,45 @@ abstract class CommandTestBase extends \PHPUnit\Framework\TestCase {
     $drupal_org->expects($this->any())
       ->method('getPatchFile')
       ->will($this->returnValueMap($getPatchFile_value_map));
+  }
+
+  /**
+   * Add any services to the container that are not yet registered on it.
+   *
+   * NOTE: currently only takes care of commit_message and the waypoint
+   * managers.
+   *
+   * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+   *  The service container.
+   */
+  protected function completeServiceContainer(ContainerBuilder $container) {
+    // TODO: add all the other services, but so far these are always mocked, to
+    // YAGNI.
+
+    if (!$container->has('commit_message')) {
+      $container
+        ->register('commit_message', \Dorgflow\Service\CommitMessageHandler::class)
+        ->addArgument(new Reference('analyser'));
+    }
+
+    if (!$container->has('waypoint_manager.branches')) {
+      $container
+        ->register('waypoint_manager.branches', \Dorgflow\Service\WaypointManagerBranches::class)
+        ->addArgument(new Reference('git.info'))
+        ->addArgument(new Reference('drupal_org'))
+        ->addArgument(new Reference('git.executor'))
+        ->addArgument(new Reference('analyser'));
+    }
+
+    if (!$container->has('waypoint_manager.patches')) {
+      $container
+        ->register('waypoint_manager.patches', \Dorgflow\Service\WaypointManagerPatches::class)
+        ->addArgument(new Reference('commit_message'))
+        ->addArgument(new Reference('drupal_org'))
+        ->addArgument(new Reference('git.log'))
+        ->addArgument(new Reference('git.executor'))
+        ->addArgument(new Reference('waypoint_manager.branches'));
+    }
   }
 
 }
