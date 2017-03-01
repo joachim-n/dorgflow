@@ -131,4 +131,63 @@ class SetUpPatchesTest extends \PHPUnit\Framework\TestCase {
     return;
   }
 
+  /**
+   * Test the patchFilenamesAreEqual() helper method.
+   *
+   * @dataProvider providerPatchFileComparison
+   *
+   * @todo Move this somewhere better.
+   */
+  public function testPatchFileComparison($local_filename, $drupal_org_filename, $expected_result) {
+    $wmp = new \Dorgflow\Service\WaypointManagerPatches(
+      NULL,
+      NULL,
+      NULL,
+      NULL,
+      NULL
+    );
+
+    $reflection = new \ReflectionClass(\Dorgflow\Service\WaypointManagerPatches::class);
+    $method = $reflection->getMethod('patchFilenamesAreEqual');
+    $method->setAccessible(TRUE);
+
+    $result = $method->invokeArgs($wmp, [$local_filename, $drupal_org_filename]);
+
+    $this->assertEquals($expected_result, $result, "The filenames $local_filename and $drupal_org_filename did not produce the expected result.");
+  }
+
+  /**
+   * Data provider for testCommitMessageParser().
+   */
+  public function providerPatchFileComparison() {
+    return [
+      'equal' => [
+        'foo.patch',
+        'foo.patch',
+        // Expected result.
+        TRUE,
+      ],
+      'munged' => [
+        'foo.flag.patch',
+        'foo.flag_.patch',
+        TRUE,
+      ],
+      'renamed' => [
+        'foo.longer-piece.patch',
+        'foo.longer-piece_12.patch',
+        TRUE,
+      ],
+      'munged and renamed' => [
+        'foo.flag.longer-piece.patch',
+        'foo.flag_.longer-piece_12.patch',
+        TRUE,
+      ],
+      'different' => [
+        'foo.flag.patch',
+        'totally.different.flag.patch',
+        FALSE,
+      ],
+    ];
+  }
+
 }

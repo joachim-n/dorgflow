@@ -103,7 +103,9 @@ class WaypointManagerPatches {
 
         // If we find a commit from the feature branch that matches this patch,
         // then create a Patch waypoint and move on to the next file.
-        if (!empty($commit_message_data['filename']) && $commit_message_data['filename'] == $patch_filename) {
+        // We need to do more than check equality to compare two patch filenames
+        // as drupal.org may rename files for security or uniqueness.
+        if (!empty($commit_message_data['filename']) && $this->patchFilenamesAreEqual($commit_message_data['filename'], $patch_filename)) {
           // Create a patch waypoint for this patch.
           $patch = $this->getPatch($file_field_item, $commit['sha']);
           $patch_waypoints[] = $patch;
@@ -131,6 +133,68 @@ class WaypointManagerPatches {
     //dump($patch_waypoints);
 
     return $patch_waypoints;
+  }
+
+  /**
+   * Determine whether two patch filenames count as equal.
+   *
+   * This is necessary because drupal.org can change the name of an uploaded
+   * file in two ways:
+   *  - the filename is altered by file_munge_filename() for security reasons
+   *  - an numeric suffix is added to prevent a filename collision.
+   *
+   * @param $local_filename
+   *  The local filename.
+   * @param $drupal_org_filename
+   *  The name of the file from drupal.org.
+   *
+   * @return bool
+   *  TRUE if the filenames are considered equal, FALSE if not.
+   */
+  protected function patchFilenamesAreEqual($local_filename, $drupal_org_filename) {
+    // Quick positive.
+    if ($local_filename == $drupal_org_filename) {
+      return TRUE;
+    }
+
+    // Redo the work of file_munge_filename() on the local filename.
+    // The extensions whitelist is that of the files field instance,
+    // node-project_issue-field_issue_files in file
+    // features/drupalorg_issues/drupalorg_issues.features.field_instance.inc
+    // of the 'drupalorg' project repository.
+    $extensions = 'jpg jpeg gif png txt xls pdf ppt pps odt ods odp gz tgz patch diff zip test info po pot psd yml mov mp4 avi mkv';
+    // Remove any null bytes. See http://php.net/manual/security.filesystem.nullbytes.php
+    $local_filename = str_replace(chr(0), '', $local_filename);
+
+    $whitelist = array_unique(explode(' ', strtolower(trim($extensions))));
+
+    // Split the filename up by periods. The first part becomes the basename
+    // the last part the final extension.
+    $filename_parts = explode('.', $local_filename);
+    $new_filename = array_shift($filename_parts); // Remove file basename.
+    $final_extension = array_pop($filename_parts); // Remove final extension.
+
+    // Loop through the middle parts of the name and add an underscore to the
+    // end of each section that could be a file extension but isn't in the list
+    // of allowed extensions.
+    foreach ($filename_parts as $filename_part) {
+      $new_filename .= '.' . $filename_part;
+      if (!in_array(strtolower($filename_part), $whitelist) && preg_match("/^[a-zA-Z]{2,5}\d?$/", $filename_part)) {
+        $new_filename .= '_';
+      }
+    }
+    $local_filename = $new_filename . '.' . $final_extension;
+
+    // Check again.
+    if ($local_filename == $drupal_org_filename) {
+      return TRUE;
+    }
+
+    // Allow for a FILE_EXISTS_RENAME suffix on the drupal.org filename.
+    $drupal_org_filename = preg_replace('@_\d+(?=\..+)@', '', $drupal_org_filename);
+
+    // Final check.
+    return ($local_filename == $drupal_org_filename);
   }
 
   /**
