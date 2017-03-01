@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\Reference;
  *   vendor/bin/phpunit tests/CommandCreatePatchTest.php
  * @endcode
  */
-class CommandCreatePatchTest extends \PHPUnit\Framework\TestCase {
+class CommandCreatePatchTest extends CommandTestBase {
 
   /**
    * Test the command bails when git is not clean.
@@ -215,23 +215,6 @@ class CommandCreatePatchTest extends \PHPUnit\Framework\TestCase {
       ]);
     $container->set('git.log', $git_log);
 
-    // Use the real branches manager service.
-    $container
-      ->register('waypoint_manager.branches', \Dorgflow\Service\WaypointManagerBranches::class)
-      ->addArgument(new Reference('git.info'))
-      ->addArgument(new Reference('drupal_org'))
-      ->addArgument(new Reference('git.executor'))
-      ->addArgument(new Reference('analyser'));
-
-    // Use the real patches manager service.
-    $container
-      ->register('waypoint_manager.patches', \Dorgflow\Service\WaypointManagerPatches::class)
-      ->addArgument(new Reference('commit_message'))
-      ->addArgument(new Reference('drupal_org'))
-      ->addArgument(new Reference('git.log'))
-      ->addArgument(new Reference('git.executor'))
-      ->addArgument(new Reference('waypoint_manager.branches'));
-
     $git_executor = $this->createMock(\Dorgflow\Service\GitExecutor::class);
     // A patch will be created.
     $git_executor->expects($this->once())
@@ -255,6 +238,9 @@ class CommandCreatePatchTest extends \PHPUnit\Framework\TestCase {
         $this->equalTo("Patch for Drupal.org. File: 123456-16.my_project.terrible-bug.patch. Automatic commit by dorgflow.")
       );
     $container->set('git.executor', $git_executor);
+
+    // Add real versions of any remaining services not yet registered.
+    $this->completeServiceContainer($container);
 
     $command = \Dorgflow\Command\CreatePatch::create($container);
 

@@ -315,22 +315,8 @@ class CommandLocalSetupTest extends CommandTestBase {
     $container->set('commit_message', $this->createMock(\Dorgflow\Service\CommitMessageHandler::class));
     $container->set('git.log', $this->createMock(\Dorgflow\Service\GitLog::class));
 
-    // Use the real branches manager service.
-    $container
-      ->register('waypoint_manager.branches', \Dorgflow\Service\WaypointManagerBranches::class)
-      ->addArgument(new Reference('git.info'))
-      ->addArgument(new Reference('drupal_org'))
-      ->addArgument(new Reference('git.executor'))
-      ->addArgument(new Reference('analyser'));
-
-    // Use the real patches manager service.
-    $container
-      ->register('waypoint_manager.patches', \Dorgflow\Service\WaypointManagerPatches::class)
-      ->addArgument(new Reference('commit_message'))
-      ->addArgument(new Reference('drupal_org'))
-      ->addArgument(new Reference('git.log'))
-      ->addArgument(new Reference('git.executor'))
-      ->addArgument(new Reference('waypoint_manager.branches'));
+    // Add real versions of any remaining services not yet registered.
+    $this->completeServiceContainer($container);
 
     $command = \Dorgflow\Command\LocalSetup::create($container);
 
