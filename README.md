@@ -6,10 +6,15 @@ on drupal.org. With Dorgflow, you don't need to download and apply patches, and
 creating patches and interdiffs is simplified. The only thing that Dorgflow
 doesn't handle is posting your files back to an issue for review.
 
+## Requirements
+
+php 7+
+
 ## Installation
 
 Install dependencies with Composer:
-
+    $ git clone git@github.com:joachim-n/dorgflow.git
+    $ cd dorgflow
     $ composer install
 
 Then either:
