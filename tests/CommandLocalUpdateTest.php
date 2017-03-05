@@ -262,6 +262,106 @@ class CommandLocalUpdateTest extends CommandTestBase {
   }
 
   /**
+   * Tests a feature branch that has patches, with new patches on the issue.
+   */
+  public function testFeatureBranchFurtherPatches() {
+    $container = new \Symfony\Component\DependencyInjection\ContainerBuilder();
+
+    $git_info = $this->createMock(\Dorgflow\Service\GitInfo::class);
+    // Git is clean so the command proceeds.
+    $git_info->method('gitIsClean')
+      ->willReturn(TRUE);
+    $git_info->method('getBranchList')
+      ->willReturn([
+        // There is a feature branch, which is further ahead than the master
+        // branch.
+        '123456-terrible-bug' => 'sha-feature',
+        '8.3.x' => 'sha-master',
+        'some-branch-name' => 'sha',
+        'something-else' => 'sha',
+      ]);
+    // Feature branch is current.
+    $git_info->method('getCurrentBranch')
+      ->willReturn('123456-terrible-bug');
+    $container->set('git.info', $git_info);
+
+    $git_log = $this->createMock(\Dorgflow\Service\GitLog::class);
+    // Feature branch log: two patches have previously been committed.
+    $git_log->method('getFeatureBranchLog')
+      ->willReturn([
+        'sha-patch-1' => [
+          'sha' => 'sha-patch-1',
+          'message' => "Patch from Drupal.org. Comment: 1; URL: http://url.com/1234; file: applied.patch; fid: 11. Automatic commit by dorgflow.",
+        ],
+        'sha-feature' => [
+          'sha' => 'sha-feature',
+          'message' => "Patch from Drupal.org. Comment: 2; URL: http://url.com/1234; file: applied.patch; fid: 12. Automatic commit by dorgflow.",
+        ],
+      ]);
+    $container->set('git.log', $git_log);
+
+    $drupal_org = $this->createMock(\Dorgflow\Service\DrupalOrg::class);
+    $drupal_org->method('getIssueNodeTitle')
+      ->willReturn('Terribly awful bug');
+    $patch_file_data = [
+      0 => [
+        // Patch has previously been applied.
+        'fid' => 11,
+        'cid' => 21,
+        'index' => 1,
+        'filename' => 'patch-1.patch',
+        'display' => TRUE,
+        // We expect that this will not be attempted again.
+        'expected' => 'skip',
+      ],
+      1 => [
+        // Patch has previously been applied.
+        'fid' => 12,
+        'cid' => 22,
+        'index' => 2,
+        'filename' => 'patch-2.patch',
+        'display' => TRUE,
+        // We expect that this will not be attempted again.
+        'expected' => 'skip',
+      ],
+      2 => [
+        // New patch.
+        'fid' => 13,
+        'cid' => 23,
+        'index' => 3,
+        'filename' => 'new.patch',
+        'display' => TRUE,
+        'applies' => TRUE,
+        // The new patch will be attempted to be applied.
+        'expected' => 'apply',
+      ],
+    ];
+    $this->setUpDrupalOrgExpectations($drupal_org, $patch_file_data);
+    $container->set('drupal_org', $drupal_org);
+
+    // The analyser returns an issue number.
+    $analyser = $this->createMock(\Dorgflow\Service\Analyser::class);
+    $analyser->method('deduceIssueNumber')
+      ->willReturn(123456);
+    $container->set('analyser', $analyser);
+
+    $git_executor = $this->createMock(\Dorgflow\Service\GitExecutor::class);
+    // No new branches will be created.
+    $git_executor->expects($this->never())
+      ->method('createNewBranch');
+    // Only the new patch file will be applied.
+    $this->setUpGitExecutorPatchExpectations($git_executor, $patch_file_data);
+    $container->set('git.executor', $git_executor);
+
+    // Add real versions of any remaining services not yet registered.
+    $this->completeServiceContainer($container);
+
+    $command = \Dorgflow\Command\LocalUpdate::create($container);
+
+    $command->execute();
+  }
+
+  /**
    * Tests a prior patch that failed to apply is not applied again.
    */
   public function testFeatureBranchFailingPatch() {
