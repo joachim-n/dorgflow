@@ -208,6 +208,8 @@ class CommandLocalUpdateTest extends CommandTestBase {
         'index' => 1,
         'filename' => 'fix-1.patch',
         'display' => TRUE,
+        'applies' => TRUE,
+        'expected' => 'apply',
       ],
       // Not displayed; will be skipped.
       1 => [
@@ -216,6 +218,7 @@ class CommandLocalUpdateTest extends CommandTestBase {
         'index' => 5,
         'filename' => 'fix-5.patch',
         'display' => FALSE,
+        'expected' => 'skip',
       ],
       // Not a patch; will be skipped.
       2 => [
@@ -224,6 +227,7 @@ class CommandLocalUpdateTest extends CommandTestBase {
         'index' => 6,
         'filename' => 'fix-5.not.patch.txt',
         'display' => TRUE,
+        'expected' => 'skip',
       ],
       3 => [
         'fid' => 210,
@@ -231,6 +235,8 @@ class CommandLocalUpdateTest extends CommandTestBase {
         'index' => 10,
         'filename' => 'fix-10.patch',
         'display' => TRUE,
+        'applies' => TRUE,
+        'expected' => 'apply',
       ],
     ];
     $this->setUpDrupalOrgExpectations($drupal_org, $patch_file_data);
@@ -242,25 +248,9 @@ class CommandLocalUpdateTest extends CommandTestBase {
     // No new branches will be created.
     $git_executor->expects($this->never())
       ->method('createNewBranch');
+
     // Both patches will be applied.
-    // For each patch, the master branch files will be checked out.
-    $git_executor
-      ->expects($this->exactly(2))
-      ->method('checkOutFiles')
-      ->with('8.3.x');
-    // For each patch, the patch file contents will be applied.
-    $git_executor
-      ->expects($this->exactly(2))
-      ->method('applyPatch')
-      ->withConsecutive(
-        ['patch-file-data-200'],
-        ['patch-file-data-210']
-      )
-      // Patch file applies correctly.
-      ->willReturn(TRUE);
-    $git_executor
-      ->expects($this->exactly(2))
-      ->method('commit');
+    $this->setUpGitExecutorPatchExpectations($git_executor, $patch_file_data);
     $container->set('git.executor', $git_executor);
 
     // Add real versions of any remaining services not yet registered.
@@ -317,12 +307,14 @@ class CommandLocalUpdateTest extends CommandTestBase {
       ->willReturn('Terribly awful bug');
     $patch_file_data = [
       0 => [
-        // Patch fails.
+        // A patch that previously failed to apply.
         'fid' => 200,
         'cid' => 400,
         'index' => 1,
         'filename' => 'failing.patch',
         'display' => TRUE,
+        // We expect that this will not be attempted again.
+        'expected' => 'skip',
       ],
       1 => [
         // Patch has previously been applied.
@@ -333,6 +325,7 @@ class CommandLocalUpdateTest extends CommandTestBase {
         'index' => 10,
         'filename' => 'applied.patch',
         'display' => TRUE,
+        'expected' => 'skip',
       ],
       2 => [
         // New patch.
@@ -341,6 +334,8 @@ class CommandLocalUpdateTest extends CommandTestBase {
         'index' => 20,
         'filename' => 'new.patch',
         'display' => TRUE,
+        'applies' => TRUE,
+        'expected' => 'apply',
       ],
     ];
     $this->setUpDrupalOrgExpectations($drupal_org, $patch_file_data);
@@ -351,21 +346,7 @@ class CommandLocalUpdateTest extends CommandTestBase {
     $git_executor->expects($this->never())
       ->method('createNewBranch');
     // Only the new patch file will be applied.
-    $git_executor
-      ->expects($this->exactly(1))
-      ->method('checkOutFiles')
-      ->with('8.3.x');
-    $git_executor
-      ->expects($this->exactly(1))
-      ->method('applyPatch')
-      ->withConsecutive(
-        ['patch-file-data-220']
-      )
-      // Patch file applies correctly.
-      ->willReturn(TRUE);
-    $git_executor
-      ->expects($this->exactly(1))
-      ->method('commit');
+    $this->setUpGitExecutorPatchExpectations($git_executor, $patch_file_data);
     $container->set('git.executor', $git_executor);
 
     // Add real versions of any remaining services not yet registered.

@@ -258,6 +258,8 @@ class CommandLocalSetupTest extends CommandTestBase {
         'index' => 1,
         'filename' => 'fix-1.patch',
         'display' => TRUE,
+        'applies' => TRUE,
+        'expected' => 'apply',
       ],
       // Not displayed; will be skipped.
       1 => [
@@ -266,6 +268,7 @@ class CommandLocalSetupTest extends CommandTestBase {
         'index' => 5,
         'filename' => 'fix-5.patch',
         'display' => FALSE,
+        'expected' => 'skip',
       ],
       // Not a patch; will be skipped.
       2 => [
@@ -274,6 +277,7 @@ class CommandLocalSetupTest extends CommandTestBase {
         'index' => 6,
         'filename' => 'fix-5.not.patch.txt',
         'display' => TRUE,
+        'expected' => 'skip',
       ],
       3 => [
         'fid' => 210,
@@ -281,6 +285,8 @@ class CommandLocalSetupTest extends CommandTestBase {
         'index' => 10,
         'filename' => 'fix-10.patch',
         'display' => TRUE,
+        'applies' => TRUE,
+        'expected' => 'apply',
       ],
     ];
     $this->setUpDrupalOrgExpectations($drupal_org, $patch_file_data);
@@ -291,25 +297,8 @@ class CommandLocalSetupTest extends CommandTestBase {
     $git_executor->expects($this->once())
       ->method('createNewBranch')
       ->with($this->equalTo('123456-Terribly-awful-bug'), $this->equalTo(TRUE));
-    // Both patches will be applied.
-    // For each patch, the master branch files will be checked out.
-    $git_executor
-      ->expects($this->exactly(2))
-      ->method('checkOutFiles')
-      ->with('8.3.x');
-    // For each patch, the patch file contents will be applied.
-    $git_executor
-      ->expects($this->exactly(2))
-      ->method('applyPatch')
-      ->withConsecutive(
-        ['patch-file-data-200'],
-        ['patch-file-data-210']
-      )
-      // Patch file applies correctly.
-      ->willReturn(TRUE);
-    $git_executor
-      ->expects($this->exactly(2))
-      ->method('commit');
+
+    $this->setUpGitExecutorPatchExpectations($git_executor, $patch_file_data);
     $container->set('git.executor', $git_executor);
 
     $container->set('commit_message', $this->createMock(\Dorgflow\Service\CommitMessageHandler::class));
