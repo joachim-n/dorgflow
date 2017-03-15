@@ -15,9 +15,11 @@ class FeatureBranchTest extends \PHPUnit\Framework\TestCase {
   public function testFeatureBranch() {
     $git_info = $this->getMockBuilder(\Dorgflow\Service\GitInfo::class)
       ->disableOriginalConstructor()
-      ->setMethods(['getBranchList', 'getCurrentBranch'])
+      ->setMethods(['getBranchList', 'getBranchListReachable', 'getCurrentBranch'])
       ->getMock();
     $git_info->method('getBranchList')
+      ->willReturn([]);
+    $git_info->method('getBranchListReachable')
       ->willReturn([]);
     $git_info->method('getCurrentBranch')
       ->willReturn('notthebranchyouseek');

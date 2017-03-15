@@ -13,6 +13,8 @@ class GitInfo {
 
   protected $branch_list;
 
+  protected $branch_list_reachable;
+
   /**
    * Returns whether the current git repository is clean.
    *
@@ -37,7 +39,6 @@ class GitInfo {
     return $this->current_branch;
   }
 
-
   /**
    * Returns a list of all the git branches which are currently reachable.
    *
@@ -55,20 +56,40 @@ class GitInfo {
       foreach (explode("\n", trim($refs)) as $line) {
         list($sha, $branch_name) = explode(' ', $line);
 
-        $output = '';
-        // Exit value is 0 if true, 1 if false.
-        $return_var = '';
-        exec("git merge-base --is-ancestor $branch_name HEAD", $output, $return_var);
-
-        if ($return_var === 0) {
-          $branch_list[$branch_name] = $sha;
-        }
+        $branch_list[$branch_name] = $sha;
       }
 
       $this->branch_list = $branch_list;
     }
 
     return $this->branch_list;
+  }
+
+  /**
+   * Returns a list of all the git branches.
+   *
+   * @return
+   *  An array whose keys are branch names, and values are the SHA of the tip.
+   */
+  public function getBranchListReachable() {
+    if (!isset($this->branch_list_reachable)) {
+      $branch_list_reachable = [];
+
+      foreach ($this->getBranchList() as $branch_name => $sha) {
+        $output = '';
+        // Exit value is 0 if true, 1 if false.
+        $return_var = '';
+        exec("git merge-base --is-ancestor $branch_name HEAD", $output, $return_var);
+
+        if ($return_var === 0) {
+          $branch_list_reachable[$branch_name] = $sha;
+        }
+      }
+
+      $this->branch_list_reachable = $branch_list_reachable;
+    }
+
+    return $this->branch_list_reachable;
   }
 
 }

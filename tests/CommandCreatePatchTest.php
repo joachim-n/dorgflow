@@ -59,13 +59,16 @@ class CommandCreatePatchTest extends CommandTestBase {
     // Git is clean so the command proceeds.
     $git_info->method('gitIsClean')
       ->willReturn(TRUE);
+    $branch_list = [
+      // There is no feature branch.
+      '8.x-2.x' => 'sha',
+      'some-branch-name' => 'sha',
+      'something-else' => 'sha',
+    ];
     $git_info->method('getBranchList')
-      ->willReturn([
-        // There is no feature branch.
-        '8.x-2.x' => 'sha',
-        'some-branch-name' => 'sha',
-        'something-else' => 'sha',
-      ]);
+      ->willReturn($branch_list);
+    $git_info->method('getBranchListReachable')
+      ->willReturn($branch_list);
     $container->set('git.info', $git_info);
 
     // The analyser returns an issue number.
@@ -116,15 +119,17 @@ class CommandCreatePatchTest extends CommandTestBase {
     // Git is clean so the command proceeds.
     $git_info->method('gitIsClean')
       ->willReturn(TRUE);
+    $branch_list = [
+      // There is a feature branch.
+      '123456-terrible-bug' => 'sha-feature',
+      '8.x-2.x' => 'sha',
+      'some-branch-name' => 'sha',
+      'something-else' => 'sha',
+    ];
     $git_info->method('getBranchList')
-      ->willReturn([
-        // There is a feature branch.
-        '123456-terrible-bug' => 'sha-feature',
-        '8.x-2.x' => 'sha',
-        'some-branch-name' => 'sha',
-        'something-else' => 'sha',
-      ]);
-    // Master branch is current rather than the feature branch.
+      ->willReturn($branch_list);
+    $git_info->method('getBranchListReachable')
+      ->willReturn($branch_list);
     $git_info->method('getCurrentBranch')
       ->willReturn('8.x-2.x');
     $container->set('git.info', $git_info);
@@ -177,14 +182,17 @@ class CommandCreatePatchTest extends CommandTestBase {
     // Git is clean so the command proceeds.
     $git_info->method('gitIsClean')
       ->willReturn(TRUE);
+    $branch_list = [
+      // There is a feature branch.
+      '123456-terrible-bug' => 'sha-feature',
+      '8.x-2.x' => 'sha',
+      'some-branch-name' => 'sha',
+      'something-else' => 'sha',
+    ];
     $git_info->method('getBranchList')
-      ->willReturn([
-        // There is a feature branch.
-        '123456-terrible-bug' => 'sha-feature',
-        '8.x-2.x' => 'sha',
-        'some-branch-name' => 'sha',
-        'something-else' => 'sha',
-      ]);
+      ->willReturn($branch_list);
+    $git_info->method('getBranchListReachable')
+      ->willReturn($branch_list);
     // Feature branch is current.
     $git_info->method('getCurrentBranch')
       ->willReturn('123456-terrible-bug');

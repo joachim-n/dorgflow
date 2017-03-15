@@ -13,7 +13,8 @@ class MasterBranch {
     $this->git_info = $git_info;
     $this->git_executor = $git_executor;
 
-    $branch_list = $this->git_info->getBranchList();
+    // We require the master branch to be reachable.
+    $branch_list = $this->git_info->getBranchListReachable();
 
     // Sort the branches by version number, with highest first.
     uksort($branch_list, 'version_compare');

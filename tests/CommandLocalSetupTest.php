@@ -56,12 +56,15 @@ class CommandLocalSetupTest extends CommandTestBase {
     // Git is clean so the command proceeds.
     $git_info->method('gitIsClean')
       ->willReturn(TRUE);
+    $branch_list = [
+      '8.x-2.x' => 'sha',
+      'some-branch-name' => 'sha',
+      'something-else' => 'sha',
+    ];
     $git_info->method('getBranchList')
-      ->willReturn([
-        '8.x-2.x' => 'sha',
-        'some-branch-name' => 'sha',
-        'something-else' => 'sha',
-      ]);
+      ->willReturn($branch_list);
+    $git_info->method('getBranchListReachable')
+      ->willReturn($branch_list);
     // The master branch is not current.
     $git_info->method('getCurrentBranch')
       ->willReturn('some-branch-name');
@@ -112,16 +115,19 @@ class CommandLocalSetupTest extends CommandTestBase {
     // Git is clean so the command proceeds past this check.
     $git_info->method('gitIsClean')
       ->willReturn(TRUE);
+    $branch_list = [
+      '8.x-2.x' => 'sha',
+      // Feature branch already exists.
+      // Only the issue number part counts to determine this; the rest of the
+      // branch name should not matter, so this is intentionally different
+      // from the issue node title.
+      '123456-some-branch-name' => 'sha',
+      'some-other-branch' => 'sha',
+    ];
     $git_info->method('getBranchList')
-      ->willReturn([
-        '8.x-2.x' => 'sha',
-        // Feature branch already exists.
-        // Only the issue number part counts to determine this; the rest of the
-        // branch name should not matter, so this is intentionally different
-        // from the issue node title.
-        '123456-some-branch-name' => 'sha',
-        'some-other-branch' => 'sha',
-      ]);
+      ->willReturn($branch_list);
+    $git_info->method('getBranchListReachable')
+      ->willReturn($branch_list);
     // The master branch is current so we proceed past master branch discovery.
     $git_info->method('getCurrentBranch')
       ->willReturn('8.x-2.x');
@@ -179,8 +185,13 @@ class CommandLocalSetupTest extends CommandTestBase {
     // Master branch is current.
     $git_info->method('getCurrentBranch')
       ->willReturn('8.3.x');
+    $branch_list = [
+      '8.3.x' => 'sha',
+    ];
     $git_info->method('getBranchList')
-      ->willReturn(['8.3.x' => 'sha']);
+      ->willReturn($branch_list);
+    $git_info->method('getBranchListReachable')
+      ->willReturn($branch_list);
     $container->set('git.info', $git_info);
 
     $analyser = $this->createMock(\Dorgflow\Service\Analyser::class);
@@ -239,8 +250,13 @@ class CommandLocalSetupTest extends CommandTestBase {
     // Master branch is current.
     $git_info->method('getCurrentBranch')
       ->willReturn('8.3.x');
+    $branch_list = [
+      '8.3.x' => 'sha',
+    ];
     $git_info->method('getBranchList')
-      ->willReturn(['8.3.x' => 'sha']);
+      ->willReturn($branch_list);
+    $git_info->method('getBranchListReachable')
+      ->willReturn($branch_list);
     $container->set('git.info', $git_info);
 
     $analyser = $this->createMock(\Dorgflow\Service\Analyser::class);
