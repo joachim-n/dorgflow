@@ -5,11 +5,24 @@ namespace Dorgflow\Service;
 // TODO: consider replacing this with a library.
 class GitExecutor {
 
-  // we need this for:
-    // a: createf feature branch (HEAD, CHECKOUT!)
-    // b: create side-branch for update with local commits: HEAD, NO CHECKOUT.
+  /**
+   * Create a new git branch at the current commit.
+   *
+   * @param string $branch_short_name
+   *  The name of the branch, without the refs/heads/ prefix.
+   * @param bool $checkout
+   *  Indicates whether to switch to the new branch.
+   *
+   * @throws \Exception
+   *  Throws an exception if a branch already exists with the given name.
+   */
   public function createNewBranch($branch_short_name, $checkout = FALSE) {
-    // TODO: check $branch_short_name does not exist yet!
+    // Check whether the branch already exist, as the plumbing command to create
+    // a branch doesn't do so, and will simply move the HEAD of an existing one.
+    $existing_ref = exec("git show-ref --heads {$branch_short_name}");
+    if (!empty($existing_ref)) {
+      throw new \Exception("Branch $branch_short_name already exists.");
+    }
 
     // Create a new branch at the given commit.
     exec("git update-ref refs/heads/{$branch_short_name} HEAD");
