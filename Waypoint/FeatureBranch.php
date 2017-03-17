@@ -100,10 +100,22 @@ class FeatureBranch {
     return $branch_name;
   }
 
+  /**
+   * Returns whether the branch exists in git.
+   *
+   * @return bool
+   *  TRUE if the branch exists, FALSE if not.
+   */
   public function exists() {
     return $this->exists;
   }
 
+  /**
+   * Returns whether the branch is currently checked out in git.
+   *
+   * @return bool
+   *  TRUE if the branch is current, FALSE if not.
+   */
   public function isCurrentBranch() {
     // If the branch doesn't exist, it can't be current.
     if (!$this->exists) {
