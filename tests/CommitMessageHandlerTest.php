@@ -59,6 +59,7 @@ class CommitMessageHandlerTest extends \PHPUnit\Framework\TestCase {
         [
           'filename' => 'myfile.patch',
           'fid' => 16,
+          'comment_index' => 10,
         ],
       ],
       'local commit 1.1.0' => [
@@ -77,6 +78,7 @@ class CommitMessageHandlerTest extends \PHPUnit\Framework\TestCase {
         [
           'filename' => 'myfile.patch',
           'fid' => 16,
+          'comment_index' => 10,
         ],
       ],
     ];

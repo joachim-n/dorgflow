@@ -49,6 +49,7 @@ class CommitMessageHandler {
    *    - 'fid': The file entity ID. This will be absent in the case of a commit
    *      made by the CreatePatch command, that is, for a patch the user is
    *      creating to be uploaded to drupal.org.
+   *    - 'comment_index': The comment index.
    */
   public function parseCommitMessage($message) {
     // Bail if not a dorgflow commit.
@@ -71,7 +72,10 @@ class CommitMessageHandler {
       $return['fid'] = $matches['fid'];
     }
 
-    // TODO: 'comment_index'
+    $matches = [];
+    if (preg_match('@Comment:? (?P<comment_index>\d+)@', $message, $matches)) {
+      $return['comment_index'] = $matches['comment_index'];
+    }
 
     if (empty($return)) {
       // We shouldn't come here, but just in case, return the right thing.
