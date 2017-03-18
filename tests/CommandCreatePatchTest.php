@@ -173,7 +173,7 @@ class CommandCreatePatchTest extends CommandTestBase {
   }
 
   /**
-   * Tests the command creates a patch.
+   * Tests creating a patch with no previous patches.
    */
   public function testCreatePatch() {
     $container = new \Symfony\Component\DependencyInjection\ContainerBuilder();
