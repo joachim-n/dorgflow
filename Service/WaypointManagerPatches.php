@@ -232,7 +232,7 @@ class WaypointManagerPatches {
    * @return
    *  The new patch object.
    */
-  public function getPatch($file_field_item = NULL, $sha = NULL) {
+  protected function getPatch($file_field_item = NULL, $sha = NULL) {
     $patch = new Patch(
       $this->drupal_org,
       $this->waypoint_manager_branches,
