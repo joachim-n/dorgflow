@@ -65,7 +65,7 @@ class WaypointManagerPatches {
         // then create a Patch waypoint and move on to the next file.
         if (!empty($commit_message_data['fid']) && $commit_message_data['fid'] == $fid) {
           // Create a patch waypoint for this patch.
-          $patch = $this->getPatch($file_field_item, $commit['sha']);
+          $patch = $this->getPatch($file_field_item, $commit['sha'], $commit_message_data);
           $patch_waypoints[] = $patch;
 
           // Replace the original log with the search copy, as we've found a
@@ -107,7 +107,7 @@ class WaypointManagerPatches {
         // as drupal.org may rename files for security or uniqueness.
         if (!empty($commit_message_data['filename']) && $this->patchFilenamesAreEqual($commit_message_data['filename'], $patch_filename)) {
           // Create a patch waypoint for this patch.
-          $patch = $this->getPatch($file_field_item, $commit['sha']);
+          $patch = $this->getPatch($file_field_item, $commit['sha'], $commit_message_data);
           $patch_waypoints[] = $patch;
 
           // Replace the original log with the search copy, as we've found a
@@ -213,7 +213,7 @@ class WaypointManagerPatches {
         // This is the most recent commit that has detectable commit data;
         // therefore the most recent that has a patch.
         // Create a patch object for this commit.
-        $patch = $this->getPatch(NULL, $sha);
+        $patch = $this->getPatch(NULL, $sha, $commit_message_data);
         return $patch;
       }
     }
@@ -228,18 +228,21 @@ class WaypointManagerPatches {
    *  The file field item from the issue node for the patch file, if there is one.
    * @param $sha = NULL
    *  The SHA for the patch's commit, if there is a commit.
+   * @param $commit_message_data = NULL
+   *  The parsed commit message data, if there is a commit.
    *
    * @return
    *  The new patch object.
    */
-  protected function getPatch($file_field_item = NULL, $sha = NULL) {
+  protected function getPatch($file_field_item = NULL, $sha = NULL, $commit_message_data = NULL) {
     $patch = new Patch(
       $this->drupal_org,
       $this->waypoint_manager_branches,
       $this->git_executor,
       $this->commit_message,
       $file_field_item,
-      $sha
+      $sha,
+      $commit_message_data
     );
 
     return $patch;
