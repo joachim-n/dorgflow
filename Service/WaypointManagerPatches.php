@@ -207,9 +207,9 @@ class WaypointManagerPatches {
     $branch_log = $this->git_log->getFeatureBranchLog();
     // Reverse this so we get the most recent first.
     foreach (array_reverse($branch_log) as $sha => $commit) {
-      $commit_data = $this->commit_message->parseCommitMessage($commit['message']);
+      $commit_message_data = $this->commit_message->parseCommitMessage($commit['message']);
 
-      if (!empty($commit_data)) {
+      if (!empty($commit_message_data)) {
         // This is the most recent commit that has detectable commit data;
         // therefore the most recent that has a patch.
         // Create a patch object for this commit.
