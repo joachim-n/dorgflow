@@ -55,6 +55,11 @@ class Patch {
       $this->index = $file_field_item->index;
       $this->cid = $file_field_item->file->cid;
     }
+    elseif (isset($commit_message_data)) {
+      // If there is no file item, then try the commit message data.
+      $this->fid = $commit_message_data['fid'] ?? NULL;
+      $this->index = $commit_message_data['comment_index'] ?? NULL;
+    }
 
     $this->sha = $sha;
   }
