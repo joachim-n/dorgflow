@@ -209,13 +209,16 @@ class WaypointManagerPatches {
     foreach (array_reverse($branch_log) as $sha => $commit) {
       $commit_message_data = $this->commit_message->parseCommitMessage($commit['message']);
 
-      if (!empty($commit_message_data)) {
-        // This is the most recent commit that has detectable commit data;
-        // therefore the most recent that has a patch.
-        // Create a patch object for this commit.
-        $patch = $this->getPatch(NULL, $sha, $commit_message_data);
-        return $patch;
+      if (empty($commit_message_data)) {
+        // Skip a commit that isn't a patch.
+        continue;
       }
+
+      // If we have commit data, then this is the most recent commit that is a
+      // patch.
+      // Create a patch object for this commit and we're done.
+      $patch = $this->getPatch(NULL, $sha, $commit_message_data);
+      return $patch;
     }
   }
 
