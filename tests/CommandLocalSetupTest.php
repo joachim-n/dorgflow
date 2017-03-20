@@ -36,14 +36,9 @@ class CommandLocalSetupTest extends CommandTestBase {
 
     $command = \Dorgflow\Command\LocalSetup::create($container);
 
-    try {
-      $command->execute();
+    $this->expectException(\Exception::class);
 
-      $this->fail("Expected Exception for unclean git not thrown.");
-    }
-    catch (\Exception $e) {
-      // Pass.
-    }
+    $command->execute();
   }
 
   /**
@@ -95,14 +90,9 @@ class CommandLocalSetupTest extends CommandTestBase {
 
     $command = \Dorgflow\Command\LocalSetup::create($container);
 
-    try {
-      $command->execute();
+    $this->expectException(\Exception::class);
 
-      $this->fail("Expected Exception for master branch not current not thrown.");
-    }
-    catch (\Exception $e) {
-      // Pass.
-    }
+    $command->execute();
   }
 
   /**
@@ -162,14 +152,9 @@ class CommandLocalSetupTest extends CommandTestBase {
 
     $command = \Dorgflow\Command\LocalSetup::create($container);
 
-    try {
-      $command->execute();
+    $this->expectException(\Exception::class);
 
-      $this->fail("Expected Exception for existing feature branch not thrown.");
-    }
-    catch (\Exception $e) {
-      // Pass.
-    }
+    $command->execute();
   }
 
   /**
