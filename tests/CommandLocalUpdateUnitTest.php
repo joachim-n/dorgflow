@@ -54,14 +54,9 @@ class CommandLocalUpdateUnitTest extends \PHPUnit\Framework\TestCase {
       NULL
     );
 
-    try {
-      $command->execute();
-      $this->fail("The exception was not thrown.");
-    }
-    catch (\Exception $e) {
-      // Why is there no pass() method? WTF?
-      $this->assertTrue(TRUE, "The exception was thrown as expected.");
-    }
+    $this->expectException(\Exception::class);
+
+    $command->execute();
   }
 
   /**
