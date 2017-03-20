@@ -39,14 +39,9 @@ class CommandCreatePatchTest extends CommandTestBase {
 
     $command = \Dorgflow\Command\CreatePatch::create($container);
 
-    try {
-      $command->execute();
+    $this->expectException(\Exception::class);
 
-      $this->fail("Expected Exception for unclean git not thrown.");
-    }
-    catch (\Exception $e) {
-      // Pass.
-    }
+    $command->execute();
   }
 
   /**
@@ -100,13 +95,9 @@ class CommandCreatePatchTest extends CommandTestBase {
 
     $command = \Dorgflow\Command\CreatePatch::create($container);
 
-    try {
-      $command->execute();
-      $this->fail("The exception was not thrown.");
-    }
-    catch (\Exception $e) {
-      $this->assertTrue(TRUE, "The exception was thrown as expected.");
-    }
+    $this->expectException(\Exception::class);
+
+    $command->execute();
   }
 
   /**
@@ -163,13 +154,9 @@ class CommandCreatePatchTest extends CommandTestBase {
 
     $command = \Dorgflow\Command\CreatePatch::create($container);
 
-    try {
-      $command->execute();
-      $this->fail("The exception was not thrown.");
-    }
-    catch (\Exception $e) {
-      $this->assertTrue(TRUE, "The exception was thrown as expected.");
-    }
+    $this->expectException(\Exception::class);
+
+    $command->execute();
   }
 
   /**
