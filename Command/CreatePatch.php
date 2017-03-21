@@ -88,12 +88,18 @@ class CreatePatch extends CommandBase {
   }
 
   protected function getInterdiffName($feature_branch, $last_patch) {
-    // TODO: include the comment number of the previous patch, once we have
-    // these.
     $issue_number = $this->analyser->deduceIssueNumber();
-    $comment_number = $this->drupal_org->getNextCommentIndex();
+    $last_patch_comment_number = $last_patch->getPatchFileIndex();
+    $next_comment_number = $this->drupal_org->getNextCommentIndex();
 
-    return "interdiff.$issue_number.$comment_number.txt";
+    // Allow for local patches that won't have a comment index.
+    if (empty($last_patch_comment_number)) {
+      $interdiff_name = "interdiff.$issue_number.$next_comment_number.txt";
+    }
+    else {
+      $interdiff_name = "interdiff.$issue_number.$last_patch_comment_number-$next_comment_number.txt";
+    }
+    return $interdiff_name;
   }
 
 }

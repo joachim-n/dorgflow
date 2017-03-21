@@ -322,7 +322,7 @@ class CommandCreatePatchTest extends CommandTestBase {
           // Diff against the most recent patch.
          'sha-patch-1',
          // Interdiff file name
-         'interdiff.123456.16.txt',
+         'interdiff.123456.1-16.txt',
         ]
       );
     $git_executor->expects($this->never())->method('checkOutFiles');
