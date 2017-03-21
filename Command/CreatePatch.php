@@ -16,17 +16,19 @@ class CreatePatch extends CommandBase {
       $container->get('waypoint_manager.branches'),
       $container->get('waypoint_manager.patches'),
       $container->get('drupal_org'),
-      $container->get('git.executor')
+      $container->get('git.executor'),
+      $container->get('commit_message')
     );
   }
 
-  function __construct($git_info, $analyser, $waypoint_manager_branches, $waypoint_manager_patches, $drupal_org, $git_executor) {
+  function __construct($git_info, $analyser, $waypoint_manager_branches, $waypoint_manager_patches, $drupal_org, $git_executor, $commit_message) {
     $this->git_info = $git_info;
     $this->analyser = $analyser;
     $this->waypoint_manager_branches = $waypoint_manager_branches;
     $this->waypoint_manager_patches = $waypoint_manager_patches;
     $this->drupal_org = $drupal_org;
     $this->git_executor = $git_executor;
+    $this->commit_message = $commit_message;
   }
 
   public function execute() {
@@ -71,8 +73,8 @@ class CreatePatch extends CommandBase {
     }
 
     // Make an empty commit to record the patch.
-    // TODO: use the commit message service to create the message.
-    $this->git_executor->commit("Patch for Drupal.org. File: $patch_name. Automatic commit by dorgflow.");
+    $local_patch_commit_message = $this->commit_message->createLocalCommitMessage($patch_name);
+    $this->git_executor->commit($local_patch_commit_message);
   }
 
   protected function getPatchName($feature_branch) {

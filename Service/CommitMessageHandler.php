@@ -38,6 +38,18 @@ class CommitMessageHandler {
     return "Patch from Drupal.org. Comment: $index; URL: $url; file: $filename; fid: $fid. Automatic commit by dorgflow.";
   }
 
+  /**
+   * Creates a commit message to use for a local patch.
+   *
+   * @param string
+   *  The patch file name.
+   *
+   * @return string
+   *  The commit message.
+   */
+  public function createLocalCommitMessage($patch_name) {
+    return "Patch for Drupal.org. File: $patch_name. Automatic commit by dorgflow.";
+  }
 
   /**
    * Extract data from a commit message previously created by Dorgflow.

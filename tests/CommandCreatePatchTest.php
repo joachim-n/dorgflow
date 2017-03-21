@@ -37,6 +37,9 @@ class CommandCreatePatchTest extends CommandTestBase {
     $container->set('drupal_org', $this->getMockBuilder(StdClass::class));
     $container->set('git.executor', $this->getMockBuilder(StdClass::class));
 
+    // Add real versions of any remaining services not yet registered.
+    $this->completeServiceContainer($container);
+
     $command = \Dorgflow\Command\CreatePatch::create($container);
 
     $this->expectException(\Exception::class);
@@ -92,6 +95,9 @@ class CommandCreatePatchTest extends CommandTestBase {
       ->addArgument(new Reference('analyser'));
 
     $container->set('waypoint_manager.patches', $this->getMockBuilder(\Dorgflow\Service\WaypointManagerPatches::class));
+
+    // Add real versions of any remaining services not yet registered.
+    $this->completeServiceContainer($container);
 
     $command = \Dorgflow\Command\CreatePatch::create($container);
 
@@ -152,6 +158,9 @@ class CommandCreatePatchTest extends CommandTestBase {
 
     $container->set('waypoint_manager.patches', $this->getMockBuilder(\Dorgflow\Service\WaypointManagerPatches::class));
 
+    // Add real versions of any remaining services not yet registered.
+    $this->completeServiceContainer($container);
+
     $command = \Dorgflow\Command\CreatePatch::create($container);
 
     $this->expectException(\Exception::class);
@@ -197,8 +206,6 @@ class CommandCreatePatchTest extends CommandTestBase {
     $drupal_org->method('getNextCommentIndex')
       ->willReturn(16);
     $container->set('drupal_org', $drupal_org);
-
-    $container->set('commit_message', $this->createMock(\Dorgflow\Service\CommitMessageHandler::class));
 
     $git_log = $this->createMock(\Dorgflow\Service\GitLog::class);
     $git_log->method('getFeatureBranchLog')
