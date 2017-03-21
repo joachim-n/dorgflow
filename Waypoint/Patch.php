@@ -114,6 +114,15 @@ class Patch {
     return $this->fid;
   }
 
+  /**
+   * Gets the comment index for the patch file.
+   *
+   * This is the number of the comment that was added to the node when the file
+   * was added. Comment numbers start at 1 and increment for each comment.
+   *
+   * @return int
+   *  The comment index.
+   */
   public function getPatchFileIndex() {
     return $this->index;
   }
