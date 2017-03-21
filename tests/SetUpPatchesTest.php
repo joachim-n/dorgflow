@@ -105,6 +105,8 @@ class SetUpPatchesTest extends \PHPUnit\Framework\TestCase {
       $drupal_org,
       $git_log,
       NULL,
+      NULL,
+      NULL,
       NULL
     );
 
@@ -140,6 +142,7 @@ class SetUpPatchesTest extends \PHPUnit\Framework\TestCase {
    */
   public function testPatchFileComparison($local_filename, $drupal_org_filename, $expected_result) {
     $wmp = new \Dorgflow\Service\WaypointManagerPatches(
+      NULL,
       NULL,
       NULL,
       NULL,

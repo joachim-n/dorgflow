@@ -9,11 +9,12 @@ use Dorgflow\Waypoint\Patch;
  */
 class WaypointManagerPatches {
 
-  function __construct($commit_message, $drupal_org, $git_log, $git_executor, $waypoint_manager_branches) {
+  function __construct($commit_message, $drupal_org, $git_log, $git_executor, $analyser, $waypoint_manager_branches) {
     $this->commit_message = $commit_message;
     $this->drupal_org = $drupal_org;
     $this->git_log = $git_log;
     $this->git_executor = $git_executor;
+    $this->analyser = $analyser;
     $this->waypoint_manager_branches = $waypoint_manager_branches;
   }
 
