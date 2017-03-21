@@ -68,6 +68,7 @@ class CommitMessageHandlerTest extends \PHPUnit\Framework\TestCase {
         // Expected data.
         [
           'filename' => 'myfile.patch',
+          'local' => TRUE,
         ],
       ],
       // 1.0.0 format.

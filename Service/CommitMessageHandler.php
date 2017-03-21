@@ -65,6 +65,8 @@ class CommitMessageHandler {
    *      made by the CreatePatch command, that is, for a patch the user is
    *      creating to be uploaded to drupal.org.
    *    - 'comment_index': The comment index.
+   *    - 'local': Is set and TRUE if the commit is for a local patch, i.e. one
+   *      that the user generated to upload themselves to Drupal.org.
    */
   public function parseCommitMessage($message) {
     // Bail if not a dorgflow commit.
@@ -90,6 +92,10 @@ class CommitMessageHandler {
     $matches = [];
     if (preg_match('@Comment:? (?P<comment_index>\d+)@', $message, $matches)) {
       $return['comment_index'] = $matches['comment_index'];
+    }
+
+    if (preg_match('@Patch for Drupal.org@', $message)) {
+      $return['local'] = TRUE;
     }
 
     if (empty($return)) {
