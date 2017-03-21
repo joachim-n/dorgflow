@@ -14,7 +14,10 @@ class CommitMessageHandler {
   }
 
   /**
-   * Creates a commit message to use for a patch..
+   * Creates a commit message to use for a patch from a d.org file.
+   *
+   * @param \Dorgflow\Waypoint\Patch $patch
+   *  The patch object.
    *
    * @return string
    *  The commit message.
