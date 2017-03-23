@@ -46,9 +46,11 @@ class LocalSetup extends CommandBase {
 
     $feature_branch = $this->waypoint_manager_branches->getFeatureBranch();
 
-    // Check whether feature branch exists.
+    // Check whether feature branch exists (whether reachable or not).
     if ($feature_branch->exists()) {
-      throw new \Exception("The feature branch already exists. Use the update command. Aborting.");
+      throw new \Exception(strtr("The feature branch !branch already exists. Use the update command, rebasing first if necessary. Aborting.", [
+        '!branch' => $feature_branch->getBranchName(),
+      ]));
     }
 
     $feature_branch->gitCreate();
