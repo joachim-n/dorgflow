@@ -46,5 +46,5 @@ $container
   ->addArgument(new Reference('drupal_org'))
   ->addArgument(new Reference('git.log'))
   ->addArgument(new Reference('git.executor'))
-  ->addArgument(new Reference('analyser'));
+  ->addArgument(new Reference('analyser'))
   ->addArgument(new Reference('waypoint_manager.branches'));
