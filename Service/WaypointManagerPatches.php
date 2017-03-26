@@ -199,6 +199,20 @@ class WaypointManagerPatches {
   }
 
   /**
+   * Creates a Waypoint object representing a patch about to be created.
+   *
+   * @return \Dorgflow\Waypoint\LocalPatch
+   *  A LocalPatch waypoint object.
+   */
+  public function getLocalPatch() {
+    // TODO: sanity checks.
+    // if tip commit is a d.org patch, then bail. pointless
+    // if tip commit is a local patch, then bail. pointless
+
+    return $this->getWaypoint(\Dorgflow\Waypoint\LocalPatch::class);
+  }
+
+  /**
    * Finds the most recent commit on the feature branch that is for a patch.
    *
    * @return \Dorgflow\Waypoint\Patch
