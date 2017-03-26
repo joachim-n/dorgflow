@@ -95,7 +95,7 @@ class CommitMessageHandler {
     }
 
     $matches = [];
-    if (preg_match('@Comment:? (?P<comment_index>\d+)@', $message, $matches)) {
+    if (preg_match('@Comment: (?P<comment_index>\d+)@', $message, $matches)) {
       $return['comment_index'] = $matches['comment_index'];
     }
 
