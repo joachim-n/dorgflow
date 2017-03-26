@@ -5,7 +5,10 @@ namespace Dorgflow\Service;
 use Dorgflow\Waypoint\Patch;
 
 /**
- * Parses commit messages for our automatic git commits.
+ * Handles commit messages for our automatic git commits.
+ *
+ * This both creates messages and parses them. This class exists simply to keep
+ * both sides of this process in the same place.
  */
 class CommitMessageHandler {
 
