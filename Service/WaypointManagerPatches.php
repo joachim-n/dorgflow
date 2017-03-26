@@ -252,4 +252,31 @@ class WaypointManagerPatches {
     return $patch;
   }
 
+  /**
+   * Creates a waypoint object of the given class
+   *
+   * This takes care of injecting the services.
+   *
+   * @param string $class_name
+   *  The fully-qualified name of the class to instantiate.
+   * @param array $params = []
+   *  (optional) An array of parameters to pass to the constructor after the
+   *  injected services.
+   *
+   * @return
+   *  The new object.
+   */
+  protected function getWaypoint($class_name, $params = []) {
+    $waypoint = new $class_name(
+      $this->drupal_org,
+      $this->waypoint_manager_branches,
+      $this->git_executor,
+      $this->commit_message,
+      // Splat operator! :)
+      ...$params
+    );
+
+    return $waypoint;
+  }
+
 }
