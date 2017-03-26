@@ -3,6 +3,7 @@
 namespace Dorgflow\Service;
 
 use Dorgflow\Waypoint\Patch;
+use Dorgflow\Waypoint\LocalPatch;
 
 /**
  * Handles commit messages for our automatic git commits.
@@ -44,13 +45,14 @@ class CommitMessageHandler {
   /**
    * Creates a commit message to use for a local patch.
    *
-   * @param string
-   *  The patch file name.
+   * @param \Dorgflow\Waypoint\LocalPatch $local_patch
+   *  The patch object.
    *
    * @return string
    *  The commit message.
    */
-  public function createLocalCommitMessage($patch_name) {
+  public function createLocalCommitMessage(LocalPatch $local_patch) {
+    $patch_name = $local_patch->getPatchFilename();
     return "Patch for Drupal.org. File: $patch_name. Automatic commit by dorgflow.";
   }
 

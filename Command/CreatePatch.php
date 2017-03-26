@@ -76,7 +76,7 @@ class CreatePatch extends CommandBase {
     }
 
     // Make an empty commit to record the patch.
-    $local_patch_commit_message = $this->commit_message->createLocalCommitMessage($patch_name);
+    $local_patch_commit_message = $this->commit_message->createLocalCommitMessage($local_patch);
     $this->git_executor->commit($local_patch_commit_message);
   }
 
