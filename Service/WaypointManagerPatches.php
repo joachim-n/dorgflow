@@ -244,6 +244,7 @@ class WaypointManagerPatches {
       $this->waypoint_manager_branches,
       $this->git_executor,
       $this->commit_message,
+      $this->analyser,
       $file_field_item,
       $sha,
       $commit_message_data
@@ -272,6 +273,7 @@ class WaypointManagerPatches {
       $this->waypoint_manager_branches,
       $this->git_executor,
       $this->commit_message,
+      $this->analyser,
       // Splat operator! :)
       ...$params
     );
