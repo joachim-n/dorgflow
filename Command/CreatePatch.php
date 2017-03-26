@@ -54,7 +54,10 @@ class CreatePatch extends CommandBase {
     $sequential = FALSE;
 
     $master_branch_name = $master_branch->getBranchName();
-    $patch_name = $this->getPatchName($feature_branch);
+
+    $local_patch = $this->waypoint_manager_patches->getLocalPatch();
+
+    $patch_name = $local_patch->getPatchFilename();
 
     $this->git_executor->createPatch($master_branch_name, $patch_name, $sequential);
 
@@ -75,16 +78,6 @@ class CreatePatch extends CommandBase {
     // Make an empty commit to record the patch.
     $local_patch_commit_message = $this->commit_message->createLocalCommitMessage($patch_name);
     $this->git_executor->commit($local_patch_commit_message);
-  }
-
-  protected function getPatchName($feature_branch) {
-    $issue_number = $this->analyser->deduceIssueNumber();
-    $comment_number = $this->drupal_org->getNextCommentIndex();
-    $patch_number = "$issue_number-$comment_number";
-    $current_project = $this->analyser->getCurrentProjectName();
-    $branch_description = $feature_branch->getBranchDescription();
-
-    return "$patch_number.$current_project.$branch_description.patch";
   }
 
   protected function getInterdiffName($feature_branch, $last_patch) {
