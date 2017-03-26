@@ -53,7 +53,9 @@ class CommitMessageHandler {
    */
   public function createLocalCommitMessage(LocalPatch $local_patch) {
     $patch_name = $local_patch->getPatchFilename();
-    return "Patch for Drupal.org. File: $patch_name. Automatic commit by dorgflow.";
+    $index = $local_patch->getPatchFileIndex();
+
+    return "Patch for Drupal.org. Comment (expected): $index; file: $patch_name. Automatic commit by dorgflow.";
   }
 
   /**
