@@ -51,8 +51,8 @@ class CommitMessageHandlerTest extends \PHPUnit\Framework\TestCase {
         // Expected data.
         FALSE,
       ],
-      // 1.1.0 format.
-      'd.org patch 1.1.0' => [
+      // 1.1.3 format.
+      'd.org patch 1.1.3' => [
         // Message.
         'Patch from Drupal.org. Comment: 10; URL: https://www.drupal.org/node/12345#comment-67890; file: myfile.patch; fid: 16. Automatic commit by dorgflow.',
         // Expected data.
@@ -62,6 +62,17 @@ class CommitMessageHandlerTest extends \PHPUnit\Framework\TestCase {
           'comment_index' => 10,
         ],
       ],
+      'local commit 1.1.3' => [
+        // Message.
+        'Patch for Drupal.org. Comment (expected): 10; file: myfile.patch. Automatic commit by dorgflow.',
+        // Expected data.
+        [
+          'filename' => 'myfile.patch',
+          'comment_index' => 10,
+          'local' => TRUE,
+        ],
+      ],
+      // 1.1.0 format.
       'local commit 1.1.0' => [
         // Message.
         'Patch for Drupal.org. File: myfile.patch. Automatic commit by dorgflow.',
