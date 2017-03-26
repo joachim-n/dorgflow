@@ -84,8 +84,8 @@ class CommitMessageHandler {
     $return = [];
 
     $matches = [];
-    // Allow for pre-1.0.0 format, where the file is the first item in the list
-    // and has a capital letter.
+    // Allow for older format (pre-1.0.0 for d.org commits, pre-1.1.3 for local)
+    // where the file is the first item in the list and has a capital letter.
     if (preg_match('@[Ff]ile: (?P<filename>.+\.patch)@', $message, $matches)) {
       $return['filename'] = $matches['filename'];
     }
@@ -97,7 +97,7 @@ class CommitMessageHandler {
     }
 
     $matches = [];
-    if (preg_match('@Comment: (?P<comment_index>\d+)@', $message, $matches)) {
+    if (preg_match('@Comment( \(expected\))?: (?P<comment_index>\d+)@', $message, $matches)) {
       $return['comment_index'] = $matches['comment_index'];
     }
 
