@@ -229,6 +229,37 @@ class WaypointManagerPatches {
         continue;
       }
 
+      // If the patch is local, we might not want to diff against it, in the
+      // case that it's a prior run at making the patch we're making now.
+      // (The use case is the user makes the patch, fixes a typo, makes the
+      // patch again.)
+      // Compare the comment index of this patch with the expected comment index
+      // of the next patch.
+      // (Note that local patch commits written prior to version 1.1.3 won't
+      // have the comment index. In this case, we play safe (and keep the old
+      // buggy behaviour) and return this commit.
+      if (!empty($commit_message_data['local']) && isset($commit_message_data['comment_index'])) {
+        $next_comment_number = $this->drupal_org->getNextCommentIndex();
+
+        // If the comment numbers are the same, then skip this patch.
+        if ($commit_message_data['comment_index'] == $next_comment_number) {
+          continue;
+        }
+
+        // If the comment index is different, then there are two possibilities:
+        // - it's an older patch that the user previously uploaded, and we are
+        //   right to return this.
+        // - it is in fact a prior version of the patch we're making now, but
+        //   in the time since it was made, another drupal.org user posted a
+        //   comment to the node, causing getNextCommentIndex() to now return
+        //   a higher number. There is no simple way we can deal with this
+        //   scenario, short of checking for patches on any comments since
+        //   the commit's comment index, and then checking these patches to
+        //   see whether they match with the diff that the commit represents,
+        //   which is all a lot of work for an edge case.
+        //   So for now, we do return this, even though it could be incorrect.
+      }
+
       // If we have commit data, then this is the most recent commit that is a
       // patch.
       // Create a patch object for this commit and we're done.

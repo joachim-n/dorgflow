@@ -342,4 +342,118 @@ class CommandCreatePatchTest extends CommandTestBase {
 
     $command->execute();
   }
+
+  /**
+   * Tests creating a patch with a previous patch after an earlier attempt.
+   *
+   * This covers the case when the user has done this:
+   *  - $ dorgflow [creates a patch]
+   *  - spots something they missed, doesn't upload the patch.
+   *  - $ git commit ... [makes more commits]
+   * The user is now about to make the patch again. The interdiff should ignore
+   * the commit that the previous CreatePatch command made.
+   */
+  public function testCreatePatchWithInterdiffAndPriorAttempt() {
+    $container = new \Symfony\Component\DependencyInjection\ContainerBuilder();
+
+    $git_info = $this->createMock(\Dorgflow\Service\GitInfo::class);
+    // Git is clean so the command proceeds.
+    $git_info->method('gitIsClean')
+      ->willReturn(TRUE);
+    $branch_list = [
+      // There is a feature branch.
+      '123456-terrible-bug' => 'sha-feature',
+      '8.x-2.x' => 'sha',
+      'some-branch-name' => 'sha',
+      'something-else' => 'sha',
+    ];
+    $git_info->method('getBranchList')
+      ->willReturn($branch_list);
+    $git_info->method('getBranchListReachable')
+      ->willReturn($branch_list);
+    // Feature branch is current.
+    $git_info->method('getCurrentBranch')
+      ->willReturn('123456-terrible-bug');
+    $container->set('git.info', $git_info);
+
+    // The analyser returns an issue number and project name.
+    $analyser = $this->createMock(\Dorgflow\Service\Analyser::class);
+    $analyser->method('deduceIssueNumber')
+      ->willReturn(123456);
+    $analyser->method('getCurrentProjectName')
+      ->willReturn('my_project');
+    $container->set('analyser', $analyser);
+
+    $drupal_org = $this->createMock(\Dorgflow\Service\DrupalOrg::class);
+    $drupal_org->method('getNextCommentIndex')
+      ->willReturn(16);
+    $container->set('drupal_org', $drupal_org);
+
+    $git_log = $this->createMock(\Dorgflow\Service\GitLog::class);
+    $git_log->method('getFeatureBranchLog')
+      ->willReturn([
+        // Previous patch from Drupal.org which has been applied.
+        'sha-patch-1' => [
+          'sha' => 'sha-patch-1',
+          'message' => 'Patch from Drupal.org. Comment: 1; URL: https://www.drupal.org/node/123456#comment-111; file: patch-1.patch; fid: 11. Automatic commit by dorgflow.',
+        ],
+        'sha-1' => [
+          'sha' => 'sha-1',
+          'message' => 'my own commit',
+        ],
+        'sha-patch-local' => [
+          'sha' => 'sha-patch-local',
+          'message' => "Patch for Drupal.org. Comment (expected): 16; file: 123456-16.my_project.terrible-bug.patch. Automatic commit by dorgflow.",
+        ],
+        'sha-2' => [
+          'sha' => 'sha-2',
+          'message' => 'another commit',
+        ],
+        'sha-feature' => [
+          'sha' => 'sha-feature',
+          'message' => 'commit message',
+        ],
+      ]);
+    $container->set('git.log', $git_log);
+
+    $git_executor = $this->createMock(\Dorgflow\Service\GitExecutor::class);
+    // A patch will be created.
+    $git_executor->expects($this->exactly(2))
+      ->method('createPatch')
+      ->withConsecutive(
+        [
+          // Diff against the master branch.
+          $this->equalTo('8.x-2.x'),
+          // Patch name contains:
+          //  - issue number
+          //  - next comment number
+          //  - project name
+          //  - feature branch description
+          $this->equalTo('123456-16.my_project.terrible-bug.patch'),
+        ],
+        [
+          // Diff against the most recent patch.
+         'sha-patch-1',
+         // Interdiff file name
+         'interdiff.123456.1-16.txt',
+        ]
+      );
+    $git_executor->expects($this->never())->method('checkOutFiles');
+    $git_executor->expects($this->never())->method('applyPatch');
+    // An empty commit will be made to the feature branch to show the new patch.
+    $git_executor->expects($this->once())
+      ->method('commit')
+      ->with(
+        $this->equalTo("Patch for Drupal.org. Comment (expected): 16; file: 123456-16.my_project.terrible-bug.patch. Automatic commit by dorgflow.")
+      );
+    $container->set('git.executor', $git_executor);
+
+    // Add real versions of any remaining services not yet registered.
+    $this->completeServiceContainer($container);
+
+    $command = \Dorgflow\Command\CreatePatch::create($container);
+
+    $command->execute();
+  }
+
 }
