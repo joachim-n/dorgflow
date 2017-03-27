@@ -3,11 +3,14 @@
 namespace Dorgflow\Service;
 
 use Dorgflow\Waypoint\Patch;
+use Dorgflow\Waypoint\LocalPatch;
 
 /**
  * Creates objects that represent patch waypoints in the workflow.
  */
 class WaypointManagerPatches {
+
+  protected $patches = [];
 
   function __construct($commit_message, $drupal_org, $git_log, $git_executor, $analyser, $waypoint_manager_branches) {
     $this->commit_message = $commit_message;
@@ -209,7 +212,7 @@ class WaypointManagerPatches {
     // if tip commit is a d.org patch, then bail. pointless
     // if tip commit is a local patch, then bail. pointless
 
-    return $this->getWaypoint(\Dorgflow\Waypoint\LocalPatch::class);
+    return $this->getWaypoint(LocalPatch::class);
   }
 
   /**
