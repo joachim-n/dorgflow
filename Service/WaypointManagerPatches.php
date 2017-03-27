@@ -69,7 +69,7 @@ class WaypointManagerPatches {
         // then create a Patch waypoint and move on to the next file.
         if (!empty($commit_message_data['fid']) && $commit_message_data['fid'] == $fid) {
           // Create a patch waypoint for this patch.
-          $patch = $this->getPatch($file_field_item, $commit['sha'], $commit_message_data);
+          $patch = $this->getWaypoint(Patch::class, $file_field_item, $commit['sha'], $commit_message_data);
           $patch_waypoints[] = $patch;
 
           // Replace the original log with the search copy, as we've found a
@@ -111,7 +111,7 @@ class WaypointManagerPatches {
         // as drupal.org may rename files for security or uniqueness.
         if (!empty($commit_message_data['filename']) && $this->patchFilenamesAreEqual($commit_message_data['filename'], $patch_filename)) {
           // Create a patch waypoint for this patch.
-          $patch = $this->getPatch($file_field_item, $commit['sha'], $commit_message_data);
+          $patch = $this->getWaypoint(Patch::class, $file_field_item, $commit['sha'], $commit_message_data);
           $patch_waypoints[] = $patch;
 
           // Replace the original log with the search copy, as we've found a
@@ -126,7 +126,7 @@ class WaypointManagerPatches {
 
       // We've not found a commit.
       // Create a patch waypoint for this patch.
-      $patch = $this->getPatch($file_field_item);
+      $patch = $this->getWaypoint(Patch::class, $file_field_item);
       $patch_waypoints[] = $patch;
 
       // TODO:
@@ -266,39 +266,9 @@ class WaypointManagerPatches {
       // If we have commit data, then this is the most recent commit that is a
       // patch.
       // Create a patch object for this commit and we're done.
-      $patch = $this->getPatch(NULL, $sha, $commit_message_data);
+      $patch = $this->getWaypoint(Patch::class, NULL, $sha, $commit_message_data);
       return $patch;
     }
-  }
-
-  /**
-   * Creates a patch object.
-   *
-   * This takes care of injecting the services.
-   *
-   * @param $file_field_item = NULL
-   *  The file field item from the issue node for the patch file, if there is one.
-   * @param $sha = NULL
-   *  The SHA for the patch's commit, if there is a commit.
-   * @param $commit_message_data = NULL
-   *  The parsed commit message data, if there is a commit.
-   *
-   * @return
-   *  The new patch object.
-   */
-  protected function getPatch($file_field_item = NULL, $sha = NULL, $commit_message_data = NULL) {
-    $patch = new Patch(
-      $this->drupal_org,
-      $this->waypoint_manager_branches,
-      $this->git_executor,
-      $this->commit_message,
-      $this->analyser,
-      $file_field_item,
-      $sha,
-      $commit_message_data
-    );
-
-    return $patch;
   }
 
   /**
