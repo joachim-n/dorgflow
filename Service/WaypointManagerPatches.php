@@ -272,7 +272,7 @@ class WaypointManagerPatches {
   }
 
   /**
-   * Creates a waypoint object of the given class
+   * Creates a waypoint object of the given class.
    *
    * This takes care of injecting the services.
    *
