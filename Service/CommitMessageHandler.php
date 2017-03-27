@@ -105,6 +105,16 @@ class CommitMessageHandler {
       $return['local'] = TRUE;
     }
 
+    // Handle pre-1.1.3 local commits without the index explicit in the message:
+    // pick it out of the patch filename.
+    if (!empty($return['local']) && empty($return['comment_index'])) {
+      $matches = [];
+      // Format is: ISSUE-COMMENT.PROJECT.DESCRIPTION.patch.
+      if (preg_match('@^\d+-(?P<comment_index>\d+)\.@', $return['filename'], $matches)) {
+        $return['comment_index'] = $matches['comment_index'];
+      }
+    }
+
     if (empty($return)) {
       // We shouldn't come here, but just in case, return the right thing.
       return FALSE;

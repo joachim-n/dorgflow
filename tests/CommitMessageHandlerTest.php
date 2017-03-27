@@ -80,6 +80,8 @@ class CommitMessageHandlerTest extends \PHPUnit\Framework\TestCase {
         [
           'filename' => '12345-10.project.bug-description.patch',
           'local' => TRUE,
+          // The parser extracts this from the filename for the 1.1.0 format.
+          'comment_index' => 10,
         ],
       ],
       // 1.0.0 format.
