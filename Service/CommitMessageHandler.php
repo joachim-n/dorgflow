@@ -53,7 +53,9 @@ class CommitMessageHandler {
    */
   public function createLocalCommitMessage(LocalPatch $local_patch) {
     $patch_name = $local_patch->getPatchFilename();
-    return "Patch for Drupal.org. File: $patch_name. Automatic commit by dorgflow.";
+    $index = $local_patch->getPatchFileIndex();
+
+    return "Patch for Drupal.org. Comment (expected): $index; file: $patch_name. Automatic commit by dorgflow.";
   }
 
   /**
@@ -82,8 +84,8 @@ class CommitMessageHandler {
     $return = [];
 
     $matches = [];
-    // Allow for pre-1.0.0 format, where the file is the first item in the list
-    // and has a capital letter.
+    // Allow for older format (pre-1.0.0 for d.org commits, pre-1.1.3 for local)
+    // where the file is the first item in the list and has a capital letter.
     if (preg_match('@[Ff]ile: (?P<filename>.+\.patch)@', $message, $matches)) {
       $return['filename'] = $matches['filename'];
     }
@@ -95,12 +97,22 @@ class CommitMessageHandler {
     }
 
     $matches = [];
-    if (preg_match('@Comment: (?P<comment_index>\d+)@', $message, $matches)) {
+    if (preg_match('@Comment( \(expected\))?: (?P<comment_index>\d+)@', $message, $matches)) {
       $return['comment_index'] = $matches['comment_index'];
     }
 
     if (preg_match('@Patch for Drupal.org@', $message)) {
       $return['local'] = TRUE;
+    }
+
+    // Handle pre-1.1.3 local commits without the index explicit in the message:
+    // pick it out of the patch filename.
+    if (!empty($return['local']) && empty($return['comment_index'])) {
+      $matches = [];
+      // Format is: ISSUE-COMMENT.PROJECT.DESCRIPTION.patch.
+      if (preg_match('@^\d+-(?P<comment_index>\d+)\.@', $return['filename'], $matches)) {
+        $return['comment_index'] = $matches['comment_index'];
+      }
     }
 
     if (empty($return)) {

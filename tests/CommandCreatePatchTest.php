@@ -237,7 +237,7 @@ class CommandCreatePatchTest extends CommandTestBase {
     $git_executor->expects($this->once())
       ->method('commit')
       ->with(
-        $this->equalTo("Patch for Drupal.org. File: 123456-16.my_project.terrible-bug.patch. Automatic commit by dorgflow.")
+        $this->equalTo("Patch for Drupal.org. Comment (expected): 16; file: 123456-16.my_project.terrible-bug.patch. Automatic commit by dorgflow.")
       );
     $container->set('git.executor', $git_executor);
 
@@ -331,7 +331,7 @@ class CommandCreatePatchTest extends CommandTestBase {
     $git_executor->expects($this->once())
       ->method('commit')
       ->with(
-        $this->equalTo("Patch for Drupal.org. File: 123456-16.my_project.terrible-bug.patch. Automatic commit by dorgflow.")
+        $this->equalTo("Patch for Drupal.org. Comment (expected): 16; file: 123456-16.my_project.terrible-bug.patch. Automatic commit by dorgflow.")
       );
     $container->set('git.executor', $git_executor);
 
