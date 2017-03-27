@@ -308,14 +308,14 @@ class WaypointManagerPatches {
    *
    * @param string $class_name
    *  The fully-qualified name of the class to instantiate.
-   * @param array $params = []
-   *  (optional) An array of parameters to pass to the constructor after the
+   * @param array $params
+   *  (optional) Further parameters to pass to the constructor after the
    *  injected services.
    *
    * @return
    *  The new object.
    */
-  protected function getWaypoint($class_name, $params = []) {
+  protected function getWaypoint($class_name, ...$params) {
     $waypoint = new $class_name(
       $this->drupal_org,
       $this->waypoint_manager_branches,
