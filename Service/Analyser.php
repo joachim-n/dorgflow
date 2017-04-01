@@ -30,11 +30,9 @@ class Analyser {
 
     // Try to deduce an issue number from the current branch.
     $current_branch = $this->git_info->getCurrentBranch();
+    $this->issue_number = $this->extractIssueNumberFromBranch($current_branch);
 
-    $matches = [];
-    preg_match("@^(?P<number>\d+)-@", $current_branch, $matches);
-    if (!empty($matches['number'])) {
-      $this->issue_number = $matches['number'];
+    if (!empty($this->issue_number)) {
       return $this->issue_number;
     }
 
@@ -52,6 +50,24 @@ class Analyser {
     */
 
     throw new \Exception("Unable to find an issue number from command line parameter or current git branch.");
+  }
+
+  /**
+   * Determine an issue number from a git branch name.
+   *
+   * @param string $branch_name
+   *  The branch name.
+   *
+   * @return
+   *  An issue number, or NULL if none is found.
+   */
+  public function extractIssueNumberFromBranch($branch_name) {
+    $matches = [];
+    preg_match("@^(?P<number>\d+)-@", $branch_name, $matches);
+    if (!empty($matches['number'])) {
+      $issue_number = $matches['number'];
+      return $issue_number;
+    }
   }
 
   public function getCurrentProjectName() {
