@@ -26,6 +26,9 @@ class CommandResolver {
         case 'cleanup':
           $command_class_name = 'Cleanup';
           break;
+        case 'purge':
+          $command_class_name = 'Purge';
+          break;
         case 'update':
           $command_class_name = 'LocalUpdate';
           break;

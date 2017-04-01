@@ -121,3 +121,12 @@ When you're completely done with this branch, you can do:
     $ dorgflow cleanup
 
 This performs a checkout of the master branch, and deletes the feature branch.
+
+Alternatively, you can clean up ALL feature branches that have been committed
+with:
+
+    $ dorgflow purge
+
+This looks at all branches whose name is of the form 'ISSUE-description', and
+deletes those where a master branch commit exists with that issue number in the
+commit message.
