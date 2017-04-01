@@ -40,7 +40,7 @@ class GitInfo {
   }
 
   /**
-   * Returns a list of all the git branches which are currently reachable.
+   * Returns a list of all the git branches.
    *
    * @return
    *  An array whose keys are branch names, and values are the SHA of the tip.
@@ -66,7 +66,7 @@ class GitInfo {
   }
 
   /**
-   * Returns a list of all the git branches.
+   * Returns a list of all the git branches which are currently reachable.
    *
    * @return
    *  An array whose keys are branch names, and values are the SHA of the tip.
