@@ -88,7 +88,6 @@ class WaypointManagerPatches {
       $file_url = $file_entity->url;
 
       // Skip a file that is not a patch.
-      $patch_filename = pathinfo($file_url, PATHINFO_FILENAME);
       $patch_file_extension = pathinfo($file_url, PATHINFO_EXTENSION);
       if ($patch_file_extension != 'patch') {
         continue;
@@ -109,6 +108,7 @@ class WaypointManagerPatches {
         // then create a Patch waypoint and move on to the next file.
         // We need to do more than check equality to compare two patch filenames
         // as drupal.org may rename files for security or uniqueness.
+        $patch_filename = pathinfo($file_url, PATHINFO_BASENAME);
         if (!empty($commit_message_data['filename']) && $this->patchFilenamesAreEqual($commit_message_data['filename'], $patch_filename)) {
           // Create a patch waypoint for this patch.
           $patch = $this->getWaypoint(Patch::class, $file_field_item, $commit['sha'], $commit_message_data);
