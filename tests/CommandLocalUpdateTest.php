@@ -459,4 +459,136 @@ class CommandLocalUpdateTest extends CommandTestBase {
     $command->execute();
   }
 
+  /**
+   * Tests a feature branch ending in a local patch, new patches on the issue.
+   *
+   * The scenario is as follows:
+   *  - user set up the issue with a patch from d.org
+   *  - user created a patch and uploaded it
+   *  - another user posted a patch to d.org
+   *  - the user is now updating.
+   *
+   * @group fail
+   */
+  public function testFeatureBranchLocalPatchHeadFurtherPatches() {
+    $container = new \Symfony\Component\DependencyInjection\ContainerBuilder();
+
+    // Create a standard git.info service for the command to proceed.
+    $git_info = $this->getGitInfoCleanWithFeatureBranch();
+    $container->set('git.info', $git_info);
+
+    $git_log = $this->createMock(\Dorgflow\Service\GitLog::class);
+    // Feature branch log: one d.org patch, a work commit, then one local patch.
+    $git_log->method('getFeatureBranchLog')
+      ->willReturn([
+        'sha-patch-1' => [
+          'sha' => 'sha-patch-1',
+          'message' => "Patch from Drupal.org. Comment: 21; URL: http://url.com/1234; file: patch-1.patch; fid: 11. Automatic commit by dorgflow.",
+        ],
+        'sha-work' => [
+          'sha' => 'sha-work',
+          'message' => "Fixing the bug.",
+        ],
+        'sha-feature' => [
+          // This is the tip of the feature branch.
+          'sha' => 'sha-feature',
+          'message' => "Patch for Drupal.org. Comment (expected): 22; file: 123456-22.project.bug-description.patch. Automatic commit by dorgflow.",
+        ],
+      ]);
+    $container->set('git.log', $git_log);
+
+    $drupal_org = $this->createMock(\Dorgflow\Service\DrupalOrg::class);
+    $drupal_org->method('getIssueNodeTitle')
+      ->willReturn('Terribly awful bug');
+    $patch_file_data = [
+      0 => [
+        // Patch has previously been applied.
+        'fid' => 11,
+        'cid' => 21,
+        'index' => 1,
+        'filename' => 'patch-1.patch',
+        'display' => TRUE,
+        // We expect that this will not be attempted again.
+        'expected' => 'skip',
+      ],
+      1 => [
+        // Patch came from us.
+        'fid' => 12,
+        'cid' => 22,
+        'index' => 2,
+        'filename' => '123456-22.project.bug-description.patch',
+        'display' => TRUE,
+        // We expect that this will not be attempted again.
+        'expected' => 'skip',
+      ],
+      2 => [
+        // New patch.
+        'fid' => 13,
+        'cid' => 23,
+        'index' => 3,
+        'filename' => 'patch-23.patch',
+        'display' => TRUE,
+        'applies' => TRUE,
+        // The new patch will be attempted to be applied.
+        'expected' => 'apply',
+      ],
+    ];
+    $this->setUpDrupalOrgExpectations($drupal_org, $patch_file_data);
+    $container->set('drupal_org', $drupal_org);
+
+    // The analyser returns an issue number.
+    $analyser = $this->createMock(\Dorgflow\Service\Analyser::class);
+    $analyser->method('deduceIssueNumber')
+      ->willReturn(123456);
+    $container->set('analyser', $analyser);
+
+    $git_executor = $this->createMock(\Dorgflow\Service\GitExecutor::class);
+    // No new branches will be created.
+    $git_executor->expects($this->never())
+      ->method('createNewBranch');
+    // Only the new patch file will be applied.
+    $this->setUpGitExecutorPatchExpectations($git_executor, $patch_file_data);
+    $container->set('git.executor', $git_executor);
+
+    // Add real versions of any remaining services not yet registered.
+    $this->completeServiceContainer($container);
+
+    $command = \Dorgflow\Command\LocalUpdate::create($container);
+
+    $command->execute();
+  }
+
+  /**
+   * Creates a git info service with typical data for the command to proceed.
+   *
+   * - git is clean
+   * - the feature branch exists, is current, and is ahead of the master branch.
+   *
+   * @return
+   *  The mocked git.info object.
+   */
+  protected function getGitInfoCleanWithFeatureBranch() {
+    $git_info = $this->createMock(\Dorgflow\Service\GitInfo::class);
+    // Git is clean so the command proceeds.
+    $git_info->method('gitIsClean')
+      ->willReturn(TRUE);
+    $branch_list = [
+      // There is a feature branch, which is further ahead than the master
+      // branch.
+      '123456-terrible-bug' => 'sha-feature',
+      '8.3.x' => 'sha-master',
+      'some-branch-name' => 'sha',
+      'something-else' => 'sha',
+    ];
+    $git_info->method('getBranchList')
+      ->willReturn($branch_list);
+    $git_info->method('getBranchListReachable')
+      ->willReturn($branch_list);
+    // Feature branch is current.
+    $git_info->method('getCurrentBranch')
+      ->willReturn('123456-terrible-bug');
+
+    return $git_info;
+  }
+
 }
