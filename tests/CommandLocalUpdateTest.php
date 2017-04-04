@@ -17,6 +17,21 @@ use Symfony\Component\DependencyInjection\Reference;
 class CommandLocalUpdateTest extends CommandTestBase {
 
   /**
+   * The feature branch name to use in mocked data.
+   */
+  const FEATURE_BRANCH_NAME = '123456-terrible-bug';
+
+  /**
+   * The feature branch tip sha to use in mocked data.
+   */
+  const FEATURE_BRANCH_SHA = 'sha-feature';
+
+  /**
+   * The issue number to use in mocked data.
+   */
+  const ISSUE_NUMBER = '123456';
+
+  /**
    * Test the command bails when git is not clean.
    */
   public function testGitUnclean() {
@@ -64,7 +79,7 @@ class CommandLocalUpdateTest extends CommandTestBase {
     // The analyser returns an issue number.
     $analyser = $this->createMock(\Dorgflow\Service\Analyser::class);
     $analyser->method('deduceIssueNumber')
-      ->willReturn(123456);
+      ->willReturn(self::ISSUE_NUMBER);
     $container->set('analyser', $analyser);
 
     // The git executor should not be called at all.
@@ -107,7 +122,7 @@ class CommandLocalUpdateTest extends CommandTestBase {
       ->willReturn(TRUE);
     $branch_list = [
       // There is a feature branch.
-      '123456-terrible-bug' => 'sha-feature',
+      self::FEATURE_BRANCH_NAME => self::FEATURE_BRANCH_SHA,
       '8.x-2.x' => 'sha',
       'some-branch-name' => 'sha',
       'something-else' => 'sha',
@@ -124,7 +139,7 @@ class CommandLocalUpdateTest extends CommandTestBase {
     // The analyser returns an issue number.
     $analyser = $this->createMock(\Dorgflow\Service\Analyser::class);
     $analyser->method('deduceIssueNumber')
-      ->willReturn(123456);
+      ->willReturn(self::ISSUE_NUMBER);
     $container->set('analyser', $analyser);
 
     // The git executor should not be called at all.
@@ -168,7 +183,7 @@ class CommandLocalUpdateTest extends CommandTestBase {
     $branch_list = [
       // There is a feature branch, and its SHA is the same as the master
       // branch.
-      '123456-terrible-bug' => 'sha-master',
+      self::FEATURE_BRANCH_NAME => 'sha-master',
       '8.3.x' => 'sha-master',
       'some-branch-name' => 'sha',
       'something-else' => 'sha',
@@ -179,7 +194,7 @@ class CommandLocalUpdateTest extends CommandTestBase {
       ->willReturn($branch_list);
     // Feature branch is current.
     $git_info->method('getCurrentBranch')
-      ->willReturn('123456-terrible-bug');
+      ->willReturn(self::FEATURE_BRANCH_NAME);
     $container->set('git.info', $git_info);
 
     $git_log = $this->createMock(\Dorgflow\Service\GitLog::class);
@@ -191,7 +206,7 @@ class CommandLocalUpdateTest extends CommandTestBase {
     // The analyser returns an issue number.
     $analyser = $this->createMock(\Dorgflow\Service\Analyser::class);
     $analyser->method('deduceIssueNumber')
-      ->willReturn(123456);
+      ->willReturn(self::ISSUE_NUMBER);
     $container->set('analyser', $analyser);
 
     $drupal_org = $this->createMock(\Dorgflow\Service\DrupalOrg::class);
@@ -270,7 +285,7 @@ class CommandLocalUpdateTest extends CommandTestBase {
     $branch_list = [
       // There is a feature branch, which is further ahead than the master
       // branch.
-      '123456-terrible-bug' => 'sha-feature',
+      self::FEATURE_BRANCH_NAME => self::FEATURE_BRANCH_SHA,
       '8.3.x' => 'sha-master',
       'some-branch-name' => 'sha',
       'something-else' => 'sha',
@@ -281,7 +296,7 @@ class CommandLocalUpdateTest extends CommandTestBase {
       ->willReturn($branch_list);
     // Feature branch is current.
     $git_info->method('getCurrentBranch')
-      ->willReturn('123456-terrible-bug');
+      ->willReturn(self::FEATURE_BRANCH_NAME);
     $container->set('git.info', $git_info);
 
     $git_log = $this->createMock(\Dorgflow\Service\GitLog::class);
@@ -292,8 +307,8 @@ class CommandLocalUpdateTest extends CommandTestBase {
           'sha' => 'sha-patch-1',
           'message' => "Patch from Drupal.org. Comment: 1; URL: http://url.com/1234; file: applied.patch; fid: 11. Automatic commit by dorgflow.",
         ],
-        'sha-feature' => [
-          'sha' => 'sha-feature',
+        self::FEATURE_BRANCH_SHA => [
+          'sha' => self::FEATURE_BRANCH_SHA,
           'message' => "Patch from Drupal.org. Comment: 2; URL: http://url.com/1234; file: applied.patch; fid: 12. Automatic commit by dorgflow.",
         ],
       ]);
@@ -341,7 +356,7 @@ class CommandLocalUpdateTest extends CommandTestBase {
     // The analyser returns an issue number.
     $analyser = $this->createMock(\Dorgflow\Service\Analyser::class);
     $analyser->method('deduceIssueNumber')
-      ->willReturn(123456);
+      ->willReturn(self::ISSUE_NUMBER);
     $container->set('analyser', $analyser);
 
     $git_executor = $this->createMock(\Dorgflow\Service\GitExecutor::class);
@@ -372,7 +387,7 @@ class CommandLocalUpdateTest extends CommandTestBase {
       ->willReturn(TRUE);
     $branch_list = [
       // There is a feature branch.
-      '123456-terrible-bug' => 'sha-feature',
+      self::FEATURE_BRANCH_NAME => self::FEATURE_BRANCH_SHA,
       '8.3.x' => 'sha-master',
       'some-branch-name' => 'sha',
       'something-else' => 'sha',
@@ -383,7 +398,7 @@ class CommandLocalUpdateTest extends CommandTestBase {
       ->willReturn($branch_list);
     // Feature branch is current.
     $git_info->method('getCurrentBranch')
-      ->willReturn('123456-terrible-bug');
+      ->willReturn(self::FEATURE_BRANCH_NAME);
     $container->set('git.info', $git_info);
 
     $git_log = $this->createMock(\Dorgflow\Service\GitLog::class);
@@ -391,8 +406,8 @@ class CommandLocalUpdateTest extends CommandTestBase {
     // the first one failed.
     $git_log->method('getFeatureBranchLog')
       ->willReturn([
-        'sha-feature' => [
-          'sha' => 'sha-feature',
+        self::FEATURE_BRANCH_SHA => [
+          'sha' => self::FEATURE_BRANCH_SHA,
           'message' => "Patch from Drupal.org. Comment: 10; URL: http://url.com/1234; file: applied.patch; fid: 210. Automatic commit by dorgflow.",
         ],
       ]);
@@ -401,7 +416,7 @@ class CommandLocalUpdateTest extends CommandTestBase {
     // The analyser returns an issue number.
     $analyser = $this->createMock(\Dorgflow\Service\Analyser::class);
     $analyser->method('deduceIssueNumber')
-      ->willReturn(123456);
+      ->willReturn(self::ISSUE_NUMBER);
     $container->set('analyser', $analyser);
 
     $drupal_org = $this->createMock(\Dorgflow\Service\DrupalOrg::class);
@@ -489,9 +504,9 @@ class CommandLocalUpdateTest extends CommandTestBase {
           'sha' => 'sha-work',
           'message' => "Fixing the bug.",
         ],
-        'sha-feature' => [
+        self::FEATURE_BRANCH_SHA => [
           // This is the tip of the feature branch.
-          'sha' => 'sha-feature',
+          'sha' => self::FEATURE_BRANCH_SHA,
           'message' => "Patch for Drupal.org. Comment (expected): 22; file: 123456-22.project.bug-description.patch. Automatic commit by dorgflow.",
         ],
       ]);
@@ -539,7 +554,7 @@ class CommandLocalUpdateTest extends CommandTestBase {
     // The analyser returns an issue number.
     $analyser = $this->createMock(\Dorgflow\Service\Analyser::class);
     $analyser->method('deduceIssueNumber')
-      ->willReturn(123456);
+      ->willReturn(self::ISSUE_NUMBER);
     $container->set('analyser', $analyser);
 
     $git_executor = $this->createMock(\Dorgflow\Service\GitExecutor::class);
@@ -575,7 +590,7 @@ class CommandLocalUpdateTest extends CommandTestBase {
     $branch_list = [
       // There is a feature branch, which is further ahead than the master
       // branch.
-      '123456-terrible-bug' => 'sha-feature',
+      self::FEATURE_BRANCH_NAME => self::FEATURE_BRANCH_SHA,
       '8.3.x' => 'sha-master',
       'some-branch-name' => 'sha',
       'something-else' => 'sha',
@@ -586,7 +601,7 @@ class CommandLocalUpdateTest extends CommandTestBase {
       ->willReturn($branch_list);
     // Feature branch is current.
     $git_info->method('getCurrentBranch')
-      ->willReturn('123456-terrible-bug');
+      ->willReturn(self::FEATURE_BRANCH_NAME);
 
     return $git_info;
   }
