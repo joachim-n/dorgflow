@@ -8,8 +8,7 @@ class MasterBranch {
 
   protected $isCurrentBranch;
 
-  // TODO: typehints
-  function __construct($git_info, $git_executor) {
+  function __construct(\Dorgflow\Service\GitInfo $git_info, \Dorgflow\Service\GitExecutor $git_executor) {
     $this->git_info = $git_info;
     $this->git_executor = $git_executor;
 
