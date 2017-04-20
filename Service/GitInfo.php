@@ -76,6 +76,7 @@ class GitInfo {
       $branch_list_reachable = [];
 
       foreach ($this->getBranchList() as $branch_name => $sha) {
+        // TODO: use isAncestor().
         $output = '';
         // Exit value is 0 if true, 1 if false.
         $return_var = '';
@@ -90,6 +91,30 @@ class GitInfo {
     }
 
     return $this->branch_list_reachable;
+  }
+
+  /**
+   * Determines whether one commit is the ancestor of another.
+   *
+   * @param string $ancestor
+   *  The potential ancestor commit.
+   * @param string $child
+   *  The potential child commit.
+   *
+   * @return bool
+   *  TRUE if $ancestor is reachable from $child, FALSE if not.
+   */
+  public function isAncestor($ancestor, $child) {
+    // Exit value is 0 if true, 1 if false.
+    $return_var = '';
+    exec("git merge-base --is-ancestor $ancestor $child", $output, $return_var);
+
+    if ($return_var === 0) {
+      return TRUE;
+    }
+    else {
+      return FALSE;
+    }
   }
 
 }
