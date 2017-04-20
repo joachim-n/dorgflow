@@ -17,6 +17,9 @@ class Analyser {
   /**
    * Figures out the issue number in question, from input or current branch.
    *
+   * A user input value, that is, given as a command line parameter, takes
+   * precedence over the current branch.
+   *
    * @return int
    *  The issue number, which is the nid of the drupal.org issue node.
    *
@@ -28,15 +31,18 @@ class Analyser {
       return $this->issue_number;
     }
 
-    // Try to deduce an issue number from the current branch.
-    $current_branch = $this->git_info->getCurrentBranch();
-    $this->issue_number = $this->extractIssueNumberFromBranch($current_branch);
+    // Try to get an issue number from user input.
+    // This comes first to allow commands to override the current branch with
+    // input.
+    $this->issue_number = $this->user_input->getIssueNumber();
 
     if (!empty($this->issue_number)) {
       return $this->issue_number;
     }
 
-    $this->issue_number = $this->user_input->getIssueNumber();
+    // Try to deduce an issue number from the current branch.
+    $current_branch = $this->git_info->getCurrentBranch();
+    $this->issue_number = $this->extractIssueNumberFromBranch($current_branch);
 
     if (!empty($this->issue_number)) {
       return $this->issue_number;
