@@ -151,4 +151,17 @@ class FeatureBranch {
     $this->exists = TRUE;
   }
 
+  /**
+   * Checks out the branch.
+   */
+  public function gitCheckout() {
+    // No need to do anything if the branch is current.
+    if ($this->isCurrentBranch()) {
+      return;
+    }
+
+    $branch_name = $this->getBranchName();
+    $this->git_exec->checkOutBranch($branch_name);
+  }
+
 }
