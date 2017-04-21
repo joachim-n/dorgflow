@@ -34,6 +34,28 @@ class GitLog {
   }
 
   /**
+   * Get the log data of the feature branch from a given point.
+   *
+   * @param $commit
+   *  The older commit to start the log after. This is not included.
+   *  TODO: change this to be a Waypoint object.
+   *
+   * @return
+   *  An array keyed by SHA, whose items are arrays with 'sha' and 'message'.
+   *  The items are arranged in progressing order, that is, older commits first.
+   */
+  public function getPartialFeatureBranchLog($commit) {
+    // This only gets called once, no need to cache.
+
+    // TODO! Complain if $feature_branch_name doesn't exist yet!
+    $feature_branch_name = $this->waypoint_manager_branches->getFeatureBranch()->getBranchName();
+
+    $log = $this->getLog($commit, $feature_branch_name);
+
+    return $this->parseLog($log);
+  }
+
+  /**
    * Gets the raw git log from one commit to another.
    *
    * @param $old
