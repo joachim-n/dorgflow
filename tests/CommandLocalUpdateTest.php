@@ -278,25 +278,7 @@ class CommandLocalUpdateTest extends CommandTestBase {
   public function testFeatureBranchFurtherPatches() {
     $container = new \Symfony\Component\DependencyInjection\ContainerBuilder();
 
-    $git_info = $this->createMock(\Dorgflow\Service\GitInfo::class);
-    // Git is clean so the command proceeds.
-    $git_info->method('gitIsClean')
-      ->willReturn(TRUE);
-    $branch_list = [
-      // There is a feature branch, which is further ahead than the master
-      // branch.
-      self::FEATURE_BRANCH_NAME => self::FEATURE_BRANCH_SHA,
-      '8.3.x' => 'sha-master',
-      'some-branch-name' => 'sha',
-      'something-else' => 'sha',
-    ];
-    $git_info->method('getBranchList')
-      ->willReturn($branch_list);
-    $git_info->method('getBranchListReachable')
-      ->willReturn($branch_list);
-    // Feature branch is current.
-    $git_info->method('getCurrentBranch')
-      ->willReturn(self::FEATURE_BRANCH_NAME);
+    $git_info = $this->getGitInfoCleanWithFeatureBranch();
     $container->set('git.info', $git_info);
 
     $git_log = $this->createMock(\Dorgflow\Service\GitLog::class);
