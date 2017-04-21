@@ -22,20 +22,30 @@ class GitLog {
    */
   public function getFeatureBranchLog() {
     if (!isset($this->feature_branch_log)) {
-      $log = $this->getLog();
+      $master_branch_name = $this->waypoint_manager_branches->getMasterBranch()->getBranchName();
+      // TODO! Complain if $feature_branch_name doesn't exist yet!
+      $feature_branch_name = $this->waypoint_manager_branches->getFeatureBranch()->getBranchName();
+
+      $log = $this->getLog($master_branch_name, $feature_branch_name);
       $this->parseLog($log);
     }
 
     return $this->feature_branch_log;
   }
 
-  protected function getLog() {
-    $master_branch_name = $this->waypoint_manager_branches->getMasterBranch()->getBranchName();
-    $feature_branch_name = $this->waypoint_manager_branches->getFeatureBranch()->getBranchName();
-
-    // TODO! Complain if $feature_branch_name doesn't exist yet!
-
-    $git_log = shell_exec("git rev-list {$feature_branch_name} ^{$master_branch_name} --pretty=oneline --reverse");
+  /**
+   * Gets the raw git log from one commit to another.
+   *
+   * @param $old
+   *  The older commit. This is not included in the log.
+   * @param $new
+   *  The recent commit. This is included in the log.
+   *
+   * @return
+   *  The raw output from git rev-list.
+   */
+  protected function getLog($old, $new) {
+    $git_log = shell_exec("git rev-list {$new} ^{$old} --pretty=oneline --reverse");
 
     return $git_log;
   }
