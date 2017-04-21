@@ -27,7 +27,7 @@ class GitLog {
       $feature_branch_name = $this->waypoint_manager_branches->getFeatureBranch()->getBranchName();
 
       $log = $this->getLog($master_branch_name, $feature_branch_name);
-      $this->parseLog($log);
+      $this->feature_branch_log = $this->parseLog($log);
     }
 
     return $this->feature_branch_log;
@@ -50,6 +50,17 @@ class GitLog {
     return $git_log;
   }
 
+  /**
+   * Parse raw git log output into structured data.
+   *
+   * @param string $log
+   *  The log output, as given by 'git rev-list --pretty=oneline'.
+   *
+   * @return
+   *  An array keyed by SHA, where each item is an array with:
+   *    - 'sha': The SHA.
+   *    - 'message': The commit message.
+   */
   protected function parseLog($log) {
     $feature_branch_log = [];
 
@@ -67,7 +78,7 @@ class GitLog {
       }
     }
 
-    $this->feature_branch_log = $feature_branch_log;
+    return $feature_branch_log;
   }
 
 }
