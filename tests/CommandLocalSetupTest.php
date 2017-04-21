@@ -60,7 +60,8 @@ class CommandLocalSetupTest extends CommandTestBase {
       ->willReturn($branch_list);
     $git_info->method('getBranchListReachable')
       ->willReturn($branch_list);
-    // The master branch is not current.
+    // The master branch is not current -- we're on some other branch that's not
+    // for an issue.
     $git_info->method('getCurrentBranch')
       ->willReturn('some-branch-name');
     $container->set('git.info', $git_info);
@@ -75,7 +76,11 @@ class CommandLocalSetupTest extends CommandTestBase {
     $drupal_org->expects($this->never())->method($this->anything());
     $container->set('drupal_org', $drupal_org);
 
-    $container->set('analyser', $this->createMock(\Dorgflow\Service\Analyser::class));
+    // The requested issue number comes from user input.
+    $analyser = $this->createMock(\Dorgflow\Service\Analyser::class);
+    $analyser->method('deduceIssueNumber')
+      ->willReturn(123456);
+    $container->set('analyser', $analyser);
 
     // Need the real service for this, as we want the command to get the branch
     // object from it, based on the mocked git.info service.
@@ -135,9 +140,16 @@ class CommandLocalSetupTest extends CommandTestBase {
     $drupal_org->expects($this->never())->method('getIssueFileFieldItems');
     $container->set('drupal_org', $drupal_org);
 
-    // The git executor should not be called at all.
+    // The git executor be called only to check out the feature branch.
     $git_executor = $this->createMock(\Dorgflow\Service\GitExecutor::class);
-    $git_executor->expects($this->never())->method($this->anything());
+    $git_executor->expects($this->once())
+      ->method('checkOutBranch')
+      ->with($this->equalTo('123456-some-branch-name'));
+    // No branches will be created or patches applied.
+    $git_executor->expects($this->never())->method('createNewBranch');
+    $git_executor->expects($this->never())->method('checkOutFiles');
+    $git_executor->expects($this->never())->method('applyPatch');
+    $git_executor->expects($this->never())->method('commit');
     $container->set('git.executor', $git_executor);
 
     $container
@@ -151,8 +163,6 @@ class CommandLocalSetupTest extends CommandTestBase {
     $container->set('waypoint_manager.patches', $waypoint_manager_patches);
 
     $command = \Dorgflow\Command\LocalSetup::create($container);
-
-    $this->expectException(\Exception::class);
 
     $command->execute();
   }

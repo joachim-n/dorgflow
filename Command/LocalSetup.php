@@ -30,8 +30,32 @@ class LocalSetup extends CommandBase {
       throw new \Exception("Git repository is not clean. Aborting.");
     }
 
-    // Create branches.
+    // Create branch objects.
+    $feature_branch = $this->waypoint_manager_branches->getFeatureBranch();
     $master_branch = $this->waypoint_manager_branches->getMasterBranch();
+
+    // Check whether feature branch exists (whether reachable or not).
+    if ($feature_branch->exists()) {
+      // If the feature branch already exists, check it out, and stop.
+      $feature_branch->gitCheckout();
+
+      print strtr("The feature branch !branch already exists and has been checked out.\n", [
+        '!branch' => $feature_branch->getBranchName(),
+      ]);
+
+      if ($this->waypoint_manager_branches->featureBranchIsUpToDateWithMaster($feature_branch)) {
+        print "This branch is up to date with master.\n";
+        print "You should use the update command to get new patches from drupal.org.\n";
+      }
+      else {
+        print strtr("This branch is not up to date with master. You should do 'git rebase !master --keep-empty'.\n", [
+          '!master' => $master_branch->getBranchName(),
+        ]);
+        print "Afterwards, you should use the update command to get new patches from drupal.org.\n";
+      }
+
+      return;
+    }
 
     // If the master branch is not current, abort.
     if (!$master_branch->isCurrentBranch()) {
@@ -43,15 +67,6 @@ class LocalSetup extends CommandBase {
     print strtr("Detected master branch !branch.\n", [
       '!branch' => $master_branch->getBranchName(),
     ]);
-
-    $feature_branch = $this->waypoint_manager_branches->getFeatureBranch();
-
-    // Check whether feature branch exists (whether reachable or not).
-    if ($feature_branch->exists()) {
-      throw new \Exception(strtr("The feature branch !branch already exists. Use the update command, rebasing first if necessary. Aborting.", [
-        '!branch' => $feature_branch->getBranchName(),
-      ]));
-    }
 
     $feature_branch->gitCreate();
 
