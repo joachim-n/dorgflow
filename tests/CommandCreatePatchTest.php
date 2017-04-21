@@ -31,6 +31,7 @@ class CommandCreatePatchTest extends CommandTestBase {
 
     $container->set('git.info', $git_info);
     // These won't get called, so don't need to mock anything.
+    $container->set('git.log', $this->getMockBuilder(StdClass::class));
     $container->set('analyser', $this->getMockBuilder(StdClass::class));
     $container->set('waypoint_manager.branches', $this->getMockBuilder(StdClass::class));
     $container->set('waypoint_manager.patches', $this->getMockBuilder(StdClass::class));
@@ -74,6 +75,11 @@ class CommandCreatePatchTest extends CommandTestBase {
     $analyser->method('deduceIssueNumber')
       ->willReturn(123456);
     $container->set('analyser', $analyser);
+
+    // The git log should not be called at all.
+    $git_log = $this->createMock(\Dorgflow\Service\GitLog::class);
+    $git_log->expects($this->never())->method($this->anything());
+    $container->set('git.log', $git_log);
 
     // The git executor should not be called at all.
     $git_executor = $this->createMock(\Dorgflow\Service\GitExecutor::class);
@@ -136,6 +142,11 @@ class CommandCreatePatchTest extends CommandTestBase {
     $analyser->method('deduceIssueNumber')
       ->willReturn(123456);
     $container->set('analyser', $analyser);
+
+    // The git log should not be called at all.
+    $git_log = $this->createMock(\Dorgflow\Service\GitLog::class);
+    $git_log->expects($this->never())->method($this->anything());
+    $container->set('git.log', $git_log);
 
     // The git executor should not be called at all.
     $git_executor = $this->createMock(\Dorgflow\Service\GitExecutor::class);
@@ -215,6 +226,9 @@ class CommandCreatePatchTest extends CommandTestBase {
           'message' => 'commit message',
         ],
       ]);
+    // Not testing this output, so just return an empty array.
+    $git_log->method('getPartialFeatureBranchLog')
+      ->willReturn([]);
     $container->set('git.log', $git_log);
 
     $git_executor = $this->createMock(\Dorgflow\Service\GitExecutor::class);
@@ -301,6 +315,9 @@ class CommandCreatePatchTest extends CommandTestBase {
           'message' => 'commit message',
         ],
       ]);
+    // Not testing this output, so just return an empty array.
+    $git_log->method('getPartialFeatureBranchLog')
+      ->willReturn([]);
     $container->set('git.log', $git_log);
 
     $git_executor = $this->createMock(\Dorgflow\Service\GitExecutor::class);
@@ -414,6 +431,9 @@ class CommandCreatePatchTest extends CommandTestBase {
           'message' => 'commit message',
         ],
       ]);
+    // Not testing this output, so just return an empty array.
+    $git_log->method('getPartialFeatureBranchLog')
+      ->willReturn([]);
     $container->set('git.log', $git_log);
 
     $git_executor = $this->createMock(\Dorgflow\Service\GitExecutor::class);

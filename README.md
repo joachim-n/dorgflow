@@ -100,6 +100,10 @@ When you are ready to make a patch, just do:
 This will create a patch with a systematic filename, and also an interdiff file.
 You can then upload these to the issue node on drupal.org.
 
+The commit messages from the git log are output, either since the start of the
+branch, or the last patch if there is one. You can copy-paste this to your
+comment on drupal.org to explain your changes.
+
 ### Committing a patch (maintainers only)
 
 If an issue is set to RTBC, and the corresponding feature branch is up to date

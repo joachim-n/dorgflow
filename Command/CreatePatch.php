@@ -12,6 +12,7 @@ class CreatePatch extends CommandBase {
   static public function create(ContainerBuilder $container) {
     return new static(
       $container->get('git.info'),
+      $container->get('git.log'),
       $container->get('analyser'),
       $container->get('waypoint_manager.branches'),
       $container->get('waypoint_manager.patches'),
@@ -21,8 +22,9 @@ class CreatePatch extends CommandBase {
     );
   }
 
-  function __construct($git_info, $analyser, $waypoint_manager_branches, $waypoint_manager_patches, $drupal_org, $git_executor, $commit_message) {
+  function __construct($git_info, $git_log, $analyser, $waypoint_manager_branches, $waypoint_manager_patches, $drupal_org, $git_executor, $commit_message) {
     $this->git_info = $git_info;
+    $this->git_log = $git_log;
     $this->analyser = $analyser;
     $this->waypoint_manager_branches = $waypoint_manager_branches;
     $this->waypoint_manager_patches = $waypoint_manager_patches;
@@ -74,6 +76,29 @@ class CreatePatch extends CommandBase {
 
       print("Written interdiff $interdiff_name with diff from $last_patch_sha to local branch.\n");
     }
+
+    // Write out a log of changes since the last patch.
+    print("The following may be useful for the comment on d.org:\n");
+    print("------------------------------------------------\n");
+    if (empty($last_patch)) {
+      $log = $this->git_log->getPartialFeatureBranchLog($master_branch_name);
+      print("Changes in this patch:\n");
+    }
+    else {
+      $log = $this->git_log->getPartialFeatureBranchLog($last_patch->getSHA());
+      print("Changes since the last patch:\n");
+    }
+    foreach ($log as $log_item) {
+      print("- {$log_item['message']}\n");
+    }
+    // Blow our own trumpet ;)
+    if (empty($last_patch)) {
+      print("Patch created by Dorgflow.\n");
+    }
+    else {
+      print("Patch and interdiff created by Dorgflow.\n");
+    }
+    print("------------------------------------------------\n");
 
     // Make an empty commit to record the patch.
     $local_patch_commit_message = $this->commit_message->createLocalCommitMessage($local_patch);
