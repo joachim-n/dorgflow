@@ -464,8 +464,6 @@ class CommandLocalUpdateTest extends CommandTestBase {
    *  - user created a patch and uploaded it
    *  - another user posted a patch to d.org
    *  - the user is now updating.
-   *
-   * @group fail
    */
   public function testFeatureBranchLocalPatchHeadFurtherPatches() {
     $container = new \Symfony\Component\DependencyInjection\ContainerBuilder();
