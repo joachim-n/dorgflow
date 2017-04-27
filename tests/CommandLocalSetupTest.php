@@ -44,7 +44,7 @@ class CommandLocalSetupTest extends CommandTestBase {
   /**
    * Test the command bails when the master branch is not current.
    */
-  public function testNoMasterBranch() {
+  public function testNotOnMasterBranch() {
     $container = new \Symfony\Component\DependencyInjection\ContainerBuilder();
 
     $git_info = $this->createMock(\Dorgflow\Service\GitInfo::class);
