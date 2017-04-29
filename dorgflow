@@ -6,12 +6,55 @@ namespace Dorgflow;
 require_once __DIR__ . '/vendor/autoload.php';
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+//use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
 $container = new ContainerBuilder();
 // Don't bother with PhpFileLoader; it's overkill.
 require 'services.php';
 
 print "Hello, this is Dorgflow!\n";
+
+$application = new Application();
+/*
+$application->register('echo')
+    //->addArgument('foo', InputArgument::OPTIONAL, 'The directory')
+    //->addOption('bar', null, InputOption::VALUE_REQUIRED)
+    //->setCode(function(InputInterface $input, OutputInterface $output) {
+    //    // output arguments and options
+   // })
+->getApplication()
+->setDefaultCommand('echo') // Single command application
+->run();
+*/
+
+$application->add(new \Dorgflow\Command\SymfCommand());
+
+$application->setDefaultCommand('echo'); // Single command application
+
+$application->run();
+
+return;
+
+/*
+(new Application('echo', '1.0.0'))
+  ->register('echo')
+      ->addArgument('foo', InputArgument::OPTIONAL, 'The directory')
+      ->addOption('bar', null, InputOption::VALUE_REQUIRED)
+      ->setCode(function(InputInterface $input, OutputInterface $output) {
+          // output arguments and options
+      })
+  ->getApplication()
+  ->setDefaultCommand('echo', true) // Single command application
+  ->run();
+  */
+  
+  
+  
+
 
 $command_class_name = CommandResolver::getCommandClass($argv);
 
