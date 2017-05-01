@@ -2,14 +2,16 @@
 
 namespace Dorgflow\Command;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
-class CreatePatch extends CommandBase {
+class CreatePatch extends Command {
 
   /**
    * Creates an instance of this command, injecting services from the container.
    */
-  static public function create(ContainerBuilder $container) {
+  static public function Xcreate(ContainerBuilder $container) {
     return new static(
       $container->get('git.info'),
       $container->get('git.log'),
@@ -22,7 +24,7 @@ class CreatePatch extends CommandBase {
     );
   }
 
-  function __construct($git_info, $git_log, $analyser, $waypoint_manager_branches, $waypoint_manager_patches, $drupal_org, $git_executor, $commit_message) {
+  function X__construct($git_info, $git_log, $analyser, $waypoint_manager_branches, $waypoint_manager_patches, $drupal_org, $git_executor, $commit_message) {
     $this->git_info = $git_info;
     $this->git_log = $git_log;
     $this->analyser = $analyser;
@@ -33,7 +35,7 @@ class CreatePatch extends CommandBase {
     $this->commit_message = $commit_message;
   }
 
-  public function execute() {
+  public function execute(InputInterface $input, OutputInterface $output) {
     // Check git is clean.
     $clean = $this->git_info->gitIsClean();
     if (!$clean) {
