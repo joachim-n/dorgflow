@@ -2,11 +2,21 @@
 
 namespace Dorgflow\Command;
 
+/*
+https://iamcode.guru/symfony-console-and-dependency-injection/
+
+
+*/
+
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
-class SymfCommand extends Command {
+class SymfCommand extends Command implements ContainerAwareInterface {
+
+  use ContainerAwareTrait;
 
   protected function configure() {
     $this
@@ -22,6 +32,10 @@ class SymfCommand extends Command {
   }
 
   protected function execute(InputInterface $input, OutputInterface $output) {
+             dump($this->container);
+    $git_info = $this->container->get('git.info');
+    dump($git_info->getCurrentBranch());
+
     $output->writeln('Whoa!');
   }
 
