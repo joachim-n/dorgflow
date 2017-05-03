@@ -21,7 +21,7 @@ class GitExecutor {
     // a branch doesn't do so, and will simply move the HEAD of an existing one.
     $existing_ref = exec("git show-ref --heads {$branch_short_name}");
     if (!empty($existing_ref)) {
-      throw new \Exception("Branch $branch_short_name already exists.");
+      throw new \Exception("Attempted to create branch $branch_short_name, but it already exists.");
     }
 
     // Create a new branch at the given commit.
