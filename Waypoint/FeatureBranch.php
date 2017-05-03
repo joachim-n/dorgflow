@@ -29,8 +29,10 @@ class FeatureBranch {
 
     // Work over branch list.
     foreach ($branch_list as $branch => $sha) {
-      if (substr($branch, 0, strlen($issue_number)) == $issue_number &&
-        substr($branch, -6) != '-tests') {
+      if (substr($branch, 0, strlen($issue_number)) == $issue_number) {
+        // TODO: support tests-only branches?
+        // substr($branch, -6) != '-XXXtests'
+
         $this->exists = TRUE;
         // Set the current branch as WHAT WE ARE.
         $this->sha = $sha;
