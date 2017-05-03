@@ -115,6 +115,11 @@ class DrupalOrg {
   public function getFileEntity($fid) {
     if (!isset($file_entities[$fid])) {
       $response = file_get_contents("https://www.drupal.org/api-d7/file/{$fid}.json");
+
+      if ($response === FALSE) {
+        throw new \Exception("Failed getting file entity {$fid} from drupal.org.");
+      }
+
       $file_entities[$fid] = json_decode($response);
     }
 
@@ -134,6 +139,11 @@ class DrupalOrg {
     // @todo: this probably doesn't need any caching, but check!
 
     $file = file_get_contents($url);
+
+    if ($file === FALSE) {
+      throw new \Exception("Failed getting file {$url} from drupal.org.");
+    }
+
     return $file;
   }
 
@@ -146,6 +156,10 @@ class DrupalOrg {
     print "Fetching node $issue_number from drupal.org.\n";
 
     $response = file_get_contents("https://www.drupal.org/api-d7/node/{$issue_number}.json");
+
+    if ($response === FALSE) {
+      throw new \Exception("Failed getting node {$issue_number} from drupal.org.");
+    }
 
     $this->node_data = json_decode($response);
   }
