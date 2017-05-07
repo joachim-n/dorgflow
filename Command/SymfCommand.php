@@ -32,7 +32,7 @@ class SymfCommand extends Command implements ContainerAwareInterface {
   }
 
   protected function execute(InputInterface $input, OutputInterface $output) {
-             dump($this->container);
+    dump($this->container);
     $git_info = $this->container->get('git.info');
     dump($git_info->getCurrentBranch());
 
