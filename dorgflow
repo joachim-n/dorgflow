@@ -12,12 +12,14 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+// Build the service container.
 $container = new ContainerBuilder();
 // Don't bother with PhpFileLoader; it's overkill.
 require 'services.php';
 
 print "Hello, this is Dorgflow!\n";
 
+// Build the console application.
 $application = new Application();
 
 $application->add(new \Dorgflow\Command\SymfCommand());
@@ -27,8 +29,8 @@ $application->setDefaultCommand('symfony');
 $application->run();
 
 return;
-  
-// Old code below:  
+
+// Old code below:
 
 
 $command_class_name = CommandResolver::getCommandClass($argv);
