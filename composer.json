@@ -1,5 +1,7 @@
 {
   "name": "joachim-n/dorgflow",
+  "description": " Automated git workflow for drupal.org patches.",
+  "homepage": "https://github.com/joachim-n/dorgflow",
   "license": "GPL-2.0+",
   "require": {
     "symfony/dependency-injection": ">=3.2"
