@@ -19,41 +19,16 @@ require 'services.php';
 print "Hello, this is Dorgflow!\n";
 
 $application = new Application();
-/*
-$application->register('echo')
-    //->addArgument('foo', InputArgument::OPTIONAL, 'The directory')
-    //->addOption('bar', null, InputOption::VALUE_REQUIRED)
-    //->setCode(function(InputInterface $input, OutputInterface $output) {
-    //    // output arguments and options
-   // })
-->getApplication()
-->setDefaultCommand('echo') // Single command application
-->run();
-*/
 
 $application->add(new \Dorgflow\Command\SymfCommand());
 
-$application->setDefaultCommand('echo'); // Single command application
+$application->setDefaultCommand('symfony');
 
 $application->run();
 
 return;
-
-/*
-(new Application('echo', '1.0.0'))
-  ->register('echo')
-      ->addArgument('foo', InputArgument::OPTIONAL, 'The directory')
-      ->addOption('bar', null, InputOption::VALUE_REQUIRED)
-      ->setCode(function(InputInterface $input, OutputInterface $output) {
-          // output arguments and options
-      })
-  ->getApplication()
-  ->setDefaultCommand('echo', true) // Single command application
-  ->run();
-  */
   
-  
-  
+// Old code below:  
 
 
 $command_class_name = CommandResolver::getCommandClass($argv);
