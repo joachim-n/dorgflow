@@ -48,3 +48,7 @@ $container
   ->addArgument(new Reference('git.executor'))
   ->addArgument(new Reference('analyser'))
   ->addArgument(new Reference('waypoint_manager.branches'));
+
+$container
+    ->register('command.symf', \Dorgflow\Command\SymfCommand::class)
+    ->addMethodCall('setContainer', [new Reference('service_container')]);

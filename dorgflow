@@ -22,7 +22,9 @@ print "Hello, this is Dorgflow!\n";
 // Build the console application.
 $application = new Application();
 
-$application->add(new \Dorgflow\Command\SymfCommand());
+//$application->add(new \Dorgflow\Command\SymfCommand());
+$application->add($container->get('command.symf'));
+
 
 $application->setDefaultCommand('symfony');
 
