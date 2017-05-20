@@ -33,7 +33,7 @@ class LocalSetup extends CommandBase {
     $this->waypoint_manager_patches = $waypoint_manager_patches;
   }
 
-  public function execute() {
+  protected function execute(InputInterface $input, OutputInterface $output) {
     // Check git is clean.
     $clean = $this->git_info->gitIsClean();
     if (!$clean) {

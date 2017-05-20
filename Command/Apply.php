@@ -38,7 +38,7 @@ class Apply extends CommandBase {
     $this->analyser = $analyser;
   }
 
-  public function execute() {
+  protected function execute(InputInterface $input, OutputInterface $output) {
     // Check git is clean.
     $clean = $this->git_info->gitIsClean();
     if (!$clean) {

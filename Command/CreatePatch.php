@@ -43,7 +43,7 @@ class CreatePatch extends CommandBase {
     $this->commit_message = $commit_message;
   }
 
-  public function execute() {
+  protected function execute(InputInterface $input, OutputInterface $output) {
     // Check git is clean.
     $clean = $this->git_info->gitIsClean();
     if (!$clean) {

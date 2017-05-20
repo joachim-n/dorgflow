@@ -35,7 +35,7 @@ class LocalUpdate extends CommandBase {
     $this->git_executor = $git_executor;
   }
 
-  public function execute() {
+  protected function execute(InputInterface $input, OutputInterface $output) {
     // Check git is clean.
     $clean = $this->git_info->gitIsClean();
     if (!$clean) {

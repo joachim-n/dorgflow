@@ -36,7 +36,7 @@ class Purge extends CommandBase {
     $this->waypoint_manager_branches = $waypoint_manager_branches;
   }
 
-  public function execute() {
+  protected function execute(InputInterface $input, OutputInterface $output) {
     $this->master_branch_name = $this->waypoint_manager_branches->getMasterBranch()->getBranchName();
 
     $branch_list = $this->git_info->getBranchList();
