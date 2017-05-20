@@ -8,7 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
-class LocalUpdate extends Command implements ContainerAwareInterface {
+class LocalUpdate extends SymfonyCommand implements ContainerAwareInterface {
 
   use ContainerAwareTrait;
 

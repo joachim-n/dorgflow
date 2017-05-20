@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 /**
  * Deletes the current feature branch.
  */
-class Cleanup extends Command implements ContainerAwareInterface {
+class Cleanup extends SymfonyCommand implements ContainerAwareInterface {
 
   use ContainerAwareTrait;
 
