@@ -10,6 +10,16 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class Purge extends CommandBase {
 
   /**
+   * {@inheritdoc}
+   */
+  protected function configure() {
+    $this
+      ->setName('purge')
+      ->setDescription('Deletes all feature branches whose issues are committed to the master branch.')
+      ->setHelp('Deletes all feature branches whose issues are committed to the master branch.');
+  }
+
+  /**
    * Creates an instance of this command, injecting services from the container.
    */
   static public function create(ContainerBuilder $container) {

@@ -7,6 +7,16 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class LocalUpdate extends CommandBase {
 
   /**
+   * {@inheritdoc}
+   */
+  protected function configure() {
+    $this
+      ->setName('update')
+      ->setDescription('Updates a feature branch.')
+      ->setHelp('Updates an existing feature branch, and downloads and applies any new patches.');
+  }
+
+  /**
    * Creates an instance of this command, injecting services from the container.
    */
   static public function create(ContainerBuilder $container) {

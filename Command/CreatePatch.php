@@ -7,6 +7,16 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class CreatePatch extends CommandBase {
 
   /**
+   * {@inheritdoc}
+   */
+  protected function configure() {
+    $this
+      ->setName('patch')
+      ->setDescription('Creates a patch for the current feature branch.')
+      ->setHelp('Creates a patch for the diff between the current feature branch and the master branch, and also an interdiff if a patch has previously been made.');
+  }
+
+  /**
    * Creates an instance of this command, injecting services from the container.
    */
   static public function create(ContainerBuilder $container) {

@@ -7,6 +7,16 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class LocalSetup extends CommandBase {
 
   /**
+   * {@inheritdoc}
+   */
+  protected function configure() {
+    $this
+      ->setName('setup')
+      ->setDescription('Sets up a feature branch.')
+      ->setHelp('Sets up a feature branch based on a drupal.org issue node, and downloads and applies any patches.');
+  }
+
+  /**
    * Creates an instance of this command, injecting services from the container.
    */
   static public function create(ContainerBuilder $container) {

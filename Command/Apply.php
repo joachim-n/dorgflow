@@ -10,6 +10,16 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class Apply extends CommandBase {
 
   /**
+   * {@inheritdoc}
+   */
+  protected function configure() {
+    $this
+      ->setName('apply')
+      ->setDescription('Applies the current feature branch to the master branch.')
+      ->setHelp('Applies the diff of the current feature branch to the master branch, so it can be committed.');
+  }
+
+  /**
    * Creates an instance of this command, injecting services from the container.
    */
   static public function create(ContainerBuilder $container) {

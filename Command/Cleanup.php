@@ -10,6 +10,16 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class Cleanup extends CommandBase {
 
   /**
+   * {@inheritdoc}
+   */
+  protected function configure() {
+    $this
+      ->setName('cleanup')
+      ->setDescription('Deletes the current feature branch.')
+      ->setHelp('Deletes the current feature branch.');
+  }
+
+  /**
    * Creates an instance of this command, injecting services from the container.
    */
   static public function create(ContainerBuilder $container) {
