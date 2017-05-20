@@ -16,26 +16,16 @@ class LocalUpdate extends CommandBase {
       ->setHelp('Updates an existing feature branch, and downloads and applies any new patches.');
   }
 
-  /**
-   * Creates an instance of this command, injecting services from the container.
-   */
-  static public function create(ContainerBuilder $container) {
-    return new static(
-      $container->get('git.info'),
-      $container->get('waypoint_manager.branches'),
-      $container->get('waypoint_manager.patches'),
-      $container->get('git.executor')
-    );
-  }
-
-  function __construct($git_info, $waypoint_manager_branches, $waypoint_manager_patches, $git_executor) {
-    $this->git_info = $git_info;
-    $this->waypoint_manager_branches = $waypoint_manager_branches;
-    $this->waypoint_manager_patches = $waypoint_manager_patches;
-    $this->git_executor = $git_executor;
+  protected function setServices() {
+    $this->git_info = $this->container->get('git.info');
+    $this->waypoint_manager_branches = $this->container->get('waypoint_manager.branches');
+    $this->waypoint_manager_patches = $this->container->get('waypoint_manager.patches');
+    $this->git_executor = $this->container->get('git.executor');
   }
 
   protected function execute(InputInterface $input, OutputInterface $output) {
+    $this->setServices();
+
     // Check git is clean.
     $clean = $this->git_info->gitIsClean();
     if (!$clean) {

@@ -19,22 +19,14 @@ class Cleanup extends CommandBase {
       ->setHelp('Deletes the current feature branch.');
   }
 
-  /**
-   * Creates an instance of this command, injecting services from the container.
-   */
-  static public function create(ContainerBuilder $container) {
-    return new static(
-      $container->get('git.info'),
-      $container->get('waypoint_manager.branches')
-    );
-  }
-
-  function __construct($git_info, $waypoint_manager_branches) {
-    $this->git_info = $git_info;
-    $this->waypoint_manager_branches = $waypoint_manager_branches;
+  protected function setServices() {
+    $this->git_info = $this->container->get('git.info');
+    $this->waypoint_manager_branches = $this->container->get('waypoint_manager.branches');
   }
 
   protected function execute(InputInterface $input, OutputInterface $output) {
+    $this->setServices();
+
     // Check git is clean.
     $clean = $this->git_info->gitIsClean();
     if (!$clean) {

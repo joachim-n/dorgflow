@@ -19,26 +19,16 @@ class Apply extends CommandBase {
       ->setHelp('Applies the diff of the current feature branch to the master branch, so it can be committed.');
   }
 
-  /**
-   * Creates an instance of this command, injecting services from the container.
-   */
-  static public function create(ContainerBuilder $container) {
-    return new static(
-      $container->get('git.info'),
-      $container->get('waypoint_manager.branches'),
-      $container->get('git.executor'),
-      $container->get('analyser')
-    );
-  }
-
-  function __construct($git_info, $waypoint_manager_branches, $git_executor, $analyser) {
-    $this->git_info = $git_info;
-    $this->waypoint_manager_branches = $waypoint_manager_branches;
-    $this->git_executor = $git_executor;
-    $this->analyser = $analyser;
+  protected function setServices() {
+    $this->git_info = $this->container->get('git.info');
+    $this->waypoint_manager_branches = $this->container->get('waypoint_manager.branches');
+    $this->git_executor = $this->container->get('git.executor');
+    $this->analyser = $this->container->get('analyser');
   }
 
   protected function execute(InputInterface $input, OutputInterface $output) {
+    $this->setServices();
+
     // Check git is clean.
     $clean = $this->git_info->gitIsClean();
     if (!$clean) {

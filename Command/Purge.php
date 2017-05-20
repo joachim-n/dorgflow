@@ -19,24 +19,15 @@ class Purge extends CommandBase {
       ->setHelp('Deletes all feature branches whose issues are committed to the master branch.');
   }
 
-  /**
-   * Creates an instance of this command, injecting services from the container.
-   */
-  static public function create(ContainerBuilder $container) {
-    return new static(
-      $container->get('git.info'),
-      $container->get('analyser'),
-      $container->get('waypoint_manager.branches')
-    );
-  }
-
-  function __construct($git_info, $analyser, $waypoint_manager_branches) {
-    $this->git_info = $git_info;
-    $this->analyser = $analyser;
-    $this->waypoint_manager_branches = $waypoint_manager_branches;
+  protected function setServices() {
+    $this->git_info = $this->container->get('git.info');
+    $this->waypoint_manager_branches = $this->container->get('waypoint_manager.branches');
+    $this->analyser = $this->container->get('analyser');
   }
 
   protected function execute(InputInterface $input, OutputInterface $output) {
+    $this->setServices();
+
     $this->master_branch_name = $this->waypoint_manager_branches->getMasterBranch()->getBranchName();
 
     $branch_list = $this->git_info->getBranchList();
