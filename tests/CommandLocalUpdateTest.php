@@ -47,11 +47,13 @@ class CommandLocalUpdateTest extends CommandTestBase {
     $container->set('waypoint_manager.patches', $this->getMockBuilder(StdClass::class));
     $container->set('git.executor', $this->getMockBuilder(StdClass::class));
 
-    $command = \Dorgflow\Command\LocalUpdate::create($container);
+    $command_tester = $this->setUpCommandTester($container, 'update', \Dorgflow\Command\LocalUpdate::class);
 
     $this->expectException(\Exception::class);
 
-    $command->execute();
+    $command_tester->execute([
+      'command'  => 'update',
+    ]);
   }
 
   /**
@@ -103,11 +105,13 @@ class CommandLocalUpdateTest extends CommandTestBase {
 
     $container->set('waypoint_manager.patches', $this->getMockBuilder(\Dorgflow\Service\WaypointManagerPatches::class));
 
-    $command = \Dorgflow\Command\LocalUpdate::create($container);
+    $command_tester = $this->setUpCommandTester($container, 'update', \Dorgflow\Command\LocalUpdate::class);
 
     $this->expectException(\Exception::class);
 
-    $command->execute();
+    $command_tester->execute([
+      'command'  => 'update',
+    ]);
   }
 
   /**
@@ -163,11 +167,13 @@ class CommandLocalUpdateTest extends CommandTestBase {
 
     $container->set('waypoint_manager.patches', $this->getMockBuilder(\Dorgflow\Service\WaypointManagerPatches::class));
 
-    $command = \Dorgflow\Command\LocalUpdate::create($container);
+    $command_tester = $this->setUpCommandTester($container, 'update', \Dorgflow\Command\LocalUpdate::class);
 
     $this->expectException(\Exception::class);
 
-    $command->execute();
+    $command_tester->execute([
+      'command'  => 'update',
+    ]);
   }
 
   /**
@@ -267,9 +273,11 @@ class CommandLocalUpdateTest extends CommandTestBase {
     // Add real versions of any remaining services not yet registered.
     $this->completeServiceContainer($container);
 
-    $command = \Dorgflow\Command\LocalUpdate::create($container);
+    $command_tester = $this->setUpCommandTester($container, 'update', \Dorgflow\Command\LocalUpdate::class);
 
-    $command->execute();
+    $command_tester->execute([
+      'command'  => 'update',
+    ]);
   }
 
   /**
@@ -352,9 +360,11 @@ class CommandLocalUpdateTest extends CommandTestBase {
     // Add real versions of any remaining services not yet registered.
     $this->completeServiceContainer($container);
 
-    $command = \Dorgflow\Command\LocalUpdate::create($container);
+    $command_tester = $this->setUpCommandTester($container, 'update', \Dorgflow\Command\LocalUpdate::class);
 
-    $command->execute();
+    $command_tester->execute([
+      'command'  => 'update',
+    ]);
   }
 
   /**
@@ -451,9 +461,11 @@ class CommandLocalUpdateTest extends CommandTestBase {
     // Add real versions of any remaining services not yet registered.
     $this->completeServiceContainer($container);
 
-    $command = \Dorgflow\Command\LocalUpdate::create($container);
+    $command_tester = $this->setUpCommandTester($container, 'update', \Dorgflow\Command\LocalUpdate::class);
 
-    $command->execute();
+    $command_tester->execute([
+      'command'  => 'update',
+    ]);
   }
 
   /**
@@ -548,9 +560,11 @@ class CommandLocalUpdateTest extends CommandTestBase {
     // Add real versions of any remaining services not yet registered.
     $this->completeServiceContainer($container);
 
-    $command = \Dorgflow\Command\LocalUpdate::create($container);
+    $command_tester = $this->setUpCommandTester($container, 'update', \Dorgflow\Command\LocalUpdate::class);
 
-    $command->execute();
+    $command_tester->execute([
+      'command'  => 'update',
+    ]);
   }
 
   /**
