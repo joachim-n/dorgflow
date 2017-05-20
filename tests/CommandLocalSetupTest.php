@@ -2,7 +2,9 @@
 
 namespace Dorgflow\Tests;
 
+use Dorgflow\Application;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * System test for the local setup command.
@@ -34,11 +36,13 @@ class CommandLocalSetupTest extends CommandTestBase {
     $container->set('waypoint_manager.branches', $this->getMockBuilder(StdClass::class));
     $container->set('waypoint_manager.patches', $this->getMockBuilder(StdClass::class));
 
-    $command = \Dorgflow\Command\LocalSetup::create($container);
+    $command_tester = $this->setUpCommandTester($container, 'setup', \Dorgflow\Command\LocalSetup::class);
 
     $this->expectException(\Exception::class);
 
-    $command->execute();
+    $command_tester->execute([
+      'command'  => 'setup',
+    ]);
   }
 
   /**
@@ -93,11 +97,13 @@ class CommandLocalSetupTest extends CommandTestBase {
 
     $container->set('waypoint_manager.patches', $this->getMockBuilder(\Dorgflow\Service\WaypointManagerPatches::class));
 
-    $command = \Dorgflow\Command\LocalSetup::create($container);
+    $command_tester = $this->setUpCommandTester($container, 'setup', \Dorgflow\Command\LocalSetup::class);
 
     $this->expectException(\Exception::class);
 
-    $command->execute();
+    $command_tester->execute([
+      'command'  => 'setup',
+    ]);
   }
 
   /**
@@ -162,9 +168,11 @@ class CommandLocalSetupTest extends CommandTestBase {
     $waypoint_manager_patches = $this->createMock(\Dorgflow\Service\WaypointManagerPatches::class);
     $container->set('waypoint_manager.patches', $waypoint_manager_patches);
 
-    $command = \Dorgflow\Command\LocalSetup::create($container);
+    $command_tester = $this->setUpCommandTester($container, 'setup', \Dorgflow\Command\LocalSetup::class);
 
-    $command->execute();
+    $command_tester->execute([
+      'command'  => 'setup',
+    ]);
   }
 
   /**
@@ -227,9 +235,11 @@ class CommandLocalSetupTest extends CommandTestBase {
     $waypoint_manager_patches = $this->createMock(\Dorgflow\Service\WaypointManagerPatches::class);
     $container->set('waypoint_manager.patches', $waypoint_manager_patches);
 
-    $command = \Dorgflow\Command\LocalSetup::create($container);
+    $command_tester = $this->setUpCommandTester($container, 'setup', \Dorgflow\Command\LocalSetup::class);
 
-    $command->execute();
+    $command_tester->execute([
+      'command'  => 'setup',
+    ]);
   }
 
   /**
@@ -318,9 +328,11 @@ class CommandLocalSetupTest extends CommandTestBase {
     // Add real versions of any remaining services not yet registered.
     $this->completeServiceContainer($container);
 
-    $command = \Dorgflow\Command\LocalSetup::create($container);
+    $command_tester = $this->setUpCommandTester($container, 'setup', \Dorgflow\Command\LocalSetup::class);
 
-    $command->execute();
+    $command_tester->execute([
+      'command'  => 'setup',
+    ]);
   }
 
 }
