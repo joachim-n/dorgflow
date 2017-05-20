@@ -10,7 +10,7 @@ namespace Dorgflow\Tests;
  *   vendor/bin/phpunit tests/CommandLocalUpdateTest.php
  * @endcode
  */
-class CommandLocalUpdateUnitTest extends \PHPUnit\Framework\TestCase {
+class CommandLocalUpdateUnitTest extends CommandTestBase {
 
   /*
   TODO:
@@ -45,18 +45,21 @@ class CommandLocalUpdateUnitTest extends \PHPUnit\Framework\TestCase {
     $waypoint_manager_branches->method('getFeatureBranch')
       ->willReturn($feature_branch);
 
-    $command = new \Dorgflow\Command\LocalUpdate(
-      $this->getMockGitInfoClean(),
-      $waypoint_manager_branches,
-      // We don't need these services, but the command expects them.
-      // Passing NULL also means the test fails if these services are called.
-      NULL,
-      NULL
-    );
+    $container = new \Symfony\Component\DependencyInjection\ContainerBuilder();
+
+    $container->set('git.info', $this->getMockGitInfoClean());
+    $container->set('waypoint_manager.branches', $waypoint_manager_branches);
+    // These won't get called, so don't need to mock anything.
+    $container->set('waypoint_manager.patches', $this->getMockBuilder(StdClass::class));
+    $container->set('git.executor', $this->getMockBuilder(StdClass::class));
+
+    $command_tester = $this->setUpCommandTester($container, 'update', \Dorgflow\Command\LocalUpdate::class);
 
     $this->expectException(\Exception::class);
 
-    $command->execute();
+    $command_tester->execute([
+      'command'  => 'update',
+    ]);
   }
 
   /**
@@ -82,15 +85,18 @@ class CommandLocalUpdateUnitTest extends \PHPUnit\Framework\TestCase {
       ->willReturn('file-patch-0.patch');
     $patches[] = $patch;
 
-    $command = new \Dorgflow\Command\LocalUpdate(
-      // Mock services that allow the command to pass its sanity checks.
-      $this->getMockGitInfoClean(),
-      $this->getMockWaypointManagerFeatureBranchCurrent(),
-      $this->getMockWaypointManagerWithPatches($patches),
-      NULL
-    );
+    $container = new \Symfony\Component\DependencyInjection\ContainerBuilder();
 
-    $command->execute();
+    $container->set('git.info', $this->getMockGitInfoClean());
+    $container->set('waypoint_manager.branches', $this->getMockWaypointManagerFeatureBranchCurrent());
+    $container->set('waypoint_manager.patches', $this->getMockWaypointManagerWithPatches($patches));
+    $container->set('git.executor', $this->getMockBuilder(StdClass::class));
+
+    $command_tester = $this->setUpCommandTester($container, 'update', \Dorgflow\Command\LocalUpdate::class);
+
+    $command_tester->execute([
+      'command'  => 'update',
+    ]);
 
     // TODO: test user output
   }
@@ -138,15 +144,18 @@ class CommandLocalUpdateUnitTest extends \PHPUnit\Framework\TestCase {
       ->willReturn('file-patch-1.patch');
     $patches[] = $patch;
 
-    $command = new \Dorgflow\Command\LocalUpdate(
-      // Mock services that allow the command to pass its sanity checks.
-      $this->getMockGitInfoClean(),
-      $this->getMockWaypointManagerFeatureBranchCurrent(),
-      $this->getMockWaypointManagerWithPatches($patches),
-      NULL
-    );
+    $container = new \Symfony\Component\DependencyInjection\ContainerBuilder();
 
-    $command->execute();
+    $container->set('git.info', $this->getMockGitInfoClean());
+    $container->set('waypoint_manager.branches', $this->getMockWaypointManagerFeatureBranchCurrent());
+    $container->set('waypoint_manager.patches', $this->getMockWaypointManagerWithPatches($patches));
+    $container->set('git.executor', $this->getMockBuilder(StdClass::class));
+
+    $command_tester = $this->setUpCommandTester($container, 'update', \Dorgflow\Command\LocalUpdate::class);
+
+    $command_tester->execute([
+      'command'  => 'update',
+    ]);
   }
 
   /**
@@ -207,15 +216,18 @@ class CommandLocalUpdateUnitTest extends \PHPUnit\Framework\TestCase {
       ->method('moveBranch')
       ->with($this->isType('string'), 'sha-patch-0');
 
-    $command = new \Dorgflow\Command\LocalUpdate(
-      // Mock services that allow the command to pass its sanity checks.
-      $this->getMockGitInfoClean(),
-      $this->getMockWaypointManagerFeatureBranchCurrent(),
-      $this->getMockWaypointManagerWithPatches($patches),
-      $git_executor
-    );
+    $container = new \Symfony\Component\DependencyInjection\ContainerBuilder();
 
-    $command->execute();
+    $container->set('git.info', $this->getMockGitInfoClean());
+    $container->set('waypoint_manager.branches', $this->getMockWaypointManagerFeatureBranchCurrent());
+    $container->set('waypoint_manager.patches', $this->getMockWaypointManagerWithPatches($patches));
+    $container->set('git.executor', $git_executor);
+
+    $command_tester = $this->setUpCommandTester($container, 'update', \Dorgflow\Command\LocalUpdate::class);
+
+    $command_tester->execute([
+      'command'  => 'update',
+    ]);
   }
 
   /**
