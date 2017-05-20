@@ -13,6 +13,8 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
  */
 class Apply extends Command implements ContainerAwareInterface {
 
+  use ContainerAwareTrait;
+
   /**
    * {@inheritdoc}
    */

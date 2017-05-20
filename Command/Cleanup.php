@@ -13,6 +13,8 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
  */
 class Cleanup extends Command implements ContainerAwareInterface {
 
+  use ContainerAwareTrait;
+
   /**
    * {@inheritdoc}
    */

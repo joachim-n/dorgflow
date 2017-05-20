@@ -10,6 +10,8 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 class LocalSetup extends Command implements ContainerAwareInterface {
 
+  use ContainerAwareTrait;
+
   /**
    * {@inheritdoc}
    */

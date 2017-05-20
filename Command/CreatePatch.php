@@ -10,6 +10,8 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 class CreatePatch extends Command implements ContainerAwareInterface {
 
+  use ContainerAwareTrait;
+
   /**
    * {@inheritdoc}
    */
