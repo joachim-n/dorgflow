@@ -13,13 +13,16 @@ require 'services.php';
 
 print "Hello, this is Dorgflow!\n";
 
-$command_class_name = CommandResolver::getCommandClass($argv);
+// Build the console application.
+$application = new Application('Dorgflow');
 
-$command = $command_class_name::create($container);
+$application->add($container->get('command.apply'));
+$application->add($container->get('command.cleanup'));
+$application->add($container->get('command.patch'));
+$application->add($container->get('command.setup'));
+$application->add($container->get('command.update'));
+$application->add($container->get('command.purge'));
 
-try {
-  $command->execute();
-}
-catch (\Exception $e) {
-  print $e->getMessage() . "\n";
-}
+$application->setDefaultCommand('test');
+
+$application->run();

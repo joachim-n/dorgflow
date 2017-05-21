@@ -2,33 +2,39 @@
 
 namespace Dorgflow\Command;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Console\Command\Command as SymfonyCommand;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
  * Applies the current feature branch to the master branch as a squash merge.
  */
-class Apply extends CommandBase {
+class Apply extends SymfonyCommand implements ContainerAwareInterface {
+
+  use ContainerAwareTrait;
 
   /**
-   * Creates an instance of this command, injecting services from the container.
+   * {@inheritdoc}
    */
-  static public function create(ContainerBuilder $container) {
-    return new static(
-      $container->get('git.info'),
-      $container->get('waypoint_manager.branches'),
-      $container->get('git.executor'),
-      $container->get('analyser')
-    );
+  protected function configure() {
+    $this
+      ->setName('apply')
+      ->setDescription('Applies the current feature branch to the master branch.')
+      ->setHelp('Applies the diff of the current feature branch to the master branch, so it can be committed.');
   }
 
-  function __construct($git_info, $waypoint_manager_branches, $git_executor, $analyser) {
-    $this->git_info = $git_info;
-    $this->waypoint_manager_branches = $waypoint_manager_branches;
-    $this->git_executor = $git_executor;
-    $this->analyser = $analyser;
+  protected function setServices() {
+    $this->git_info = $this->container->get('git.info');
+    $this->waypoint_manager_branches = $this->container->get('waypoint_manager.branches');
+    $this->git_executor = $this->container->get('git.executor');
+    $this->analyser = $this->container->get('analyser');
   }
 
-  public function execute() {
+  protected function execute(InputInterface $input, OutputInterface $output) {
+    $this->setServices();
+
     // Check git is clean.
     $clean = $this->git_info->gitIsClean();
     if (!$clean) {

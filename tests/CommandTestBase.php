@@ -2,6 +2,8 @@
 
 namespace Dorgflow\Tests;
 
+use Dorgflow\Application;
+use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
@@ -201,6 +203,33 @@ abstract class CommandTestBase extends \PHPUnit\Framework\TestCase {
         ->addArgument(new Reference('analyser'))
         ->addArgument(new Reference('waypoint_manager.branches'));
     }
+  }
+
+  /**
+   * Gets the CommandTester object to run a given command.
+   *
+   * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+   *  The DI container.
+   * @param $name
+   *  The name of the command as registered in the console application.
+   * @param $class
+   *  The Command class.
+   *
+   * @return \Symfony\Component\Console\Tester\CommandTester
+   *  The command tester object.
+   */
+  protected function setUpCommandTester(ContainerBuilder $container, $name, $class) {
+    $container
+      ->register("command.{$name}", $class)
+      ->addMethodCall('setContainer', [new Reference('service_container')]);
+
+    $application = new Application();
+    $application->add($container->get("command.{$name}"));
+
+    $command = $application->find($name);
+    $command_tester = new CommandTester($command);
+
+    return $command_tester;
   }
 
 }

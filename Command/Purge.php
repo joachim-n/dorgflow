@@ -2,31 +2,38 @@
 
 namespace Dorgflow\Command;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Console\Command\Command as SymfonyCommand;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
  * Deletes ALL feature branches and files for issues which are fixed.
  */
-class Purge extends CommandBase {
+class Purge extends SymfonyCommand implements ContainerAwareInterface {
+
+  use ContainerAwareTrait;
 
   /**
-   * Creates an instance of this command, injecting services from the container.
+   * {@inheritdoc}
    */
-  static public function create(ContainerBuilder $container) {
-    return new static(
-      $container->get('git.info'),
-      $container->get('analyser'),
-      $container->get('waypoint_manager.branches')
-    );
+  protected function configure() {
+    $this
+      ->setName('purge')
+      ->setDescription('Deletes all feature branches whose issues are committed to the master branch.')
+      ->setHelp('Deletes all feature branches whose issues are committed to the master branch.');
   }
 
-  function __construct($git_info, $analyser, $waypoint_manager_branches) {
-    $this->git_info = $git_info;
-    $this->analyser = $analyser;
-    $this->waypoint_manager_branches = $waypoint_manager_branches;
+  protected function setServices() {
+    $this->git_info = $this->container->get('git.info');
+    $this->waypoint_manager_branches = $this->container->get('waypoint_manager.branches');
+    $this->analyser = $this->container->get('analyser');
   }
 
-  public function execute() {
+  protected function execute(InputInterface $input, OutputInterface $output) {
+    $this->setServices();
+
     $this->master_branch_name = $this->waypoint_manager_branches->getMasterBranch()->getBranchName();
 
     $branch_list = $this->git_info->getBranchList();

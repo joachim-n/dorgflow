@@ -2,29 +2,37 @@
 
 namespace Dorgflow\Command;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Console\Command\Command as SymfonyCommand;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
  * Deletes the current feature branch.
  */
-class Cleanup extends CommandBase {
+class Cleanup extends SymfonyCommand implements ContainerAwareInterface {
+
+  use ContainerAwareTrait;
 
   /**
-   * Creates an instance of this command, injecting services from the container.
+   * {@inheritdoc}
    */
-  static public function create(ContainerBuilder $container) {
-    return new static(
-      $container->get('git.info'),
-      $container->get('waypoint_manager.branches')
-    );
+  protected function configure() {
+    $this
+      ->setName('cleanup')
+      ->setDescription('Deletes the current feature branch.')
+      ->setHelp('Deletes the current feature branch.');
   }
 
-  function __construct($git_info, $waypoint_manager_branches) {
-    $this->git_info = $git_info;
-    $this->waypoint_manager_branches = $waypoint_manager_branches;
+  protected function setServices() {
+    $this->git_info = $this->container->get('git.info');
+    $this->waypoint_manager_branches = $this->container->get('waypoint_manager.branches');
   }
 
-  public function execute() {
+  protected function execute(InputInterface $input, OutputInterface $output) {
+    $this->setServices();
+
     // Check git is clean.
     $clean = $this->git_info->gitIsClean();
     if (!$clean) {

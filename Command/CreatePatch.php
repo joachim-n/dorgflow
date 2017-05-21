@@ -2,38 +2,40 @@
 
 namespace Dorgflow\Command;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Console\Command\Command as SymfonyCommand;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
-class CreatePatch extends CommandBase {
+class CreatePatch extends SymfonyCommand implements ContainerAwareInterface {
+
+  use ContainerAwareTrait;
 
   /**
-   * Creates an instance of this command, injecting services from the container.
+   * {@inheritdoc}
    */
-  static public function create(ContainerBuilder $container) {
-    return new static(
-      $container->get('git.info'),
-      $container->get('git.log'),
-      $container->get('analyser'),
-      $container->get('waypoint_manager.branches'),
-      $container->get('waypoint_manager.patches'),
-      $container->get('drupal_org'),
-      $container->get('git.executor'),
-      $container->get('commit_message')
-    );
+  protected function configure() {
+    $this
+      ->setName('patch')
+      ->setDescription('Creates a patch for the current feature branch.')
+      ->setHelp('Creates a patch for the diff between the current feature branch and the master branch, and also an interdiff if a patch has previously been made.');
   }
 
-  function __construct($git_info, $git_log, $analyser, $waypoint_manager_branches, $waypoint_manager_patches, $drupal_org, $git_executor, $commit_message) {
-    $this->git_info = $git_info;
-    $this->git_log = $git_log;
-    $this->analyser = $analyser;
-    $this->waypoint_manager_branches = $waypoint_manager_branches;
-    $this->waypoint_manager_patches = $waypoint_manager_patches;
-    $this->drupal_org = $drupal_org;
-    $this->git_executor = $git_executor;
-    $this->commit_message = $commit_message;
+  protected function setServices() {
+    $this->git_info = $this->container->get('git.info');
+    $this->git_log = $this->container->get('git.log');
+    $this->analyser = $this->container->get('analyser');
+    $this->waypoint_manager_branches = $this->container->get('waypoint_manager.branches');
+    $this->waypoint_manager_patches = $this->container->get('waypoint_manager.patches');
+    $this->drupal_org = $this->container->get('drupal_org');
+    $this->git_executor = $this->container->get('git.executor');
+    $this->commit_message = $this->container->get('commit_message');
   }
 
-  public function execute() {
+  protected function execute(InputInterface $input, OutputInterface $output) {
+    $this->setServices();
+
     // Check git is clean.
     $clean = $this->git_info->gitIsClean();
     if (!$clean) {

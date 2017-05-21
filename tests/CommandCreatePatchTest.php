@@ -41,11 +41,13 @@ class CommandCreatePatchTest extends CommandTestBase {
     // Add real versions of any remaining services not yet registered.
     $this->completeServiceContainer($container);
 
-    $command = \Dorgflow\Command\CreatePatch::create($container);
+    $command_tester = $this->setUpCommandTester($container, 'patch', \Dorgflow\Command\CreatePatch::class);
 
     $this->expectException(\Exception::class);
 
-    $command->execute();
+    $command_tester->execute([
+      'command'  => 'patch',
+    ]);
   }
 
   /**
@@ -105,11 +107,13 @@ class CommandCreatePatchTest extends CommandTestBase {
     // Add real versions of any remaining services not yet registered.
     $this->completeServiceContainer($container);
 
-    $command = \Dorgflow\Command\CreatePatch::create($container);
+    $command_tester = $this->setUpCommandTester($container, 'patch', \Dorgflow\Command\CreatePatch::class);
 
     $this->expectException(\Exception::class);
 
-    $command->execute();
+    $command_tester->execute([
+      'command'  => 'patch',
+    ]);
   }
 
   /**
@@ -172,11 +176,13 @@ class CommandCreatePatchTest extends CommandTestBase {
     // Add real versions of any remaining services not yet registered.
     $this->completeServiceContainer($container);
 
-    $command = \Dorgflow\Command\CreatePatch::create($container);
+    $command_tester = $this->setUpCommandTester($container, 'patch', \Dorgflow\Command\CreatePatch::class);
 
     $this->expectException(\Exception::class);
 
-    $command->execute();
+    $command_tester->execute([
+      'command'  => 'patch',
+    ]);
   }
 
   /**
@@ -258,9 +264,11 @@ class CommandCreatePatchTest extends CommandTestBase {
     // Add real versions of any remaining services not yet registered.
     $this->completeServiceContainer($container);
 
-    $command = \Dorgflow\Command\CreatePatch::create($container);
+    $command_tester = $this->setUpCommandTester($container, 'patch', \Dorgflow\Command\CreatePatch::class);
 
-    $command->execute();
+    $command_tester->execute([
+      'command'  => 'patch',
+    ]);
   }
 
   /**
@@ -355,9 +363,11 @@ class CommandCreatePatchTest extends CommandTestBase {
     // Add real versions of any remaining services not yet registered.
     $this->completeServiceContainer($container);
 
-    $command = \Dorgflow\Command\CreatePatch::create($container);
+    $command_tester = $this->setUpCommandTester($container, 'patch', \Dorgflow\Command\CreatePatch::class);
 
-    $command->execute();
+    $command_tester->execute([
+      'command'  => 'patch',
+    ]);
   }
 
   /**
@@ -471,9 +481,11 @@ class CommandCreatePatchTest extends CommandTestBase {
     // Add real versions of any remaining services not yet registered.
     $this->completeServiceContainer($container);
 
-    $command = \Dorgflow\Command\CreatePatch::create($container);
+    $command_tester = $this->setUpCommandTester($container, 'patch', \Dorgflow\Command\CreatePatch::class);
 
-    $command->execute();
+    $command_tester->execute([
+      'command'  => 'patch',
+    ]);
   }
 
 }

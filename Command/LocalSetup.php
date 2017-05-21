@@ -2,28 +2,35 @@
 
 namespace Dorgflow\Command;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Console\Command\Command as SymfonyCommand;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
-class LocalSetup extends CommandBase {
+class LocalSetup extends SymfonyCommand implements ContainerAwareInterface {
+
+  use ContainerAwareTrait;
 
   /**
-   * Creates an instance of this command, injecting services from the container.
+   * {@inheritdoc}
    */
-  static public function create(ContainerBuilder $container) {
-    return new static(
-      $container->get('git.info'),
-      $container->get('waypoint_manager.branches'),
-      $container->get('waypoint_manager.patches')
-    );
+  protected function configure() {
+    $this
+      ->setName('setup')
+      ->setDescription('Sets up a feature branch.')
+      ->setHelp('Sets up a feature branch based on a drupal.org issue node, and downloads and applies any patches.');
   }
 
-  function __construct($git_info, $waypoint_manager_branches, $waypoint_manager_patches) {
-    $this->git_info = $git_info;
-    $this->waypoint_manager_branches = $waypoint_manager_branches;
-    $this->waypoint_manager_patches = $waypoint_manager_patches;
+  protected function setServices() {
+    $this->git_info = $this->container->get('git.info');
+    $this->waypoint_manager_branches = $this->container->get('waypoint_manager.branches');
+    $this->waypoint_manager_patches = $this->container->get('waypoint_manager.patches');
   }
 
-  public function execute() {
+  protected function execute(InputInterface $input, OutputInterface $output) {
+    $this->setServices();
+
     // Check git is clean.
     $clean = $this->git_info->gitIsClean();
     if (!$clean) {

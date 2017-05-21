@@ -48,3 +48,23 @@ $container
   ->addArgument(new Reference('git.executor'))
   ->addArgument(new Reference('analyser'))
   ->addArgument(new Reference('waypoint_manager.branches'));
+
+// Register commands as services.
+$container
+  ->register('command.apply', \Dorgflow\Command\Apply::class)
+  ->addMethodCall('setContainer', [new Reference('service_container')]);
+$container
+  ->register('command.cleanup', \Dorgflow\Command\Cleanup::class)
+  ->addMethodCall('setContainer', [new Reference('service_container')]);
+$container
+  ->register('command.patch', \Dorgflow\Command\CreatePatch::class)
+  ->addMethodCall('setContainer', [new Reference('service_container')]);
+$container
+  ->register('command.setup', \Dorgflow\Command\LocalSetup::class)
+  ->addMethodCall('setContainer', [new Reference('service_container')]);
+$container
+  ->register('command.update', \Dorgflow\Command\LocalUpdate::class)
+  ->addMethodCall('setContainer', [new Reference('service_container')]);
+$container
+  ->register('command.purge', \Dorgflow\Command\Purge::class)
+  ->addMethodCall('setContainer', [new Reference('service_container')]);
