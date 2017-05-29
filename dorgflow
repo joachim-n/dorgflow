@@ -23,6 +23,6 @@ $application->add($container->get('command.setup'));
 $application->add($container->get('command.update'));
 $application->add($container->get('command.purge'));
 
-$application->setDefaultCommand('test');
+$application->setDefaultCommand('patch');
 
 $application->run();
