@@ -160,13 +160,22 @@ class GitExecutor {
     fclose($pipes[2]);
     proc_close($process);
 
-    // Check STDERR for errors.
-    if (!empty($errors)) {
-      return FALSE;
-    }
-    else {
+    if (empty($errors)) {
       return TRUE;
     }
+
+    $error_lines = explode("\n", $errors);
+
+    // Check the messages in STDERR. Not all error messages mean the patch
+    // failed; for instance, git warns of file modes that don't match the patch.
+    foreach ($error_lines as $error) {
+      if (strpos($error, 'error: patch failed') !== FALSE) {
+        return FALSE;
+      }
+    }
+
+    // If no patch failing error was found, consider this a success.
+    return TRUE;
   }
 
   /**
