@@ -92,7 +92,17 @@ class DrupalOrg {
     }
 
     foreach ($files as &$file_item) {
-      $file_item->index = $comment_id_natural_indexes[$file_item->file->cid];
+      // A file won't have a comment ID if it was uploaded when the node was
+      // created.
+      // TODO: file a bug in the relevant Drupal module, following up my last
+      // patch to add this data.
+      if (isset($file_item->file->cid)) {
+        $file_item_cid = $file_item->file->cid;
+        $file_item->index = $comment_id_natural_indexes[$file_item_cid];
+      }
+      else {
+        $file_item->index = 0;
+      }
     }
 
     // Ensure these are in creation order by ordering them by the comment index.
