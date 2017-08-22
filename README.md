@@ -16,6 +16,10 @@ Then either:
   - symlink the file dorgflow into a folder that's in your path.
   - set the root folder of this repository into your path.
 
+### Optional: For composer driven Drupal projects
+
+If you're about to use Dorgflow in the context of a composer driver Drupal project, where you e.g. want to use version 8.x-3.1 of a particular module for staging and the production server, you may easily run into trouble setting up your environment for drupal.org contributions controlled by dorgflow. For those of you there is a composer plugin available which helps you manage those environments: https://packagist.org/packages/lakedrops/dorgflow
+
 ## Usage
 
 ### Starting work on an issue
