@@ -19,7 +19,12 @@ class UserInput {
         // Allow an #anchor at the end of the URL so users can copy and paste it
         // when it has a #new or #ID link.
         $matches = [];
+        // Built-in node URL.
         if (preg_match("@www\.drupal\.org/node/(?P<number>\d+)(#.*)?$@", $argv[1], $matches)) {
+          $this->issueNumber = $matches['number'];
+        }
+        // Issue node path alias with the project name in the path.
+        if (preg_match("@www\.drupal\.org/project/(?:\w+)/issues/(?P<number>\d+)(#.*)?$@", $argv[1], $matches)) {
           $this->issueNumber = $matches['number'];
         }
       }
