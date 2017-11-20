@@ -10,7 +10,9 @@ doesn't handle is posting your files back to an issue for review.
 
 Install dependencies with Composer:
 
-    $ composer install
+    $ composer install --no-dev
+
+(The --no-dev option omits the packages that are needed for testing.)
 
 Then either:
   - symlink the file dorgflow into a folder that's in your path.
