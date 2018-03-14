@@ -66,5 +66,8 @@ $container
   ->register('command.update', \Dorgflow\Command\LocalUpdate::class)
   ->addMethodCall('setContainer', [new Reference('service_container')]);
 $container
+  ->register('command.master', \Dorgflow\Command\SwitchMaster::class)
+  ->addMethodCall('setContainer', [new Reference('service_container')]);
+$container
   ->register('command.purge', \Dorgflow\Command\Purge::class)
   ->addMethodCall('setContainer', [new Reference('service_container')]);

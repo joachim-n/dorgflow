@@ -53,4 +53,17 @@ class MasterBranch {
     $this->git_executor->checkOutFiles($this->branchName);
   }
 
+  /**
+   * Checks out the branch.
+   */
+  public function gitCheckout() {
+    // No need to do anything if the branch is current.
+    if ($this->isCurrentBranch()) {
+      return;
+    }
+
+    $branch_name = $this->getBranchName();
+    $this->git_executor->checkOutBranch($branch_name);
+  }
+
 }
