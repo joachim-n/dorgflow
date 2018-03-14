@@ -2,6 +2,7 @@
 
 namespace Dorgflow\Command;
 
+use Dorgflow\Console\ItemList;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -92,19 +93,21 @@ class LocalSetup extends SymfonyCommand implements ContainerAwareInterface {
     }
 
     // Output the patches.
+    $list = new ItemList($output);
+    $list->setProgressive();
     foreach ($patches as $patch) {
       $patch_committed = $patch->commitPatch();
 
       // Message.
       if ($patch_committed) {
-        print strtr("Applied and committed patch !patchname.\n", [
+        $list->addItem(strtr("Applied and committed patch !patchname.", [
           '!patchname' => $patch->getPatchFilename(),
-        ]);
+        ]));
       }
       else {
-        print strtr("Patch !patchname did not apply.\n", [
+        $list->addItem(strtr("Patch !patchname did not apply.", [
           '!patchname' => $patch->getPatchFilename(),
-        ]);
+        ]));
       }
     }
 
