@@ -5,6 +5,7 @@ namespace Dorgflow\Command;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
@@ -46,19 +47,19 @@ class LocalSetup extends SymfonyCommand implements ContainerAwareInterface {
       // If the feature branch already exists, check it out, and stop.
       $feature_branch->gitCheckout();
 
-      print strtr("The feature branch !branch already exists and has been checked out.\n", [
+      $output->writeln(strtr("<info>The feature branch !branch already exists and has been checked out.</info>", [
         '!branch' => $feature_branch->getBranchName(),
-      ]);
+      ]));
 
       if ($this->waypoint_manager_branches->featureBranchIsUpToDateWithMaster($feature_branch)) {
-        print "This branch is up to date with master.\n";
-        print "You should use the update command to get new patches from drupal.org.\n";
+        $output->writeln("This branch is up to date with master.");
+        $output->writeln("You should use the update command to get new patches from drupal.org.");
       }
       else {
-        print strtr("This branch is not up to date with master. You should do 'git rebase !master --keep-empty'.\n", [
+        $output->writeln(strtr("This branch is not up to date with master. You should do 'git rebase !master --keep-empty'.", [
           '!master' => $master_branch->getBranchName(),
-        ]);
-        print "Afterwards, you should use the update command to get new patches from drupal.org.\n";
+        ]));
+        $output->writeln("Afterwards, you should use the update command to get new patches from drupal.org.");
       }
 
       return;
@@ -71,22 +72,22 @@ class LocalSetup extends SymfonyCommand implements ContainerAwareInterface {
       ]));
     }
 
-    print strtr("Detected master branch !branch.\n", [
+    $output->writeln(strtr("Detected master branch !branch.", [
       '!branch' => $master_branch->getBranchName(),
-    ]);
+    ]));
 
     $feature_branch->gitCreate();
 
-    print strtr("Created feature branch !branch.\n", [
+    $output->writeln(strtr("Created feature branch !branch.", [
       '!branch' => $feature_branch->getBranchName(),
-    ]);
+    ]));
 
     // Get the patches and create them.
     $patches = $this->waypoint_manager_patches->setUpPatches();
 
     // If no patches, we're done.
     if (empty($patches)) {
-      print "There are no patches to apply.\n";
+      $output->writeln("There are no patches to apply.");
       return;
     }
 
@@ -114,9 +115,9 @@ class LocalSetup extends SymfonyCommand implements ContainerAwareInterface {
       // Save the file so the user can apply it manually.
       file_put_contents($patch->getPatchFilename(), $patch->getPatchFile());
 
-      print strtr("The most recent patch, !patchname, did not apply. You should attempt to apply it manually. The patch file has been saved to the working directory.\n", [
+      $output->writeln(strtr("The most recent patch, !patchname, did not apply. You should attempt to apply it manually. The patch file has been saved to the working directory.", [
         '!patchname' => $patch->getPatchFilename(),
-      ]);
+      ]));
     }
   }
 
