@@ -5,6 +5,7 @@ namespace Dorgflow\Command;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
@@ -82,16 +83,18 @@ class Purge extends SymfonyCommand implements ContainerAwareInterface {
       print " - issue: $issue_number\n   branch name: {$info['branch']}\n   committed in: {$info['message']}.\n";
     }
 
-    $count = count($issues_to_clean_up);
-    $confirmation = readline("Please enter 'delete' to confirm DELETION of {$count} branches:");
+    $helper = $this->getHelper('question');
 
-    if ($confirmation != 'delete') {
-      print "Clean up aborted.\n";
+    $count = count($issues_to_clean_up);
+    $question = new Question("Please enter 'delete' to confirm DELETION of {$count} branches:");
+    if ($helper->ask($input, $output, $question) != 'delete') {
+      $output->writeln('Clean up aborted.');
       return;
     }
 
     foreach ($issues_to_clean_up as $issue_number => $info) {
       shell_exec("git branch -D {$info['branch']}");
+      $output->writeln("Deleted branch {$info['branch']}.");
     }
   }
 
