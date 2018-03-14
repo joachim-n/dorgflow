@@ -3,6 +3,35 @@
 namespace Dorgflow\Waypoint;
 
 class Patch {
+  
+  /*
+  
+    - getSHA
+    - getFileEntity
+    - getPatchFile
+    - getPatchFilename
+    - getPatchFileFid
+    - getPatchFileIndex
+    - getPatchFileCid
+    - hasCommit
+    - commitPatch
+    - applyPatchFile
+    
+    
+  different kinds of patch:
+    
+    - file from dorg only. --> becomes git commit -- PatchFile
+      - getFileEntity
+      - getPatchFile
+      - getPatchFilename
+    
+    
+    - file from dorg AND git commit --> doesn't do much -- PatchFileCommitted
+    
+    - git commit only --> becomes dorg file -- LocalPatch
+    
+    - local file for dorg AND git commit --> doesn't do much -- LocalPatchFile  
+  */
 
   /**
    * The file entity ID for this patch.
@@ -141,6 +170,12 @@ class Patch {
     return !empty($this->sha);
   }
 
+  /**
+   * Create a commit for this patch on the current feature branch.
+   *
+   * @return bool
+   *  TRUE if git was able to apply the patch, FALSE if it was not.
+   */
   public function commitPatch() {
     // Set the files back to the master branch, without changing the current
     // commit.
