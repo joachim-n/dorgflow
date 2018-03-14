@@ -2,6 +2,8 @@
 
 namespace Dorgflow\Command;
 
+use Dorgflow\Console\ItemList;
+use Dorgflow\Console\DefinitionList;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -79,9 +81,20 @@ class Purge extends SymfonyCommand implements ContainerAwareInterface {
     ksort($issues_to_clean_up);
 
     print "You are about to DELETE the following branches!\n";
+    $list = new ItemList($output);
     foreach ($issues_to_clean_up as $issue_number => $info) {
-      print " - issue: $issue_number\n   branch name: {$info['branch']}\n   committed in: {$info['message']}.\n";
+      $nested_list = $list->getNestedListItem(DefinitionList::class);
+      $nested_list->setDefinitionFormatterStyle(new \Symfony\Component\Console\Formatter\OutputFormatterStyle(
+        NULL, NULL, ['bold']
+      ));
+
+      $nested_list->addItem("issue", $issue_number);
+      $nested_list->addItem('branch name', $info['branch']);
+      $nested_list->addItem('committed in', $info['message']);
+
+      $list->addItem($nested_list);
     }
+    $list->render();
 
     $helper = $this->getHelper('question');
 
