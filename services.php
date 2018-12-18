@@ -71,3 +71,6 @@ $container
 $container
   ->register('command.purge', \Dorgflow\Command\Purge::class)
   ->addMethodCall('setContainer', [new Reference('service_container')]);
+  $container
+  ->register('command.status', \Dorgflow\Command\Status::class)
+  ->addMethodCall('setContainer', [new Reference('service_container')]);

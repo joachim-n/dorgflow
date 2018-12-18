@@ -23,6 +23,7 @@ $application->add($container->get('command.setup'));
 $application->add($container->get('command.update'));
 $application->add($container->get('command.master'));
 $application->add($container->get('command.purge'));
+$application->add($container->get('command.status'));
 
 $application->setDefaultCommand('patch');
 
