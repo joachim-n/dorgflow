@@ -14,7 +14,8 @@ $container
   ->register('git.info', \Dorgflow\Service\GitInfo::class);
 
 $container
-  ->register('git.executor', \Dorgflow\Service\GitExecutor::class);
+  ->register('git.executor', \Dorgflow\Service\GitExecutor::class)
+  ->addArgument(new Reference('git.info'));
 
 $container
   ->register('analyser', \Dorgflow\Service\Analyser::class)
