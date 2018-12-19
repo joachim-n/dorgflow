@@ -248,21 +248,22 @@ class CommandLocalSetupTest extends CommandTestBase {
   public function testIssueWithPatches() {
     $container = new \Symfony\Component\DependencyInjection\ContainerBuilder();
 
-    $git_info = $this->createMock(\Dorgflow\Service\GitInfo::class);
+    $prophet = new \Prophecy\Prophet;
+    $git_info = $prophet->prophesize();
+    $git_info->willExtend(\Dorgflow\Service\GitInfo::class);
+
     // Git is clean so the command proceeds.
-    $git_info->method('gitIsClean')
-      ->willReturn(TRUE);
-    // Master branch is current.
-    $git_info->method('getCurrentBranch')
-      ->willReturn('8.3.x');
+    $git_info->gitIsClean()->willReturn(TRUE);
+
+    $git_info->getCurrentBranch()->willReturn('8.3.x');
+
     $branch_list = [
       '8.3.x' => 'sha',
     ];
-    $git_info->method('getBranchList')
-      ->willReturn($branch_list);
-    $git_info->method('getBranchListReachable')
-      ->willReturn($branch_list);
-    $container->set('git.info', $git_info);
+    $git_info->getBranchList()->willReturn($branch_list);
+    $git_info->getBranchListReachable()->willReturn($branch_list);
+
+    $container->set('git.info', $git_info->reveal());
 
     $analyser = $this->createMock(\Dorgflow\Service\Analyser::class);
     $analyser->method('deduceIssueNumber')
@@ -317,7 +318,17 @@ class CommandLocalSetupTest extends CommandTestBase {
     // A new branch will be created.
     $git_executor->expects($this->once())
       ->method('createNewBranch')
-      ->with($this->equalTo('123456-Terribly-awful-bug'), $this->equalTo(TRUE));
+      ->with(
+        $this->callback(function($subject) use ($git_info) {
+          // Creating a new branch changes what git_info will return as the
+          // current branch.
+          // (Yes, horrible mishmash of two mocking systems.)
+          $git_info->getCurrentBranch()->willReturn($subject);
+
+          return ($subject == '123456-Terribly-awful-bug');
+        }),
+        $this->equalTo(TRUE)
+      );
 
     $this->setUpGitExecutorPatchExpectations($git_executor, $patch_file_data);
     $container->set('git.executor', $git_executor);

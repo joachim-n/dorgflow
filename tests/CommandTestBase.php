@@ -139,7 +139,11 @@ abstract class CommandTestBase extends \PHPUnit\Framework\TestCase {
     // would mean an extra faffy parameter to this helper method.)
     $git_executor
       ->expects($this->exactly($patch_count))
-      ->method('checkOutFiles');
+      ->method('checkOutBranch');
+    $git_executor
+      ->expects($this->exactly($patch_count))
+      ->method('moveToBranch');
+
     // For each patch we expect to be attempted to apply, the patch file
     // contents will be applied.
     $git_executor

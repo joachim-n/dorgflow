@@ -50,7 +50,22 @@ class MasterBranch {
   }
 
   public function checkOutFiles() {
-    $this->git_executor->checkOutFiles($this->branchName);
+    $original_branch = $this->git_info->getCurrentBranch();
+
+    if ($original_branch == $this->branchName) {
+      throw new \Exception("On master branch {$original_branch}.");
+    }
+
+    // Check out the master branch.
+    $this->git_executor->checkOutBranch($this->branchName);
+
+    // Make the original branch current, but without changing the files.
+    // This will allow us to apply a patch on the master branch, while ready to
+    // make the commit for the patch on the feature branch.
+    // We have to go the long way round, because the simply checking out the
+    // master branch files while remaining on the feature branch will not take
+    // into account any new files that are added by a patch.
+    $this->git_executor->moveToBranch($original_branch);
   }
 
   /**

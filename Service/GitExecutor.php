@@ -116,6 +116,18 @@ class GitExecutor {
   }
 
   /**
+   * Changes the current branch to the given one, without changing files.
+   *
+   * @param $branch_name
+   *  The short name of a branch, e.g. 'master'.
+   */
+  public function moveToBranch($branch_name) {
+    shell_exec("git symbolic-ref HEAD refs/heads/{$branch_name}");
+
+    $this->git_info->invalidateCurrentBranchCache();
+  }
+
+  /**
    * Performs a squash merge of a given branch.
    */
   public function squashMerge($branch_name) {
