@@ -40,6 +40,15 @@ class GitInfo {
   }
 
   /**
+   * Clears the cached value for the current branch.
+   *
+   * The Git Executor service must call this whenever it changes the branch.
+   */
+  public function invalidateCurrentBranchCache() {
+    unset($this->current_branch);
+  }
+
+  /**
    * Returns a list of all the git branches.
    *
    * @return

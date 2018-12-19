@@ -5,6 +5,10 @@ namespace Dorgflow\Service;
 // TODO: consider replacing this with a library.
 class GitExecutor {
 
+  function __construct($git_info) {
+    $this->git_info = $git_info;
+  }
+
   /**
    * Create a new git branch at the current commit.
    *
@@ -30,6 +34,8 @@ class GitExecutor {
     // Switch to the new branch if requested.
     if ($checkout) {
       exec("git symbolic-ref HEAD refs/heads/{$branch_short_name}");
+
+      $this->git_info->invalidateCurrentBranchCache();
     }
   }
 
