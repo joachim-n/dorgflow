@@ -63,6 +63,16 @@ You can now start work on your own fix to the issue!
 Commit your work to the feature branch, as you would normally. Make as many
 commits as you want, with whatever message you want.
 
+You can see the whole of your work so far by doing:
+
+    $ dorgflow diff
+
+This is just a shorthand for doing a git diff against the master branch.
+
+For a reminder of your feature branch and master branch, do:
+
+    $ dorgflow status
+
 ### Updating your feature branch
 
 If there are new patches on the issue on drupal.org, do:
