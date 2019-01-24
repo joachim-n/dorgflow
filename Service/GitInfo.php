@@ -23,6 +23,11 @@ class GitInfo {
    */
   public function gitIsClean() {
     if (!isset($this->is_clean)) {
+      // Unconfuse 'git diff-files', which sees a moved file as having a diff
+      // even if the contents are the same.
+      // See https://stackoverflow.com/questions/36367190/git-diff-files-output-changes-after-git-status
+      shell_exec("git update-index --refresh");
+
       $diff_files = shell_exec("git diff-files");
 
       $this->is_clean = (empty($diff_files));
