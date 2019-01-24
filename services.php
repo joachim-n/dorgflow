@@ -58,6 +58,9 @@ $container
   ->register('command.cleanup', \Dorgflow\Command\Cleanup::class)
   ->addMethodCall('setContainer', [new Reference('service_container')]);
 $container
+  ->register('command.diff', \Dorgflow\Command\Diff::class)
+  ->addMethodCall('setContainer', [new Reference('service_container')]);
+$container
   ->register('command.patch', \Dorgflow\Command\CreatePatch::class)
   ->addMethodCall('setContainer', [new Reference('service_container')]);
 $container

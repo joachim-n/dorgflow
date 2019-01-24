@@ -36,6 +36,23 @@ class GitInfo {
     return $this->is_clean;
   }
 
+  /**
+   * Returns the diff to the given branch.
+   *
+   * TODO: consider whether to move this to the branch object.
+   *
+   * @param string $branch
+   *  The branch name to diff against.
+   *
+   * @return string
+   *  The diff output, with colour.
+   */
+  public function diffMasterBranch($branch) {
+    $diff = shell_exec("git diff-index --color -p {$branch}");
+
+    return $diff;
+  }
+
   public function getCurrentBranch() {
     if (!isset($this->current_branch)) {
       $this->current_branch = trim(shell_exec("git symbolic-ref --short -q HEAD"));

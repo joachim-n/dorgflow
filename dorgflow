@@ -16,9 +16,11 @@ print "Hello, this is Dorgflow!\n";
 // Build the console application.
 $application = new Application('Dorgflow');
 
+// Register commands.
 $application->add($container->get('command.apply'));
 $application->add($container->get('command.cleanup'));
 $application->add($container->get('command.patch'));
+$application->add($container->get('command.diff'));
 $application->add($container->get('command.setup'));
 $application->add($container->get('command.update'));
 $application->add($container->get('command.master'));
