@@ -20,6 +20,7 @@ $application = new Application('Dorgflow');
 $application->add($container->get('command.apply'));
 $application->add($container->get('command.cleanup'));
 $application->add($container->get('command.patch'));
+$application->add($container->get('command.status'));
 $application->add($container->get('command.diff'));
 $application->add($container->get('command.setup'));
 $application->add($container->get('command.update'));
