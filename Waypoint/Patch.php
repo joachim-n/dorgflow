@@ -3,9 +3,9 @@
 namespace Dorgflow\Waypoint;
 
 class Patch {
-  
+
   /*
-  
+
     - getSHA
     - getFileEntity
     - getPatchFile
@@ -16,21 +16,21 @@ class Patch {
     - hasCommit
     - commitPatch
     - applyPatchFile
-    
-    
+
+
   different kinds of patch:
-    
+
     - file from dorg only. --> becomes git commit -- PatchFile
       - getFileEntity
       - getPatchFile
       - getPatchFilename
-    
-    
+
+
     - file from dorg AND git commit --> doesn't do much -- PatchFileCommitted
-    
+
     - git commit only --> becomes dorg file -- LocalPatch
-    
-    - local file for dorg AND git commit --> doesn't do much -- LocalPatchFile  
+
+    - local file for dorg AND git commit --> doesn't do much -- LocalPatchFile
   */
 
   /**
