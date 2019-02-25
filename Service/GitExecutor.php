@@ -5,8 +5,9 @@ namespace Dorgflow\Service;
 // TODO: consider replacing this with a library.
 class GitExecutor {
 
-  function __construct($git_info) {
+  function __construct($git_info, $analyser) {
     $this->git_info = $git_info;
+    $this->analyser = $analyser;
   }
 
   /**
@@ -228,7 +229,17 @@ class GitExecutor {
       $command = 'diff';
     }
 
-    shell_exec("git $command $treeish > $patch_name");
+    // In case someone has git config --global diff.noprefix true.
+    $prefixes = '--src-prefix=a/ --dst-prefix=b/';
+
+    // Detect whether the current repository is the Drupal core subtree split
+    // that drupal-composer/drupal-project uses.
+    if ($this->analyser->drupalCoreInComposer()) {
+      // We are working in the core directory of drupal-composer/drupal-project.
+      $prefixes = '--src-prefix=a/core/ --dst-prefix=b/core/';
+    }
+
+    shell_exec("git $command $treeish $prefixes > $patch_name");
   }
 
 }

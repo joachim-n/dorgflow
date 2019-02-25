@@ -14,13 +14,14 @@ $container
   ->register('git.info', \Dorgflow\Service\GitInfo::class);
 
 $container
-  ->register('git.executor', \Dorgflow\Service\GitExecutor::class)
-  ->addArgument(new Reference('git.info'));
-
-$container
   ->register('analyser', \Dorgflow\Service\Analyser::class)
   ->addArgument(new Reference('git.info'))
   ->addArgument(new Reference('user_input'));
+
+$container
+  ->register('git.executor', \Dorgflow\Service\GitExecutor::class)
+  ->addArgument(new Reference('git.info'))
+  ->addArgument(new Reference('analyser'));
 
 $container
   ->register('commit_message', \Dorgflow\Service\CommitMessageHandler::class)

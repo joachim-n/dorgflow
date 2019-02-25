@@ -108,6 +108,28 @@ class Analyser {
   }
 
   /**
+   * Determines whether the current project is Drupal core within Composer.
+   *
+   * This is needed because with Composer, Drupal core is checked out from a
+   * subtree split with /core as its root, and so diffs must be taken with a
+   * prefix.
+   *
+   * @return bool
+   *   TRUE if the current project is Drupal core, being managed as a Composer
+   *   package. FALSE otherwise.
+   */
+  public function drupalCoreInComposer() {
+    $repo_base_dir = $this->getRepoBaseDir();
+
+    if ($this->getCurrentProjectName() == 'drupal' && basename($repo_base_dir) == 'core') {
+      return TRUE;
+    }
+    else {
+      return FALSE;
+    }
+  }
+
+  /**
    * Gets the base directory for the repository.
    *
    * @return string
