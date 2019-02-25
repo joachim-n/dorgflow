@@ -131,6 +131,8 @@ class GitExecutor {
 
   /**
    * Performs a squash merge of a given branch.
+   *
+   * @param $branch_name string
    */
   public function squashMerge($branch_name) {
     // @todo change this to use git plumbing command.
@@ -143,7 +145,7 @@ class GitExecutor {
    * @param $patch_text
    *  The text of the patch file.
    *
-   * @return
+   * @return bool
    *  TRUE if the patch applied, FALSE if it did not.
    */
   public function applyPatch($patch_text) {
@@ -201,7 +203,7 @@ class GitExecutor {
   /**
    * Commit the currently staged changes.
    *
-   * @param $message
+   * @param $message string
    *  The message for the commit.
    */
   public function commit($message) {
@@ -213,11 +215,11 @@ class GitExecutor {
   /**
    * Writes a patch file based on a git diff.
    *
-   * @param $treeish
+   * @param $treeish string
    *  The commit to take the diff from.
-   * @param $patch_name
+   * @param $patch_name string
    *  The filename to write for the patch.
-   * @param $sequential
+   * @param $sequential bool
    *  (optional) If TRUE, the patch is sequential: composed of multiple
    *  changesets, one for each commit from $treeish to HEAD. Defaults to FALSE.
    */

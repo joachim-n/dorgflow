@@ -18,7 +18,7 @@ class GitLog {
   /**
    * Get the log data of the feature branch from the branch point with master.
    *
-   * @return
+   * @return array
    *  An array keyed by SHA, whose items are arrays with 'sha' and 'message'.
    *  The items are arranged in progressing order, that is, older commits first.
    */
@@ -42,7 +42,7 @@ class GitLog {
    *  The older commit to start the log after. This is not included.
    *  TODO: change this to be a Waypoint object.
    *
-   * @return
+   * @return array
    *  An array keyed by SHA, whose items are arrays with 'sha' and 'message'.
    *  The items are arranged in progressing order, that is, older commits first.
    */
@@ -65,7 +65,7 @@ class GitLog {
    * @param $new
    *  The recent commit. This is included in the log.
    *
-   * @return
+   * @return string
    *  The raw output from git rev-list.
    */
   protected function getLog($old, $new) {
@@ -80,7 +80,7 @@ class GitLog {
    * @param string $log
    *  The log output, as given by 'git rev-list --pretty=oneline'.
    *
-   * @return
+   * @return array
    *  An array keyed by SHA, where each item is an array with:
    *    - 'sha': The SHA.
    *    - 'message': The commit message.
