@@ -86,7 +86,9 @@ class LocalPatch {
 
     $current_project = $this->analyser->getCurrentProjectName();
 
-    $branch_description = $this->waypoint_manager_branches->getFeatureBranch()->getBranchDescription();
+    $branch_description = $this->waypoint_manager_branches
+      ->getFeatureBranch()
+      ->getBranchDescription();
 
     return "$patch_number.$current_project.$branch_description.patch";
   }
@@ -97,6 +99,7 @@ class LocalPatch {
 
   public function makeCommitMessage() {
     // TODO
+    return '';
   }
 
   protected function makeGitCommit() {
