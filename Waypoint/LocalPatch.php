@@ -2,6 +2,11 @@
 
 namespace Dorgflow\Waypoint;
 
+use Dorgflow\Service\Analyser;
+use Dorgflow\Service\DrupalOrg;
+use Dorgflow\Service\GitExecutor;
+use Dorgflow\Service\WaypointManagerBranches;
+
 /**
  * Represents a patch the user is creating locally.
  *
@@ -14,10 +19,20 @@ class LocalPatch {
    */
   protected $patchFile;
 
+  protected $drupal_org;
+
+  protected $waypoint_manager_branches;
+
+  protected $git_executor;
+
+  protected $commit_message;
+
+  protected $analyser;
+
   /**
    * Constructor.
    */
-  function __construct($drupal_org, $waypoint_manager_branches, $git_executor, $commit_message, $analyser) {
+  function __construct(DrupalOrg $drupal_org, WaypointManagerBranches $waypoint_manager_branches, GitExecutor $git_executor, $commit_message, Analyser $analyser) {
     $this->drupal_org = $drupal_org;
     $this->waypoint_manager_branches = $waypoint_manager_branches;
     $this->git_executor = $git_executor;

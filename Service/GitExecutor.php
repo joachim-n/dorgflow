@@ -5,7 +5,9 @@ namespace Dorgflow\Service;
 // TODO: consider replacing this with a library.
 class GitExecutor {
 
-  function __construct($git_info) {
+  protected $git_info;
+
+  function __construct(GitInfo $git_info) {
     $this->git_info = $git_info;
   }
 

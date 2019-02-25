@@ -9,7 +9,9 @@ class GitLog {
 
   protected $feature_branch_log;
 
-  function __construct($waypoint_manager_branches) {
+  protected $waypoint_manager_branches;
+
+  public function __construct(WaypointManagerBranches $waypoint_manager_branches) {
     $this->waypoint_manager_branches = $waypoint_manager_branches;
   }
 

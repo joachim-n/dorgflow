@@ -12,6 +12,30 @@ class CreatePatch extends SymfonyCommand implements ContainerAwareInterface {
 
   use ContainerAwareTrait;
 
+  /** @var \Dorgflow\Service\GitInfo */
+  protected $git_info;
+
+  /** @var \Dorgflow\Service\GitLog */
+  protected $git_log;
+
+  /** @var \Dorgflow\Service\Analyser */
+  protected $analyser;
+
+  /** @var \Dorgflow\Service\WaypointManagerBranches */
+  protected $waypoint_manager_branches;
+
+  /** @var \Dorgflow\Service\WaypointManagerPatches */
+  protected $waypoint_manager_patches;
+
+  /** @var \Dorgflow\Service\DrupalOrg */
+  protected $drupal_org;
+
+  /** @var \Dorgflow\Service\GitExecutor */
+  protected $git_executor;
+
+  /** @var \Dorgflow\Service\CommitMessageHandler */
+  protected $commit_message;
+
   /**
    * {@inheritdoc}
    */
