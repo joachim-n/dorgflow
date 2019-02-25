@@ -5,7 +5,9 @@ namespace Dorgflow\Service;
 // TODO: consider replacing this with a library.
 class GitExecutor {
 
-  function __construct($git_info) {
+  protected $git_info;
+
+  function __construct(GitInfo $git_info) {
     $this->git_info = $git_info;
   }
 
@@ -129,6 +131,8 @@ class GitExecutor {
 
   /**
    * Performs a squash merge of a given branch.
+   *
+   * @param $branch_name string
    */
   public function squashMerge($branch_name) {
     // @todo change this to use git plumbing command.
@@ -141,15 +145,15 @@ class GitExecutor {
    * @param $patch_text
    *  The text of the patch file.
    *
-   * @return
+   * @return bool
    *  TRUE if the patch applied, FALSE if it did not.
    */
   public function applyPatch($patch_text) {
     // See https://www.sitepoint.com/proc-open-communicate-with-the-outside-world/
     $desc = [
-      0 => array('pipe', 'r'), // 0 is STDIN for process
-      1 => array('pipe', 'w'), // 1 is STDOUT for process
-      2 => array('pipe', 'w'), // 2 is STDERR for process
+      0 => ['pipe', 'r'], // 0 is STDIN for process
+      1 => ['pipe', 'w'], // 1 is STDOUT for process
+      2 => ['pipe', 'w'], // 2 is STDERR for process
     ];
 
     // The command.
@@ -199,7 +203,7 @@ class GitExecutor {
   /**
    * Commit the currently staged changes.
    *
-   * @param $message
+   * @param $message string
    *  The message for the commit.
    */
   public function commit($message) {
@@ -211,11 +215,11 @@ class GitExecutor {
   /**
    * Writes a patch file based on a git diff.
    *
-   * @param $treeish
+   * @param $treeish string
    *  The commit to take the diff from.
-   * @param $patch_name
+   * @param $patch_name string
    *  The filename to write for the patch.
-   * @param $sequential
+   * @param $sequential bool
    *  (optional) If TRUE, the patch is sequential: composed of multiple
    *  changesets, one for each commit from $treeish to HEAD. Defaults to FALSE.
    */
