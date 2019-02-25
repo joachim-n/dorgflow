@@ -30,7 +30,7 @@ class GitInfo {
 
       $diff_files = shell_exec("git diff-files");
 
-      $this->is_clean = (empty($diff_files));
+      $this->is_clean = empty($diff_files);
     }
 
     return $this->is_clean;

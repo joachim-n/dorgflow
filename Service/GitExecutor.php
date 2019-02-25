@@ -151,9 +151,9 @@ class GitExecutor {
   public function applyPatch($patch_text) {
     // See https://www.sitepoint.com/proc-open-communicate-with-the-outside-world/
     $desc = [
-      0 => array('pipe', 'r'), // 0 is STDIN for process
-      1 => array('pipe', 'w'), // 1 is STDOUT for process
-      2 => array('pipe', 'w'), // 2 is STDERR for process
+      0 => ['pipe', 'r'], // 0 is STDIN for process
+      1 => ['pipe', 'w'], // 1 is STDOUT for process
+      2 => ['pipe', 'w'], // 2 is STDERR for process
     ];
 
     // The command.
