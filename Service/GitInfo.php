@@ -83,7 +83,7 @@ class GitInfo {
       $branch_list = [];
 
       // Get the list of local branches as 'SHA BRANCHNAME'.
-      $refs = shell_exec("git for-each-ref refs/heads/ --format='%(objectname) %(refname:short)'");
+      $refs = shell_exec('git for-each-ref refs/heads/ "--format=%(objectname) %(refname:short)"');
       foreach (explode("\n", trim($refs)) as $line) {
         list($sha, $branch_name) = explode(' ', $line);
 
