@@ -208,6 +208,17 @@ class GitExecutor {
     shell_exec("git commit  --allow-empty --message='$message'");
   }
 
+  private function getRepoBaseDir() {
+    $dir = getcwd();
+    while (strlen($dir) > 1) {
+      if (file_exists("$dir/.git/config")) {
+        break;
+      }
+      $dir = dirname($dir);
+    }
+    return $dir;
+  }
+
   /**
    * Writes a patch file based on a git diff.
    *
@@ -228,7 +239,16 @@ class GitExecutor {
       $command = 'diff';
     }
 
-    shell_exec("git $command $treeish > $patch_name");
+    // In case someone has git config --global diff.noprefix true
+    $prefixes = '--src-prefix=a/ --dst-prefix=b/';
+
+    $baseDir = $this->getRepoBaseDir();
+    if (basename($baseDir) === 'core' && file_exists($baseDir . '/phpunit.xml.dist')) {
+      // We are working in the core directory of drupal-composer/drupal-project.
+      $prefixes = '--src-prefix=a/core/ --dst-prefix=b/core/';
+    }
+
+    shell_exec("git $command $treeish $prefixes > $patch_name");
   }
 
 }
