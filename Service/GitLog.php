@@ -67,7 +67,7 @@ class GitLog {
    *  The raw output from git rev-list.
    */
   protected function getLog($old, $new) {
-    $git_log = shell_exec("git rev-list {$new} ^{$old} --pretty=oneline --reverse");
+    $git_log = shell_exec("git rev-list {$new} \"^{$old}\" --pretty=oneline --reverse");
 
     return $git_log;
   }
@@ -87,7 +87,8 @@ class GitLog {
     $feature_branch_log = [];
 
     if (!empty($log)) {
-      $git_log_lines = explode("\n", rtrim($log));
+      $any_newline = '/\r\n|\n/';
+      $git_log_lines = preg_split($any_newline, rtrim($log));
       foreach ($git_log_lines as $line) {
         list($sha, $message) = explode(' ', $line, 2);
         //dump("$sha ::: $message");

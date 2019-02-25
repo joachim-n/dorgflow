@@ -205,7 +205,7 @@ class GitExecutor {
   public function commit($message) {
     // Allow empty commits, for local patches and also in case two sequential
     // patches are identical.
-    shell_exec("git commit  --allow-empty --message='$message'");
+    shell_exec(sprintf('git commit  --allow-empty "--message=%s"', $message));
   }
 
   /**
