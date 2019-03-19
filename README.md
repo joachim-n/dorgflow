@@ -13,7 +13,7 @@ Dorgflow is designed to be installed globally.
 1. Either clone the repository or download a release and place it anywhere you
 like.
 
-2. Install dependencies with Composer:
+2. In the dorgflow directory, install its dependencies with Composer:
 
     $ composer install --no-dev
 
