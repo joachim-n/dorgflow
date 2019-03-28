@@ -80,10 +80,14 @@ class Analyser {
     // @todo caching?
     $repo_base_dir = $this->getRepoBaseDir();
 
-    // Special case for core; I for one have Drupal installed in lots of
+    // Special cases for core; I for one have Drupal installed in lots of
     // funnily-named folders.
     // Drupal 8.
     if (file_exists($repo_base_dir . "/core/index.php")) {
+      return 'drupal';
+    }
+    // Drupal 8 installed with Composer.
+    if (file_exists($repo_base_dir . "/core.api.php")) {
       return 'drupal';
     }
     // Drupal 7 and prior.
