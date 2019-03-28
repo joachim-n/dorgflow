@@ -78,21 +78,21 @@ class Analyser {
 
   public function getCurrentProjectName() {
     // @todo caching?
-    $working_dir = getcwd();
+    $repo_base_dir = $this->getRepoBaseDir();
 
     // Special case for core; I for one have Drupal installed in lots of
     // funnily-named folders.
     // Drupal 8.
-    if (file_exists($working_dir . "/core/index.php")) {
+    if (file_exists($repo_base_dir . "/core/index.php")) {
       return 'drupal';
     }
     // Drupal 7 and prior.
-    if (file_exists($working_dir . "/index.php")) {
+    if (file_exists($repo_base_dir . "/index.php")) {
       return 'drupal';
     }
 
     // Get the module name.
-    $current_module = basename($working_dir);
+    $current_module = basename($repo_base_dir);
 
     // Allow for module folders to have a suffix. (E.g., I might have views-6
     // and views-7 in my sandbox folder.)
@@ -101,6 +101,23 @@ class Analyser {
     $this->current_project = $current_module;
 
     return $current_module;
+  }
+
+  /**
+   * Gets the base directory for the repository.
+   *
+   * @return string
+   *   The absolute path to the base directory of the repository.
+   */
+  protected function getRepoBaseDir() {
+    $dir = getcwd();
+    while (strlen($dir) > 1) {
+      if (file_exists("$dir/.git/config")) {
+        break;
+      }
+      $dir = dirname($dir);
+    }
+    return $dir;
   }
 
 }
