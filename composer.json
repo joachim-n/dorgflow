@@ -15,5 +15,6 @@
     "psr-4": {
       "Dorgflow\\": ""
     }
-  }
+  },
+  "bin": ["dorgflow"]
 }
