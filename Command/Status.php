@@ -70,6 +70,8 @@ class Status extends SymfonyCommand implements ContainerAwareInterface {
     if (!$clean) {
       $io->text('You have uncommitted changes.');
     }
+
+    return 0;
   }
 
 }

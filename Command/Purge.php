@@ -73,7 +73,7 @@ class Purge extends SymfonyCommand implements ContainerAwareInterface {
 
     if (empty($issues_to_clean_up)) {
       print "No branches to clean up.\n";
-      return;
+      return 0;
     }
 
     // Sort by issue number.
@@ -102,13 +102,15 @@ class Purge extends SymfonyCommand implements ContainerAwareInterface {
     $question = new Question("Please enter 'delete' to confirm DELETION of {$count} branches:");
     if ($helper->ask($input, $output, $question) != 'delete') {
       $output->writeln('Clean up aborted.');
-      return;
+      return 0;
     }
 
     foreach ($issues_to_clean_up as $issue_number => $info) {
       shell_exec("git branch -D {$info['branch']}");
       $output->writeln("Deleted branch {$info['branch']}.");
     }
+
+    return 0;
   }
 
   protected function getIssueCommit($issue_number) {
