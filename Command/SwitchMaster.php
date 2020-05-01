@@ -42,6 +42,8 @@ class SwitchMaster extends SymfonyCommand implements ContainerAwareInterface {
 
     $master_branch = $this->waypoint_manager_branches->getMasterBranch();
     $master_branch->gitCheckout();
+
+    return 0;
   }
 
 }

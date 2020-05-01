@@ -105,6 +105,8 @@ class CreatePatch extends SymfonyCommand implements ContainerAwareInterface {
     // Make an empty commit to record the patch.
     $local_patch_commit_message = $this->commit_message->createLocalCommitMessage($local_patch);
     $this->git_executor->commit($local_patch_commit_message);
+
+    return 0;
   }
 
   protected function getInterdiffName($feature_branch, $last_patch) {
