@@ -71,6 +71,8 @@ class Apply extends SymfonyCommand implements ContainerAwareInterface {
     print strtr("You should now commit this, using the command from the issue on drupal.org: https://www.drupal.org/node/!id#drupalorg-issue-credit-form.\n", [
       '!id' => $this->analyser->deduceIssueNumber(),
     ]);
+
+    return 0;
   }
 
 }

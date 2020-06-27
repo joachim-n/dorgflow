@@ -50,7 +50,7 @@ class Cleanup extends SymfonyCommand implements ContainerAwareInterface {
 
     if ($confirmation != 'delete') {
       print "Clean up aborted.\n";
-      return;
+      return 1;
     }
 
     $master_branch_name = $master_branch->getBranchName();
@@ -59,6 +59,8 @@ class Cleanup extends SymfonyCommand implements ContainerAwareInterface {
     shell_exec("git branch -D $feature_branch_name");
 
     // TODO: delete any patch files for this issue.
+
+    return 0;
   }
 
 }
