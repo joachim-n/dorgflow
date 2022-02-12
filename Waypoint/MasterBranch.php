@@ -4,6 +4,18 @@ namespace Dorgflow\Waypoint;
 
 class MasterBranch {
 
+  /**
+   * Regex patterns for a master branch.
+   */
+  const BRANCH_NAME_PATTERNS = [
+    // Old style contrib, e.g. '8.x-1.x'.
+    '\d.x-\d+-x',
+    // Old style core.
+    '\d.x',
+    // Semver core/contrib.
+    '\d.\d+.x',
+  ];
+
   protected $branchName;
 
   protected $isCurrentBranch;
@@ -19,12 +31,14 @@ class MasterBranch {
     uksort($branch_list, 'version_compare');
     $branch_list = array_reverse($branch_list);
 
+    $master_branch_regex = "@(" . implode('|', self::BRANCH_NAME_PATTERNS) . ')@';
+
     foreach ($branch_list as $branch => $sha) {
       // Identify the main development branch, of one of the following forms:
       //  - '7.x-1.x'
       //  - '7.x'
       //  - '8.0.x'
-      if (preg_match("@(\d.x-\d+-x|\d.x|\d.\d+.x)@", $branch)) {
+      if (preg_match($master_branch_regex, $branch)) {
         $this->branchName = trim($branch);
 
         $found = TRUE;
