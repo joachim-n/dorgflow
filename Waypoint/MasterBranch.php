@@ -5,6 +5,11 @@ namespace Dorgflow\Waypoint;
 class MasterBranch {
 
   /**
+   * Regex for semver branch name.
+   */
+  const SEMVER_BRANCH_NAME_REGEX = '@\d.\d+.x@';
+
+  /**
    * Regex patterns for a master branch.
    */
   const BRANCH_NAME_PATTERNS = [
@@ -27,8 +32,24 @@ class MasterBranch {
     // We require the master branch to be reachable.
     $branch_list = $this->git_info->getBranchListReachable();
 
-    // Sort the branches by version number, with highest first.
-    uksort($branch_list, 'version_compare');
+    // Sort the branches by version number.
+    uksort($branch_list, function ($a, $b) {
+      // A semver branch is always taken to be newer than a non-semver. We
+      // can't use version_compare() for this, as in contrib, something like
+      // 2.0.x is newer than 8.x-1.x.
+      if (preg_match(self::SEMVER_BRANCH_NAME_REGEX, $a) && !preg_match(self::SEMVER_BRANCH_NAME_REGEX, $b)) {
+        // Second is lower than first.
+        return 1;
+      }
+      if (!preg_match(self::SEMVER_BRANCH_NAME_REGEX, $a) && preg_match(self::SEMVER_BRANCH_NAME_REGEX, $b)) {
+        // First is lower than second.
+        return -1;
+      }
+
+      return version_compare($a, $b);
+    });
+
+    // Reverse so we have highest branch first.
     $branch_list = array_reverse($branch_list);
 
     $master_branch_regex = "@(" . implode('|', self::BRANCH_NAME_PATTERNS) . ')@';
