@@ -139,9 +139,24 @@ class Purge extends SymfonyCommand implements ContainerAwareInterface {
     }
   }
 
-  protected function getIssueCommit($issue_number) {
+  /**
+   * Gets the most recent master branch commit for an issue number, if any.
+   *
+   * @param int $issue_number
+   *   The issue number.
+   *
+   * @return string|null
+   *   The git log message, or NULL if none found, or if the most recent commit
+   *   that mentions the issue number appears to be a revert commit.
+   */
+  protected function getIssueCommit(int $issue_number): ?string {
     // TODO: move to service.
     $git_log = shell_exec("git rev-list {$this->master_branch_name} --grep={$issue_number} --pretty=oneline");
+
+    if (str_contains($git_log, 'Revert')) {
+      return NULL;
+    }
+
     return $git_log;
   }
 
