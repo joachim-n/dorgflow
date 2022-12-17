@@ -80,6 +80,10 @@ class Purge extends SymfonyCommand implements ContainerAwareInterface {
         'sha' => $sha,
       ];
 
+      if ($remote = $this->git_info->getIssueRemote($issue_number)) {
+        $issues_to_clean_up[$issue_number]['remote'] = $remote;
+      }
+
       $progressBar->advance();
     }
 
@@ -96,6 +100,7 @@ class Purge extends SymfonyCommand implements ContainerAwareInterface {
 
     print "You are about to DELETE the following branches!\n";
     $list = new ItemList($output);
+    $remote_count = 0;
     foreach ($issues_to_clean_up as $issue_number => $info) {
       $nested_list = $list->getNestedListItem(DefinitionList::class);
       $nested_list->setDefinitionFormatterStyle(new \Symfony\Component\Console\Formatter\OutputFormatterStyle(
@@ -104,6 +109,10 @@ class Purge extends SymfonyCommand implements ContainerAwareInterface {
 
       $nested_list->addItem("issue", $issue_number);
       $nested_list->addItem('branch name', $info['branch']);
+      if (isset($info['remote'])) {
+        $nested_list->addItem('remote name', $info['remote']);
+        $remote_count++;
+      }
       $nested_list->addItem('committed in', $info['message']);
 
       $list->addItem($nested_list);
@@ -113,7 +122,7 @@ class Purge extends SymfonyCommand implements ContainerAwareInterface {
     $helper = $this->getHelper('question');
 
     $count = count($issues_to_clean_up);
-    $question = new Question("Please enter 'delete' to confirm DELETION of {$count} branches:");
+    $question = new Question("Please enter 'delete' to confirm DELETION of {$count} branches and {$remote_count} remotes:");
     if ($helper->ask($input, $output, $question) != 'delete') {
       $output->writeln('Clean up aborted.');
       return;
@@ -122,6 +131,11 @@ class Purge extends SymfonyCommand implements ContainerAwareInterface {
     foreach ($issues_to_clean_up as $issue_number => $info) {
       shell_exec("git branch -D {$info['branch']}");
       $output->writeln("Deleted branch {$info['branch']}.");
+
+      if (isset($info['remote'])) {
+        shell_exec("git remote remove {$info['remote']}");
+        $output->writeln("Deleted remote {$info['remote']}.");
+      }
     }
   }
 

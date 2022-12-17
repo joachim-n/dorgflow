@@ -97,6 +97,29 @@ class GitInfo {
   }
 
   /**
+   * Gets the remote for an issue, if one exists.
+   *
+   * This assumes the default remote names proposed by drupal.org's git
+   * instructions are used.
+   *
+   * @param int $issue_number
+   *   An issue number.
+   *
+   * @return string|null
+   *   The remote name, or NULL if none found.
+   */
+  public function getIssueRemote(int $issue_number): ?string {
+    // Use the -n flag so we don't hit drupal.org.
+    $result = shell_exec("git remote show -n drupal-{$issue_number}");
+
+    if (!str_contains($result, 'git@git.drupal.org')) {
+      return NULL;
+    }
+
+    return "drupal-{$issue_number}";
+  }
+
+  /**
    * Returns a list of all the git branches which are currently reachable.
    *
    * @return
