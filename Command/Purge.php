@@ -5,6 +5,7 @@ namespace Dorgflow\Command;
 use Dorgflow\Console\ItemList;
 use Dorgflow\Console\DefinitionList;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
@@ -41,6 +42,12 @@ class Purge extends SymfonyCommand implements ContainerAwareInterface {
 
     $branch_list = $this->git_info->getBranchList();
 
+    ProgressBar::setFormatDefinition('custom', ' %current%/%max% -- %message%');
+    $progressBar = new ProgressBar($output, count($branch_list));
+    $progressBar->setFormat('custom');
+    $progressBar->setMessage("Collecting branches...");
+    $progressBar->start();
+
     $issues_to_clean_up = [];
 
     foreach ($branch_list as $branch_name => $sha) {
@@ -48,13 +55,16 @@ class Purge extends SymfonyCommand implements ContainerAwareInterface {
 
       // Skip the branch if it's not for an issue.
       if (empty($issue_number)) {
+        $progressBar->advance();
         continue;
       }
 
+      $progressBar->setMessage("Analysing branch {$branch_name}...");
       $issue_commit = $this->getIssueCommit($issue_number);
 
       // Skip the branch if we can't find a commit for it.
       if (empty($issue_commit)) {
+        $progressBar->advance();
         continue;
       }
 
@@ -69,7 +79,11 @@ class Purge extends SymfonyCommand implements ContainerAwareInterface {
         'message' => $message,
         'sha' => $sha,
       ];
+
+      $progressBar->advance();
     }
+
+    $progressBar->finish();
 
     if (empty($issues_to_clean_up)) {
       print "No branches to clean up.\n";
