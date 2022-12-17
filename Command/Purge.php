@@ -88,6 +88,7 @@ class Purge extends SymfonyCommand implements ContainerAwareInterface {
     }
 
     $progressBar->finish();
+    $progressBar->clear();
 
     if (empty($issues_to_clean_up)) {
       print "No branches to clean up.\n";
