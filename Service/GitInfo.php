@@ -73,6 +73,8 @@ class GitInfo {
   /**
    * Returns a list of all the git branches.
    *
+   * TODO: this should filter when we want only main branches??
+   *
    * @return
    *  An array whose keys are branch names, and values are the SHA of the tip.
    */
