@@ -63,7 +63,7 @@ class LocalSetup extends SymfonyCommand implements ContainerAwareInterface {
         $output->writeln("Afterwards, you should use the update command to get new patches from drupal.org.");
       }
 
-      return;
+      return 0;
     }
 
     // If the master branch is not current, abort.
@@ -89,7 +89,7 @@ class LocalSetup extends SymfonyCommand implements ContainerAwareInterface {
     // If no patches, we're done.
     if (empty($patches)) {
       $output->writeln("There are no patches to apply.");
-      return;
+      return 0;
     }
 
     // Output the patches.
