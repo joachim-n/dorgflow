@@ -2,6 +2,12 @@
 
 namespace Dorgflow\Waypoint;
 
+/**
+ * Represents a patch on an issue.
+ *
+ * This will typically be attached to a comment, but patches can also be
+ * uploaded to the node itself when it is first created.
+ */
 class Patch {
 
   /*
@@ -82,7 +88,7 @@ class Patch {
     if (isset($file_field_item)) {
       $this->fid = $file_field_item->file->id;
       $this->index = $file_field_item->index;
-      $this->cid = $file_field_item->file->cid;
+      $this->cid = $file_field_item->file->cid ?? NULL;
     }
     elseif (isset($commit_message_data)) {
       // If there is no file item, then try the commit message data.
@@ -156,7 +162,13 @@ class Patch {
     return $this->index;
   }
 
-  public function getPatchFileCid() {
+  /**
+   * Gets the comment ID for the patch file.
+   *
+   * @return int|null
+   *   The comment ID, or NULL if the file is on the node itself.
+   */
+  public function getPatchFileCid(): ?int {
     return $this->cid;
   }
 

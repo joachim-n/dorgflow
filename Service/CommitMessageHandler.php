@@ -34,10 +34,17 @@ class CommitMessageHandler {
 
     // Construct the anchor URL for the comment on the issue node where the
     // patch was added.
-    $url = strtr('https://www.drupal.org/node/:nid#comment-:cid', [
-      ':nid' => $this->analyser->deduceIssueNumber(),
-      ':cid' => $patch->getPatchFileCid(),
-    ]);
+    if ($cid = $patch->getPatchFileCid()) {
+      $url = strtr('https://www.drupal.org/node/:nid#comment-:cid', [
+        ':nid' => $this->analyser->deduceIssueNumber(),
+        ':cid' => $cid,
+      ]);
+    }
+    else {
+      $url = strtr('https://www.drupal.org/node/:nid', [
+        ':nid' => $this->analyser->deduceIssueNumber(),
+      ]);
+    }
 
     return "Patch from Drupal.org. Comment: $index; URL: $url; file: $filename; fid: $fid. Automatic commit by dorgflow.";
   }
