@@ -5,6 +5,7 @@ namespace Dorgflow\Service;
 /**
  * Retrieves data from drupal.org's REST API.
  */
+#[\AllowDynamicProperties]
 class DrupalOrg {
 
   /**

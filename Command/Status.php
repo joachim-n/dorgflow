@@ -12,6 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 /**
  * Provides the status command.
  */
+#[\AllowDynamicProperties]
 class Status extends SymfonyCommand implements ContainerAwareInterface {
 
   use ContainerAwareTrait;

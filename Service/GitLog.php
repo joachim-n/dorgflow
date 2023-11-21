@@ -5,6 +5,7 @@ namespace Dorgflow\Service;
 /**
  * Provides log data from git.
  */
+#[\AllowDynamicProperties]
 class GitLog {
 
   protected $feature_branch_log;

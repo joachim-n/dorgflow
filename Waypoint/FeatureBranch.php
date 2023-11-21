@@ -2,6 +2,7 @@
 
 namespace Dorgflow\Waypoint;
 
+#[\AllowDynamicProperties]
 class FeatureBranch {
 
   protected $exists;

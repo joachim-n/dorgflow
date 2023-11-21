@@ -15,6 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 /**
  * Deletes ALL feature branches and files for issues which are fixed.
  */
+#[\AllowDynamicProperties]
 class Purge extends SymfonyCommand implements ContainerAwareInterface {
 
   use ContainerAwareTrait;

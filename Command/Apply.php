@@ -11,6 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 /**
  * Applies the current feature branch to the master branch as a squash merge.
  */
+#[\AllowDynamicProperties]
 class Apply extends SymfonyCommand implements ContainerAwareInterface {
 
   use ContainerAwareTrait;

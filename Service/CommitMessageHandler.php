@@ -11,6 +11,7 @@ use Dorgflow\Waypoint\LocalPatch;
  * This both creates messages and parses them. This class exists simply to keep
  * both sides of this process in the same place.
  */
+#[\AllowDynamicProperties]
 class CommitMessageHandler {
 
   function __construct($analyser) {

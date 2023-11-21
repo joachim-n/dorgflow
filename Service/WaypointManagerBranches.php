@@ -9,6 +9,7 @@ use Dorgflow\Waypoint\Patch;
 /**
  * Creates objects that represent branch waypoints in the workflow.
  */
+#[\AllowDynamicProperties]
 class WaypointManagerBranches {
 
   function __construct($git_info, $drupal_org, $git_executor, $analyser) {

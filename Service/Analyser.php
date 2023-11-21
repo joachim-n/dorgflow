@@ -5,6 +5,7 @@ namespace Dorgflow\Service;
 /**
  * Figures stuff out from user input and available data.
  */
+#[\AllowDynamicProperties]
 class Analyser {
 
   protected $issue_number;

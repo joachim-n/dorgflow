@@ -8,6 +8,7 @@ namespace Dorgflow\Waypoint;
  * This will typically be attached to a comment, but patches can also be
  * uploaded to the node itself when it is first created.
  */
+#[\AllowDynamicProperties]
 class Patch {
 
   /*

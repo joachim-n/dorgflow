@@ -5,6 +5,7 @@ namespace Dorgflow\Command;
 /**
  * Common base class for commands.
  */
+#[\AllowDynamicProperties]
 class CommandBase {
 
   function __construct($container) {

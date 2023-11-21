@@ -7,6 +7,7 @@ namespace Dorgflow\Waypoint;
  *
  * Note that at the time of its construction, this does not yet exist in git.
  */
+#[\AllowDynamicProperties]
 class LocalPatch {
 
   /**

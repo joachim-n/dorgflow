@@ -10,6 +10,7 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
+#[\AllowDynamicProperties]
 class LocalSetup extends SymfonyCommand implements ContainerAwareInterface {
 
   use ContainerAwareTrait;

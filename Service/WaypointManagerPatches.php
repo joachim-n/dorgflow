@@ -8,6 +8,7 @@ use Dorgflow\Waypoint\LocalPatch;
 /**
  * Creates objects that represent patch waypoints in the workflow.
  */
+#[\AllowDynamicProperties]
 class WaypointManagerPatches {
 
   protected $patches = [];

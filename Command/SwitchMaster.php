@@ -11,6 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 /**
  * Switches git to the master branch.
  */
+#[\AllowDynamicProperties]
 class SwitchMaster extends SymfonyCommand implements ContainerAwareInterface {
 
   use ContainerAwareTrait;

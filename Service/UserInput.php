@@ -5,6 +5,7 @@ namespace Dorgflow\Service;
 /**
  * Handles user input.
  */
+#[\AllowDynamicProperties]
 class UserInput {
 
   public function getIssueNumber() {
@@ -35,7 +36,7 @@ class UserInput {
     if (!isset($this->issueNumber)) {
       $this->issueNumber = FALSE;
     }
-      
+
     return $this->issueNumber;
   }
 

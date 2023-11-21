@@ -3,6 +3,7 @@
 namespace Dorgflow\Service;
 
 // TODO: consider replacing this with a library.
+#[\AllowDynamicProperties]
 class GitExecutor {
 
   function __construct($git_info, $analyser) {

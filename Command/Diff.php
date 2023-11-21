@@ -12,6 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 /**
  * Provides the diff command.
  */
+#[\AllowDynamicProperties]
 class Diff extends SymfonyCommand implements ContainerAwareInterface {
 
   use ContainerAwareTrait;
