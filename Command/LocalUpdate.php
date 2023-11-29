@@ -60,7 +60,7 @@ class LocalUpdate extends SymfonyCommand implements ContainerAwareInterface {
     // If no patches, we're done.
     if (empty($patches)) {
       print "No patches to apply.\n";
-      return;
+      return 0;
     }
 
     $patches_uncommitted = [];
@@ -87,7 +87,7 @@ class LocalUpdate extends SymfonyCommand implements ContainerAwareInterface {
     // If no uncommitted patches, we're done.
     if (empty($patches_uncommitted)) {
       print "No patches to apply; existing patches are already applied to this feature branch.\n";
-      return;
+      return 0;
     }
 
     // If the feature branch's SHA is not the same as the last committed patch
@@ -135,7 +135,7 @@ class LocalUpdate extends SymfonyCommand implements ContainerAwareInterface {
     // If all the patches were already committed, we're done.
     if (empty($patches_committed)) {
       print "No new patches to apply.\n";
-      return;
+      return 0;
     }
 
     // If final patch didn't apply, then output a message: the latest patch
@@ -150,6 +150,8 @@ class LocalUpdate extends SymfonyCommand implements ContainerAwareInterface {
         '!patchname' => $patch->getPatchFilename(),
       ]);
     }
+
+    return 0;
   }
 
 }

@@ -54,6 +54,8 @@ class Diff extends SymfonyCommand implements ContainerAwareInterface {
     $diff = $this->git_info->diffMasterBranch($master_branch->getBranchName());
 
     $io->text($diff);
+
+    return 0;
   }
 
 }
