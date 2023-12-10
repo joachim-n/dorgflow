@@ -123,6 +123,8 @@ class LocalSetup extends SymfonyCommand implements ContainerAwareInterface {
         '!patchname' => $patch->getPatchFilename(),
       ]));
     }
+
+    return 0;
   }
 
 }
