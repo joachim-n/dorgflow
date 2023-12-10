@@ -15,5 +15,10 @@
     "psr-4": {
       "Dorgflow\\": ""
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Dorgflow\\Tests\\": "tests"
+    }
   }
 }
