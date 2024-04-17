@@ -5,13 +5,12 @@ namespace Dorgflow\Command;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Dorgflow\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Deletes the current feature branch.
  */
-class Cleanup extends SymfonyCommand implements ContainerAwareInterface {
+class Cleanup extends SymfonyCommand {
 
   use ContainerAwareTrait;
 
@@ -30,7 +29,7 @@ class Cleanup extends SymfonyCommand implements ContainerAwareInterface {
     $this->waypoint_manager_branches = $this->container->get('waypoint_manager.branches');
   }
 
-  protected function execute(InputInterface $input, OutputInterface $output) {
+  protected function execute(InputInterface $input, OutputInterface $output): int {
     $this->setServices();
 
     // Check git is clean.
@@ -50,7 +49,7 @@ class Cleanup extends SymfonyCommand implements ContainerAwareInterface {
 
     if ($confirmation != 'delete') {
       print "Clean up aborted.\n";
-      return;
+      return 0;
     }
 
     $master_branch_name = $master_branch->getBranchName();
@@ -59,6 +58,8 @@ class Cleanup extends SymfonyCommand implements ContainerAwareInterface {
     shell_exec("git branch -D $feature_branch_name");
 
     // TODO: delete any patch files for this issue.
+
+    return 0;
   }
 
 }

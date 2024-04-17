@@ -5,11 +5,10 @@ namespace Dorgflow\Command;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Dorgflow\DependencyInjection\ContainerAwareTrait;
 
 #[\AllowDynamicProperties]
-class CreatePatch extends SymfonyCommand implements ContainerAwareInterface {
+class CreatePatch extends SymfonyCommand {
 
   use ContainerAwareTrait;
 
@@ -34,7 +33,7 @@ class CreatePatch extends SymfonyCommand implements ContainerAwareInterface {
     $this->commit_message = $this->container->get('commit_message');
   }
 
-  protected function execute(InputInterface $input, OutputInterface $output) {
+  protected function execute(InputInterface $input, OutputInterface $output): int {
     $this->setServices();
 
     // Check git is clean.
@@ -106,6 +105,8 @@ class CreatePatch extends SymfonyCommand implements ContainerAwareInterface {
     // Make an empty commit to record the patch.
     $local_patch_commit_message = $this->commit_message->createLocalCommitMessage($local_patch);
     $this->git_executor->commit($local_patch_commit_message);
+
+    return 0;
   }
 
   protected function getInterdiffName($feature_branch, $last_patch) {

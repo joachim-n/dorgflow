@@ -9,14 +9,13 @@ use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Dorgflow\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Deletes ALL feature branches and files for issues which are fixed.
  */
 #[\AllowDynamicProperties]
-class Purge extends SymfonyCommand implements ContainerAwareInterface {
+class Purge extends SymfonyCommand {
 
   use ContainerAwareTrait;
 
@@ -36,7 +35,7 @@ class Purge extends SymfonyCommand implements ContainerAwareInterface {
     $this->analyser = $this->container->get('analyser');
   }
 
-  protected function execute(InputInterface $input, OutputInterface $output) {
+  protected function execute(InputInterface $input, OutputInterface $output): int {
     $this->setServices();
 
     $this->master_branch_name = $this->waypoint_manager_branches->getMasterBranch()->getBranchName();
@@ -93,7 +92,7 @@ class Purge extends SymfonyCommand implements ContainerAwareInterface {
 
     if (empty($issues_to_clean_up)) {
       print "No branches to clean up.\n";
-      return;
+      return 0;
     }
 
     // Sort by issue number.
@@ -127,7 +126,7 @@ class Purge extends SymfonyCommand implements ContainerAwareInterface {
     $question = new Question("Please enter 'delete' to confirm DELETION of {$count} branches and {$remote_count} remotes:");
     if ($helper->ask($input, $output, $question) != 'delete') {
       $output->writeln('Clean up aborted.');
-      return;
+      return 0;
     }
 
     foreach ($issues_to_clean_up as $issue_number => $info) {
@@ -139,6 +138,8 @@ class Purge extends SymfonyCommand implements ContainerAwareInterface {
         $output->writeln("Deleted remote {$info['remote']}.");
       }
     }
+
+    return 0;
   }
 
   /**

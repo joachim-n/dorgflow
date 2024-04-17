@@ -7,11 +7,10 @@ use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Dorgflow\DependencyInjection\ContainerAwareTrait;
 
 #[\AllowDynamicProperties]
-class LocalSetup extends SymfonyCommand implements ContainerAwareInterface {
+class LocalSetup extends SymfonyCommand {
 
   use ContainerAwareTrait;
 
@@ -31,7 +30,7 @@ class LocalSetup extends SymfonyCommand implements ContainerAwareInterface {
     $this->waypoint_manager_patches = $this->container->get('waypoint_manager.patches');
   }
 
-  protected function execute(InputInterface $input, OutputInterface $output) {
+  protected function execute(InputInterface $input, OutputInterface $output): int {
     $this->setServices();
 
     // Check git is clean.

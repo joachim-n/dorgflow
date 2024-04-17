@@ -5,14 +5,13 @@ namespace Dorgflow\Command;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Dorgflow\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Applies the current feature branch to the master branch as a squash merge.
  */
 #[\AllowDynamicProperties]
-class Apply extends SymfonyCommand implements ContainerAwareInterface {
+class Apply extends SymfonyCommand {
 
   use ContainerAwareTrait;
 
@@ -33,7 +32,7 @@ class Apply extends SymfonyCommand implements ContainerAwareInterface {
     $this->analyser = $this->container->get('analyser');
   }
 
-  protected function execute(InputInterface $input, OutputInterface $output) {
+  protected function execute(InputInterface $input, OutputInterface $output): int {
     $this->setServices();
 
     // Check git is clean.
@@ -72,6 +71,8 @@ class Apply extends SymfonyCommand implements ContainerAwareInterface {
     print strtr("You should now commit this, using the command from the issue on drupal.org: https://www.drupal.org/node/!id#drupalorg-issue-credit-form.\n", [
       '!id' => $this->analyser->deduceIssueNumber(),
     ]);
+
+    return 0;
   }
 
 }

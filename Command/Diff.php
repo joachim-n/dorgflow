@@ -6,14 +6,13 @@ use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Dorgflow\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Provides the diff command.
  */
 #[\AllowDynamicProperties]
-class Diff extends SymfonyCommand implements ContainerAwareInterface {
+class Diff extends SymfonyCommand {
 
   use ContainerAwareTrait;
 
@@ -38,7 +37,7 @@ class Diff extends SymfonyCommand implements ContainerAwareInterface {
   /**
    * {@inheritdoc}
    */
-  protected function execute(InputInterface $input, OutputInterface $output) {
+  protected function execute(InputInterface $input, OutputInterface $output): int {
     $this->setServices();
 
     $io = new SymfonyStyle($input, $output);
@@ -54,6 +53,8 @@ class Diff extends SymfonyCommand implements ContainerAwareInterface {
     $diff = $this->git_info->diffMasterBranch($master_branch->getBranchName());
 
     $io->text($diff);
+
+    return 0;
   }
 
 }
