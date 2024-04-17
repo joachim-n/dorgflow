@@ -6,14 +6,13 @@ use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Dorgflow\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Provides the status command.
  */
 #[\AllowDynamicProperties]
-class Status extends SymfonyCommand implements ContainerAwareInterface {
+class Status extends SymfonyCommand {
 
   use ContainerAwareTrait;
 

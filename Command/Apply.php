@@ -5,14 +5,13 @@ namespace Dorgflow\Command;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Dorgflow\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Applies the current feature branch to the master branch as a squash merge.
  */
 #[\AllowDynamicProperties]
-class Apply extends SymfonyCommand implements ContainerAwareInterface {
+class Apply extends SymfonyCommand {
 
   use ContainerAwareTrait;
 

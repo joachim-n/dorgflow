@@ -5,13 +5,12 @@ namespace Dorgflow\Command;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Dorgflow\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Deletes the current feature branch.
  */
-class Cleanup extends SymfonyCommand implements ContainerAwareInterface {
+class Cleanup extends SymfonyCommand {
 
   use ContainerAwareTrait;
 
