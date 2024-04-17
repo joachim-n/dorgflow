@@ -32,7 +32,7 @@ class Apply extends SymfonyCommand {
     $this->analyser = $this->container->get('analyser');
   }
 
-  protected function execute(InputInterface $input, OutputInterface $output) {
+  protected function execute(InputInterface $input, OutputInterface $output): int {
     $this->setServices();
 
     // Check git is clean.
@@ -71,6 +71,8 @@ class Apply extends SymfonyCommand {
     print strtr("You should now commit this, using the command from the issue on drupal.org: https://www.drupal.org/node/!id#drupalorg-issue-credit-form.\n", [
       '!id' => $this->analyser->deduceIssueNumber(),
     ]);
+
+    return 0;
   }
 
 }

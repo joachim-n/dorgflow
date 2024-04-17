@@ -35,7 +35,7 @@ class Purge extends SymfonyCommand {
     $this->analyser = $this->container->get('analyser');
   }
 
-  protected function execute(InputInterface $input, OutputInterface $output) {
+  protected function execute(InputInterface $input, OutputInterface $output): int {
     $this->setServices();
 
     $this->master_branch_name = $this->waypoint_manager_branches->getMasterBranch()->getBranchName();
@@ -92,7 +92,7 @@ class Purge extends SymfonyCommand {
 
     if (empty($issues_to_clean_up)) {
       print "No branches to clean up.\n";
-      return;
+      return 0;
     }
 
     // Sort by issue number.
@@ -126,7 +126,7 @@ class Purge extends SymfonyCommand {
     $question = new Question("Please enter 'delete' to confirm DELETION of {$count} branches and {$remote_count} remotes:");
     if ($helper->ask($input, $output, $question) != 'delete') {
       $output->writeln('Clean up aborted.');
-      return;
+      return 0;
     }
 
     foreach ($issues_to_clean_up as $issue_number => $info) {
@@ -138,6 +138,8 @@ class Purge extends SymfonyCommand {
         $output->writeln("Deleted remote {$info['remote']}.");
       }
     }
+
+    return 0;
   }
 
   /**

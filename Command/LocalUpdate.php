@@ -30,7 +30,7 @@ class LocalUpdate extends SymfonyCommand {
     $this->git_executor = $this->container->get('git.executor');
   }
 
-  protected function execute(InputInterface $input, OutputInterface $output) {
+  protected function execute(InputInterface $input, OutputInterface $output): int {
     $this->setServices();
 
     // Check git is clean.
@@ -59,7 +59,7 @@ class LocalUpdate extends SymfonyCommand {
     // If no patches, we're done.
     if (empty($patches)) {
       print "No patches to apply.\n";
-      return;
+      return 0;
     }
 
     $patches_uncommitted = [];
@@ -86,7 +86,7 @@ class LocalUpdate extends SymfonyCommand {
     // If no uncommitted patches, we're done.
     if (empty($patches_uncommitted)) {
       print "No patches to apply; existing patches are already applied to this feature branch.\n";
-      return;
+      return 0;
     }
 
     // If the feature branch's SHA is not the same as the last committed patch
@@ -134,7 +134,7 @@ class LocalUpdate extends SymfonyCommand {
     // If all the patches were already committed, we're done.
     if (empty($patches_committed)) {
       print "No new patches to apply.\n";
-      return;
+      return 0;
     }
 
     // If final patch didn't apply, then output a message: the latest patch
@@ -149,6 +149,8 @@ class LocalUpdate extends SymfonyCommand {
         '!patchname' => $patch->getPatchFilename(),
       ]);
     }
+
+    return 0;
   }
 
 }

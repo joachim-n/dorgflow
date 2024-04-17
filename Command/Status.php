@@ -38,7 +38,7 @@ class Status extends SymfonyCommand {
   /**
    * {@inheritdoc}
    */
-  protected function execute(InputInterface $input, OutputInterface $output) {
+  protected function execute(InputInterface $input, OutputInterface $output): int {
     $this->setServices();
 
     $io = new SymfonyStyle($input, $output);
@@ -70,6 +70,8 @@ class Status extends SymfonyCommand {
     if (!$clean) {
       $io->text('You have uncommitted changes.');
     }
+
+    return 0;
   }
 
 }

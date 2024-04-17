@@ -37,7 +37,7 @@ class Diff extends SymfonyCommand {
   /**
    * {@inheritdoc}
    */
-  protected function execute(InputInterface $input, OutputInterface $output) {
+  protected function execute(InputInterface $input, OutputInterface $output): int {
     $this->setServices();
 
     $io = new SymfonyStyle($input, $output);
@@ -53,6 +53,8 @@ class Diff extends SymfonyCommand {
     $diff = $this->git_info->diffMasterBranch($master_branch->getBranchName());
 
     $io->text($diff);
+
+    return 0;
   }
 
 }

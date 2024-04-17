@@ -31,7 +31,7 @@ class SwitchMaster extends SymfonyCommand {
     $this->git_executor = $this->container->get('git.executor');
   }
 
-  protected function execute(InputInterface $input, OutputInterface $output) {
+  protected function execute(InputInterface $input, OutputInterface $output): int {
     $this->setServices();
 
     // Check git is clean.
@@ -42,6 +42,8 @@ class SwitchMaster extends SymfonyCommand {
 
     $master_branch = $this->waypoint_manager_branches->getMasterBranch();
     $master_branch->gitCheckout();
+
+    return 0;
   }
 
 }

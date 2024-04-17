@@ -29,7 +29,7 @@ class Cleanup extends SymfonyCommand {
     $this->waypoint_manager_branches = $this->container->get('waypoint_manager.branches');
   }
 
-  protected function execute(InputInterface $input, OutputInterface $output) {
+  protected function execute(InputInterface $input, OutputInterface $output): int {
     $this->setServices();
 
     // Check git is clean.
@@ -49,7 +49,7 @@ class Cleanup extends SymfonyCommand {
 
     if ($confirmation != 'delete') {
       print "Clean up aborted.\n";
-      return;
+      return 0;
     }
 
     $master_branch_name = $master_branch->getBranchName();
@@ -58,6 +58,8 @@ class Cleanup extends SymfonyCommand {
     shell_exec("git branch -D $feature_branch_name");
 
     // TODO: delete any patch files for this issue.
+
+    return 0;
   }
 
 }

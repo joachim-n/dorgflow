@@ -33,7 +33,7 @@ class CreatePatch extends SymfonyCommand {
     $this->commit_message = $this->container->get('commit_message');
   }
 
-  protected function execute(InputInterface $input, OutputInterface $output) {
+  protected function execute(InputInterface $input, OutputInterface $output): int {
     $this->setServices();
 
     // Check git is clean.
@@ -105,6 +105,8 @@ class CreatePatch extends SymfonyCommand {
     // Make an empty commit to record the patch.
     $local_patch_commit_message = $this->commit_message->createLocalCommitMessage($local_patch);
     $this->git_executor->commit($local_patch_commit_message);
+
+    return 0;
   }
 
   protected function getInterdiffName($feature_branch, $last_patch) {

@@ -30,7 +30,7 @@ class LocalSetup extends SymfonyCommand {
     $this->waypoint_manager_patches = $this->container->get('waypoint_manager.patches');
   }
 
-  protected function execute(InputInterface $input, OutputInterface $output) {
+  protected function execute(InputInterface $input, OutputInterface $output): int {
     $this->setServices();
 
     // Check git is clean.
