@@ -71,7 +71,7 @@ class MasterBranch {
 
     if (empty($found)) {
       // This should trigger a complete failure -- throw an exception!
-      throw new \Exception("Can't find a master branch.");
+      throw new \Exception("Can't find a master branch in the reachable branches. Perhaps you need to rebase this branch?");
     }
 
     $this->isCurrentBranch = ($this->git_info->getCurrentBranch() == $this->branchName);
