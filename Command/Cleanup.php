@@ -10,6 +10,7 @@ use Dorgflow\DependencyInjection\ContainerAwareTrait;
 /**
  * Deletes the current feature branch.
  */
+#[\AllowDynamicProperties]
 class Cleanup extends SymfonyCommand {
 
   use ContainerAwareTrait;
