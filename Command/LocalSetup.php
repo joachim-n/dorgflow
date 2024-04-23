@@ -122,6 +122,8 @@ class LocalSetup extends SymfonyCommand {
         '!patchname' => $patch->getPatchFilename(),
       ]));
     }
+
+    return 0;
   }
 
 }
