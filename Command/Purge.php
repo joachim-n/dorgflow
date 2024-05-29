@@ -12,7 +12,7 @@ use Symfony\Component\Console\Question\Question;
 use Dorgflow\DependencyInjection\ContainerAwareTrait;
 
 /**
- * Deletes ALL feature branches and files for issues which are fixed.
+ * Deletes ALL feature branches, remotes, and files for issues which are fixed.
  */
 #[\AllowDynamicProperties]
 class Purge extends SymfonyCommand {
@@ -25,8 +25,8 @@ class Purge extends SymfonyCommand {
   protected function configure() {
     $this
       ->setName('purge')
-      ->setDescription('Deletes all feature branches whose issues are committed to the master branch.')
-      ->setHelp('Deletes all feature branches whose issues are committed to the master branch.');
+      ->setDescription('Deletes all feature branches and remotes whose issues are committed to the master branch.')
+      ->setHelp('Deletes all feature branches and remotes whose issues are committed to the master branch.');
   }
 
   protected function setServices() {
