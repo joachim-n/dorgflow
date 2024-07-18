@@ -58,6 +58,8 @@ class Cleanup extends SymfonyCommand {
 
     shell_exec("git branch -D $feature_branch_name");
 
+    return 0;
+
     // TODO: delete any patch files for this issue.
 
     return 0;
