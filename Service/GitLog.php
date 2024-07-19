@@ -57,6 +57,32 @@ class GitLog {
   }
 
   /**
+   * Gets the most recent master branch commit for an issue number, if any.
+   *
+   * @param int $issue_number
+   *   The issue number.
+   *
+   * @return string|null
+   *   The git log message, or NULL if none found, or if the most recent commit
+   *   that mentions the issue number appears to be a revert commit.
+   */
+  public function getIssueCommit(int $issue_number): ?string {
+    $master_branch_name = $this->waypoint_manager_branches->getMasterBranch()->getBranchName();
+
+    $git_log = shell_exec("git rev-list {$master_branch_name} --grep={$issue_number} --pretty=oneline");
+
+    if (empty($git_log)) {
+      return NULL;
+    }
+
+    if (str_contains($git_log, 'Revert')) {
+      return NULL;
+    }
+
+    return $git_log;
+  }
+
+  /**
    * Gets the raw git log from one commit to another.
    *
    * @param $old

@@ -31,6 +31,7 @@ class Purge extends SymfonyCommand {
 
   protected function setServices() {
     $this->git_info = $this->container->get('git.info');
+    $this->git_log = $this->container->get('git.log');
     $this->waypoint_manager_branches = $this->container->get('waypoint_manager.branches');
     $this->analyser = $this->container->get('analyser');
   }
@@ -60,7 +61,7 @@ class Purge extends SymfonyCommand {
       }
 
       $progressBar->setMessage("Analysing branch {$branch_name}...");
-      $issue_commit = $this->getIssueCommit($issue_number);
+      $issue_commit = $this->git_log->getIssueCommit($issue_number);
 
       // Skip the branch if we can't find a commit for it.
       if (empty($issue_commit)) {
@@ -140,31 +141,6 @@ class Purge extends SymfonyCommand {
     }
 
     return 0;
-  }
-
-  /**
-   * Gets the most recent master branch commit for an issue number, if any.
-   *
-   * @param int $issue_number
-   *   The issue number.
-   *
-   * @return string|null
-   *   The git log message, or NULL if none found, or if the most recent commit
-   *   that mentions the issue number appears to be a revert commit.
-   */
-  protected function getIssueCommit(int $issue_number): ?string {
-    // TODO: move to service.
-    $git_log = shell_exec("git rev-list {$this->master_branch_name} --grep={$issue_number} --pretty=oneline");
-
-    if (empty($git_log)) {
-      return NULL;
-    }
-
-    if (str_contains($git_log, 'Revert')) {
-      return NULL;
-    }
-
-    return $git_log;
   }
 
 }
