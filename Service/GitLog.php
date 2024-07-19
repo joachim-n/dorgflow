@@ -69,17 +69,24 @@ class GitLog {
   public function getIssueCommit(int $issue_number): ?string {
     $master_branch_name = $this->waypoint_manager_branches->getMasterBranch()->getBranchName();
 
-    $git_log = shell_exec("git rev-list {$master_branch_name} --grep={$issue_number} --pretty=oneline");
+    if (!isset($this->masterBranchLog)) {
+      $log = shell_exec("git rev-list {$master_branch_name} --pretty=oneline");
+      $this->masterBranchLog = explode("\n", $log);
+    }
 
-    if (empty($git_log)) {
+    $log_filtered_to_issue = preg_grep("@$issue_number@", $this->masterBranchLog);
+
+    if (empty($log_filtered_to_issue)) {
       return NULL;
     }
 
-    if (str_contains($git_log, 'Revert')) {
+    $first_commit = reset($log_filtered_to_issue);
+
+    if (str_contains($first_commit, 'Revert')) {
       return NULL;
     }
 
-    return $git_log;
+    return $first_commit;
   }
 
   /**
