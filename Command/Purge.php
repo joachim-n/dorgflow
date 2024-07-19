@@ -156,6 +156,10 @@ class Purge extends SymfonyCommand {
     // TODO: move to service.
     $git_log = shell_exec("git rev-list {$this->master_branch_name} --grep={$issue_number} --pretty=oneline");
 
+    if (empty($git_log)) {
+      return NULL;
+    }
+
     if (str_contains($git_log, 'Revert')) {
       return NULL;
     }
