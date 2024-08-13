@@ -74,7 +74,7 @@ class DrupalOrg {
    *        added.
    *    - index: The natural index of the comment this file was added with.
    */
-  public function getIssueFileFieldItems() {
+  public function getIssueFileFieldItems(int $starting_comment_index = 0) {
     if (!isset($this->node_data)) {
       $this->fetchIssueNode();
     }
@@ -92,7 +92,7 @@ class DrupalOrg {
       $comment_id_natural_indexes[$comment_item->id] = $natural_index;
     }
 
-    foreach ($files as &$file_item) {
+    foreach ($files as $delta => &$file_item) {
       // A file won't have a comment ID if it was uploaded when the node was
       // created.
       // TODO: file a bug in the relevant Drupal module, following up my last
@@ -103,6 +103,10 @@ class DrupalOrg {
       }
       else {
         $file_item->index = 0;
+      }
+
+      if ($starting_comment_index && $file_item->index < $starting_comment_index) {
+        unset($files[$delta]);
       }
     }
 

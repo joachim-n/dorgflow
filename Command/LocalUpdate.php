@@ -7,6 +7,7 @@ use Symfony\Component\Console\Command\Command as SymfonyCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Dorgflow\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\Console\Input\InputOption;
 
 #[\AllowDynamicProperties]
 class LocalUpdate extends SymfonyCommand {
@@ -21,6 +22,17 @@ class LocalUpdate extends SymfonyCommand {
       ->setName('update')
       ->setDescription('Updates a feature branch.')
       ->setHelp('Updates an existing feature branch, and downloads and applies any new patches.');
+      // Does not work yet -- comment indexes are not reliable, e.g. see
+      // the jump in index numbers at #28 on
+      // https://www.drupal.org/project/drupal/issues/66183.
+      // ->addOption(
+      //   'start',
+      //   's',
+      //   // this is the type of option (e.g. requires a value, can be passed more than once, etc.)
+      //   InputOption::VALUE_OPTIONAL,
+      //   'The natural comment index at which to start taking patches.',
+      //   0,
+      // );
   }
 
   protected function setServices() {
@@ -53,7 +65,9 @@ class LocalUpdate extends SymfonyCommand {
     }
 
     // Get the patches and create them.
-    $patches = $this->waypoint_manager_patches->setUpPatches();
+    // $first_comment = $input->getOption('start');
+    $first_comment = 0;
+    $patches = $this->waypoint_manager_patches->setUpPatches($first_comment);
     //dump($patches);
 
     // If no patches, we're done.

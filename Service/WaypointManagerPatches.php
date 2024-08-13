@@ -26,9 +26,9 @@ class WaypointManagerPatches {
    *
    * TODO: docs!
    */
-  public function setUpPatches() {
+  public function setUpPatches(int $starting_comment_index = 0) {
     // Get the field items for the issue node's file field.
-    $issue_file_field_items = $this->drupal_org->getIssueFileFieldItems();
+    $issue_file_field_items = $this->drupal_org->getIssueFileFieldItems($starting_comment_index);
 
     $feature_branch_log = $this->git_log->getFeatureBranchLog();
     //dump($feature_branch_log);
