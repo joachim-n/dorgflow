@@ -8,19 +8,18 @@ use Dorgflow\Waypoint\LocalPatch;
 /**
  * Creates objects that represent patch waypoints in the workflow.
  */
-#[\AllowDynamicProperties]
 class WaypointManagerPatches {
 
   protected $patches = [];
 
-  function __construct($commit_message, $drupal_org, $git_log, $git_executor, $analyser, $waypoint_manager_branches) {
-    $this->commit_message = $commit_message;
-    $this->drupal_org = $drupal_org;
-    $this->git_log = $git_log;
-    $this->git_executor = $git_executor;
-    $this->analyser = $analyser;
-    $this->waypoint_manager_branches = $waypoint_manager_branches;
-  }
+  function __construct(
+    protected CommitMessageHandler $commit_message,
+    protected DrupalOrg $drupal_org,
+    protected GitLog $git_log,
+    protected GitExecutor $git_executor,
+    protected Analyser $analyser,
+    protected WaypointManagerBranches $waypoint_manager_branches,
+  ) {}
 
   /**
    * Creates the Patch Waypoints for the issue.
