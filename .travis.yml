@@ -1,0 +1,13 @@
+language: php
+
+php:
+  - 7.3
+  - 7.2
+  - 7.1
+  - 7.0
+
+before_install:
+  - composer install --no-interaction --no-progress --quiet
+
+script:
+  - vendor/bin/phpunit tests
